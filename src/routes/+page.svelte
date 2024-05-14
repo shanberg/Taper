@@ -40,13 +40,14 @@
     }
 
     // Remove empty rows, except for the last one
+    const lastRowIndex = tableData.length - 1;
     tableData = tableData.filter((row, i) => {
       const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
-      const isNotLastRow = i !== tableData.length - 1;
-      return !isRowEmpty || !isNotLastRow;
+      return !(isRowEmpty && i !== lastRowIndex);
     });
 
-    tableData = tableData; // Trigger reactivity
+    // Trigger reactivity
+    tableData = [...tableData];
   }
 
   function handleStartDateChange(event) {
@@ -74,11 +75,26 @@
   }
 
   function handleAddRow(index) {
+    // Remove empty rows before adding a new one
+    removeEmptyRows();
+
     tableData = [
       ...tableData.slice(0, index + 1),
       { dose: 0, daysForDose: 0 },
       ...tableData.slice(index + 1)
     ];
+  }
+
+  function removeEmptyRows() {
+    const lastRowIndex = tableData.length - 1;
+    tableData = tableData.filter((row, i) => {
+      const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
+      return !(isRowEmpty && i !== lastRowIndex);
+    });
+  }
+
+  function handleRemoveRow(index) {
+    tableData = [...tableData.slice(0, index), ...tableData.slice(index + 1)];
   }
 
 
@@ -129,6 +145,7 @@
           <tr>
             <th class="dose">mg</th>
             <th class="days">days</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -138,6 +155,7 @@
               {startDate}
               row={row}
               index={index}
+              on:removeRow={() => handleRemoveRow(index)}
               on:change={(event) => handleRowChange(index, event.detail)}
             />
             {#if index < tableData.length - 1}
@@ -242,16 +260,29 @@
       padding: 0;
       height: calc(var(--font-size-md) * 2);
       box-shadow: none;
-      width: 5rem;
       text-align: start;
     }
-    & td:last-child input {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-    & td:first-child input {
+
+    & td.dose {
+      width: 5rem;
+
+      & input {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
+      }
+    }
+
+    & td.days {
+      width: 5rem;
+
+      & input {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      }
+    }
+
+    & td.delete {
+      width: 1em;
     }
   }
 
