@@ -15,11 +15,13 @@
   // Calculate the start and end dates
   $: {
     rowStartDate = new Date(startDate.getTime());
-    const totalDaysForStartDate = tableData.slice(0, index).reduce((acc, curr) => acc + curr.daysForDose, 0) + index;
+    const totalDaysForStartDate = tableData
+      .slice(0, index)
+      .reduce((acc, curr) => acc + curr.daysForDose - 1, 0) + index;
     rowStartDate.setDate(rowStartDate.getDate() + totalDaysForStartDate);
 
     rowEndDate = new Date(rowStartDate.getTime());
-    rowEndDate.setDate(rowEndDate.getDate() + row.daysForDose);
+    rowEndDate.setDate(rowEndDate.getDate() + row.daysForDose - 1);
   }
 </script>
 

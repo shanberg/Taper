@@ -15,16 +15,6 @@
   $: rowIsPlaceholder = row.dose === 0 && row.daysForDose === 0
   $: invalid = !rowIsPlaceholder && (row.dose <= 0 || row.daysForDose <= 0);
 
-  // Calculate the start and end dates
-  $: {
-    rowStartDate = new Date(startDate.getTime());
-    const totalDaysForStartDate = tableData.slice(0, index).reduce((acc, curr) => acc + curr.daysForDose, 0);
-    rowStartDate.setDate(rowStartDate.getDate() + totalDaysForStartDate);
-
-    rowEndDate = new Date(rowStartDate.getTime());
-    rowEndDate.setDate(rowEndDate.getDate() + row.daysForDose);
-  }
-
   function handleDoseChange(event) {
     dispatch('change', { ...row, dose: parseFloat(event.target.value) });
   }
