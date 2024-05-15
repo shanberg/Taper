@@ -1,6 +1,9 @@
 <script>
 	import { inject } from '@vercel/analytics'
 	import './styles.css';
+
+  	const dev = process.env.NODE_ENV === 'development';
+  	inject({ mode: dev ? 'development' : 'production' });
 </script>
 
 <div class="app">
