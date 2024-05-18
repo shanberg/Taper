@@ -201,21 +201,23 @@
   main {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    border-radius: var(--control-radius);
+    overflow: clip;
+    background: var(--color-bg-form);
+    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
   }
 
   header, 
   .body {
-    background: var(--color-bg-form);
     display: flex;
     flex-direction: row;
     gap: 1rem;
     padding: 1rem;
-    border-radius: var(--control-radius);
   }
 
   header {
     justify-content: space-between;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .body {
@@ -243,7 +245,10 @@
 
   .form,
   label:first-child {
-    width: 10rem; 
+    width: 12rem; 
+  }
+  label:first-child {
+    padding-right: 1.5rem;    
   }
 
   .form {
@@ -289,8 +294,6 @@
   .plan {
     display: flex;
     flex-direction: column;
-    border-left: 1px solid var(--color-border);
-    padding-left: 1rem;
   }
 
   h3 {

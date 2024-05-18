@@ -13,8 +13,9 @@
 	--color-bg-error: rgba(255, 0, 0, 0.1);
 	--color-bg-error-muted: rgba(255, 0, 0, 0.05);
 	--color-border: rgba(0, 0, 0, 0.2);
-  	--color-bg: #eee;
+  	--color-bg: #f3f2eb;
   	--color-bg-form: #fff;
+	--color-bg-control: rgb(227 231 232);
 
 	--form-radius: 0.25rem;
 	--control-radius: 0.25rem;
@@ -44,7 +45,7 @@ select,
 input {
   font-family: var(--font-body);
   font-size: var(--font-size-md);
-  background: var(--color-bg);
+  background: var(--color-bg-control);
   border-radius: var(--control-radius);
   border: none;
   width: 100%;
