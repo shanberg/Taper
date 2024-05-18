@@ -12,7 +12,7 @@
 
 <style>
   :root {
-    --add-row-button-height: calc((1 / 6) * var(--control-height));
+    --add-row-button-height: calc((1 / 7) * var(--control-height));
   }
 
   button {
