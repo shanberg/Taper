@@ -8,25 +8,48 @@
   }
 </script>
 
-<button title="Click to add a row" on:click={handleClick}></button>
+<button title="Add a row" on:click={handleClick}></button>
 
 <style>
+  :root {
+    --add-row-button-height: calc((1 / 6) * var(--control-height));
+  }
+
   button {
     height: 100%;
     width: 100%;
     background-color: transparent;
     cursor: cell;
     border: 0;
-    height: 4px;
-    margin: -1px 0;
+    height: var(--add-row-button-height);
+    margin: calc((1 / 4) * var(--control-height) * -1) 0;
     z-index: 10;
-    border-radius: 10px;
     position: relative;
-    transition: background-color 0.05s;
+    transition: all var(--control-transition-duration) cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--color-fg);
+      transition: inherit;
+      transform: scaleY(0);
+      border-radius: 10px;
+      opacity: 0;
+    }
   }
 
   button:hover, button:focus {
     outline: none;  
-    background-color: var(--color-fg);
+
+    &:after {
+      background-color: var(--color-fg);
+      opacity: 1;
+      transform: scaleY(1);
+    }
   }
 </style>

@@ -1,8 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { formatDate } from '../utils';
+  import { formatDate, isRowValid, isRowPlaceholder } from '../utils';
   export let tableData;
-  export let startDate;
   export let row;
   export let index;
 
@@ -12,8 +11,9 @@
   let rowEndDate
   let rowIsPlaceholder = false
 
-  $: rowIsPlaceholder = row.dose === 0 && row.daysForDose === 0
-  $: invalid = !rowIsPlaceholder && (row.dose <= 0 || row.daysForDose <= 0);
+  $: rowIsOnlyRealRow = tableData.length === 2
+  $: rowIsPlaceholder = isRowPlaceholder(row)
+  $: invalid = !rowIsPlaceholder && isRowValid(row);
 
   function handleDoseChange(event) {
     dispatch('change', { ...row, dose: parseFloat(event.target.value) });
@@ -50,7 +50,7 @@
     />
   </td>
   <td class="delete">
-    <button title="Remove this step" class="remove-btn" on:click={handleRemoveRow}>×</button>
+    <button disabled={rowIsOnlyRealRow ? "disabled" : undefined} title="Remove this step" class="remove-btn" on:click={handleRemoveRow}>×</button>
   </td>
 </tr>
 
@@ -90,13 +90,20 @@
     border: 0;
     margin-left: 1px;
     border-radius: var(--control-radius);
+    transition: all var(--control-transition-duration) ease-in-out;
+    color: inherit;
     background: transparent;
     cursor: pointer;
     opacity: 0;
     padding: 0;
     text-align: center;
-    transition: all 0.05s;
   }
+
+  .remove-btn:disabled {
+    cursor: not-allowed;
+  }
+
+  /* hide remove button on last row */
 
   tr:focus-within .remove-btn,
   tr:hover .remove-btn, .remove-btn:focus {
@@ -104,7 +111,7 @@
     opacity: 1;
   }
 
-  .remove-btn:hover, .remove-btn:focus {
+  .remove-btn:hover:not(:disabled), .remove-btn:focus:not(:disabled) {
     color: var(--color-fg-error);
     background: var(--color-bg-error-muted);
   }
