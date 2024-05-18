@@ -1,8 +1,8 @@
 <!-- src/routes/index.svelte -->
 <script>
-  import { formatDate } from '../utils';
+  import { formatDate, isRowPlaceholder } from '../utils';
   import { TEMPLATES } from '../templates.ts';
-  import Row from './Row.svelte';
+  import FormRow from './FormRow.svelte';
   import ScheduleRow from './ScheduleRow.svelte';
   import AddRowButton from './AddRowButton.svelte';
   import { onMount } from 'svelte';
@@ -46,15 +46,19 @@
       return !(isRowEmpty && i !== lastRowIndex);
     });
 
-    // Trigger reactivity
     tableData = [...tableData];
   }
 
   function handleStartDateChange(event) {
-    startDate = new Date(event.target.value)
-    startDate.setHours(24, 0, 0, 0)
-    // Optionally, update the startDateInputValue if needed elsewhere
-    startDateInputValue = event.target.value;
+    if (event.target.value === '') {
+      const now = new Date();
+      startDateInputValue = yyyymmdd(now);
+      startDate = now;
+    } else {
+        startDate = new Date(event.target.value)
+        startDate.setHours(24, 0, 0, 0)
+        startDateInputValue = event.target.value;
+      }
   }
 
   function handleCopyTableToClipboard() {
@@ -110,6 +114,8 @@
   // Calculate the end date
   $: endDate = new Date(startDate.getTime() + totalDays * 24 * 60 * 60 * 1000);
 
+  $: isFirstRowAPlaceholder = isRowPlaceholder(tableData[0]);
+
 </script>
 
 <main>
@@ -118,7 +124,9 @@
 
       <label class="course-begins">
         <span>Course begins</span>
-        <input type="date" bind:value={startDateInputValue} on:change={handleStartDateChange} />
+        <input
+
+         type="date" bind:value={startDateInputValue} on:change={handleStartDateChange} />
       </label>
 
       <label class="template">
@@ -149,8 +157,15 @@
           </tr>
         </thead>
         <tbody>
+          {#if !isFirstRowAPlaceholder}
+            <tr>
+              <td class="add-row-button-td" colspan="2">
+                <AddRowButton on:addRow={() => handleAddRow(-1)} />
+              </td>
+            </tr>
+          {/if}
           {#each tableData as row, index}
-            <Row
+            <FormRow
               {tableData}
               {startDate}
               row={row}
@@ -158,7 +173,7 @@
               on:removeRow={() => handleRemoveRow(index)}
               on:change={(event) => handleRowChange(index, event.detail)}
             />
-            {#if index < tableData.length - 1}
+            {#if index < tableData.length - 2}
               <tr>
                 <td class="add-row-button-td" colspan="2">
                   <AddRowButton on:addRow={() => handleAddRow(index)} />
@@ -201,21 +216,23 @@
   main {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    border-radius: calc(2 * var(--control-radius));
+    overflow: clip;
+    background: var(--color-bg-form);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.025);
   }
 
   header, 
   .body {
-    background: var(--color-bg-form);
     display: flex;
     flex-direction: row;
     gap: 1rem;
     padding: 1rem;
-    border-radius: var(--control-radius);
   }
 
   header {
     justify-content: space-between;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .body {
@@ -243,7 +260,10 @@
 
   .form,
   label:first-child {
-    width: 10rem; 
+    width: 12rem; 
+  }
+  label:first-child {
+    padding-right: 1.5rem;    
   }
 
   .form {
@@ -289,8 +309,6 @@
   .plan {
     display: flex;
     flex-direction: column;
-    border-left: 1px solid var(--color-border);
-    padding-left: 1rem;
   }
 
   h3 {
@@ -322,6 +340,8 @@
     color: var(--color-fg-muted);
     height: var(--control-height);
     line-height: var(--control-height);
+    display: flex;
+    align-items: center;
   }
 
   td.add-row-button-td {

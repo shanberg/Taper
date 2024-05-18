@@ -18,3 +18,11 @@ let options;
 
   return new Intl.DateTimeFormat('default', options).format(new Date(date));
 }
+
+export const isRowValid = (row): boolean => {
+  return row.dose <= 0 || row.daysForDose <= 0
+}
+
+export const isRowPlaceholder = (row): boolean => {
+  return row.dose === 0 && row.daysForDose === 0
+}
