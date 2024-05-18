@@ -23,6 +23,7 @@
 	--control-height: 32px;
 
 	font-family: var(--font-body);
+	line-height: 1.5;
 	color: var(--color-fg);
   	background-color: var(--color-bg);
 }
@@ -30,9 +31,9 @@
 body {
 	min-height: 100vh;
 	margin: 0;
-	padding: 0;
+	padding: 1rem;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
   	justify-content: center;
 	font-size: var(--font-size-md);
 }
@@ -65,15 +66,26 @@ input {
 }
 
 select {
-  padding-right: 2rem; /* Adjust based on the size of your SVG */
-  appearance: none; /* Removes default styling provided by the browser */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M5,8 L10,13 L15,8" fill="none" stroke-width="1.5" stroke="black"/></svg>');
+  padding-right: 2rem;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20"><path d="M5,8 L10,13 L15,8" fill="none" stroke-width="2" stroke-linecap="round" stroke="black"/></svg>');
   background-repeat: no-repeat;
-  background-position: right 0.5rem center; /* Adjust the position based on your needs */
-  background-size: 1rem; /* Adjust based on the size of your SVG */
+  background-position: right 0.5rem top 47.5%;
+  background-size: 1.25rem;
 }
 
 p {
   line-height: 1.5;
   margin: unset;
+}
+
+kbd {
+  color: inherit;
+  border-radius: var(--control-radius);
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.1ch;
+  font-size: 0.75em;
+  font-weight: 700;
+  font-family: inherit;
 }
