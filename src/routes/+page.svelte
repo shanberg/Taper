@@ -1,6 +1,6 @@
 <!-- src/routes/index.svelte -->
 <script>
-  import { formatDate, isRowPlaceholder } from '../utils';
+  import { formatDate, isRowPlaceholder, yyyymmdd } from '../utils';
   import { TEMPLATES } from '../templates.ts';
   import FormRow from './FormRow.svelte';
   import ScheduleRow from './ScheduleRow.svelte';
@@ -10,26 +10,19 @@
   const PLACEHOLDER_ROW = { dose: 0, daysForDose: 0 };
   let tableData = [...TEMPLATES.Default, PLACEHOLDER_ROW]
   let template = "Default"
-
   let startDate = new Date();
+  let undoStack = [];
+  let redoStack = [];
+  let startDateInputValue;
 
-    // Helper function to format dates as 'YYYY-MM-DD'
-  function yyyymmdd(date) {
-    const d = new Date(date),
-          month = '' + (d.getMonth() + 1),
-          day = '' + d.getDate(),
-          year = d.getFullYear();
-
-    return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+  function saveStateForUndo() {
+    undoStack = [...undoStack, [...tableData]];
+    redoStack = []; // Clear the redo stack whenever a new action is performed
   }
 
-  // Convert the startDate to a string in 'YYYY-MM-DD' format for the input element
-  let startDateInputValue;
-  onMount(() => {
-    startDateInputValue = yyyymmdd(startDate)
-  });
-
   function handleRowChange(index, newData) {
+    console.log("row change");
+    saveStateForUndo();
     tableData[index] = newData;
 
     // Automatically add a new row if the last row is filled
@@ -49,6 +42,7 @@
     tableData = [...tableData];
   }
 
+
   function handleStartDateChange(event) {
     if (event.target.value === '') {
       const now = new Date();
@@ -61,25 +55,8 @@
       }
   }
 
-  function handleCopyTableToClipboard() {
-    const newTable = document.createElement('table');
-    newTable.innerHTML = tableData
-      .map(row => `<tr>
-        <td>${row.dose}mg</td>
-        <td>${formatDate(rowStartDate)} - ${formatDate(rowEndDate)}</td>
-      </tr>`)
-      .join('\n');
-
-    // copy newTable to clipboard
-    navigator.clipboard.write([
-      new ClipboardItem({
-        [newTable.outerHTML]: newTable
-      })   
-    ])
-  }
-
   function handleAddRow(index) {
-    // Remove empty rows before adding a new one
+    saveStateForUndo();
     removeEmptyRows();
 
     tableData = [
@@ -98,9 +75,27 @@
   }
 
   function handleRemoveRow(index) {
+    saveStateForUndo();
     tableData = [...tableData.slice(0, index), ...tableData.slice(index + 1)];
   }
 
+  function undo() {
+    if (undoStack.length > 0) {
+      redoStack = [...redoStack, [...tableData]];
+      tableData = undoStack.pop();
+    }
+  }
+
+  function redo() {
+    if (redoStack.length > 0) {
+      undoStack = [...undoStack, [...tableData]];
+      tableData = redoStack.pop();
+    }
+  }
+
+  onMount(() => {
+    startDateInputValue = yyyymmdd(startDate)
+  });
 
   // Calculate the total dosage
   $: totalDose = tableData.reduce((sum, row) => sum + row.dose, 0);
@@ -124,10 +119,13 @@
 
       <label class="course-begins">
         <span>Course begins</span>
-        <input
-
-         type="date" bind:value={startDateInputValue} on:change={handleStartDateChange} />
+        <input type="date" bind:value={startDateInputValue} on:change={handleStartDateChange} />
       </label>
+
+      <div class="undo-redo-buttons">
+        <button on:click={undo} disabled={undoStack.length === 0}>Undo</button>
+        <button on:click={redo} disabled={redoStack.length === 0}>Redo</button>
+      </div>
 
       <label class="template">
         <span>Template</span>
