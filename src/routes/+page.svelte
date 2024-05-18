@@ -1,216 +1,246 @@
-<!-- src/routes/index.svelte -->
 <script>
-  import { formatDate, isRowPlaceholder } from '../utils';
+  import { formatDate, isRowPlaceholder, yyyymmdd } from '../utils';
   import { TEMPLATES } from '../templates.ts';
   import FormRow from './FormRow.svelte';
   import ScheduleRow from './ScheduleRow.svelte';
   import AddRowButton from './AddRowButton.svelte';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   const PLACEHOLDER_ROW = { dose: 0, daysForDose: 0 };
-  let tableData = [...TEMPLATES.Default, PLACEHOLDER_ROW]
-  let template = "Default"
+  let data = {
+    tableData: [...TEMPLATES.Default, PLACEHOLDER_ROW],
+    startDate: new Date()
+  };
+  let template = "Default";
+  let undoStack = [];
+  let redoStack = [];
+  let startDateInputValue;
 
-  let startDate = new Date();
-
-    // Helper function to format dates as 'YYYY-MM-DD'
-  function yyyymmdd(date) {
-    const d = new Date(date),
-          month = '' + (d.getMonth() + 1),
-          day = '' + d.getDate(),
-          year = d.getFullYear();
-
-    return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+  function saveStateForUndo() {
+    undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
+    redoStack = [];
   }
 
-  // Convert the startDate to a string in 'YYYY-MM-DD' format for the input element
-  let startDateInputValue;
-  onMount(() => {
-    startDateInputValue = yyyymmdd(startDate)
-  });
-
   function handleRowChange(index, newData) {
-    tableData[index] = newData;
+    saveStateForUndo();
+    data.tableData[index] = newData;
 
     // Automatically add a new row if the last row is filled
-    const isLastRow = index === tableData.length - 1;
+    const isLastRow = index === data.tableData.length - 1;
     const isRowFilled = newData.dose > 0 || newData.daysForDose > 0;
     if (isLastRow && isRowFilled) {
-      tableData = [...tableData, { dose: 0, daysForDose: 0 }];
+      data.tableData = [...data.tableData, { dose: 0, daysForDose: 0 }];
     }
 
     // Remove empty rows, except for the last one
-    const lastRowIndex = tableData.length - 1;
-    tableData = tableData.filter((row, i) => {
+    const lastRowIndex = data.tableData.length - 1;
+    data.tableData = data.tableData.filter((row, i) => {
       const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
       return !(isRowEmpty && i !== lastRowIndex);
     });
 
-    tableData = [...tableData];
+    data.tableData = [...data.tableData];
   }
 
   function handleStartDateChange(event) {
+    saveStateForUndo();
     if (event.target.value === '') {
-      const now = new Date();
+      const now = new Date().setHours(24, 0, 0, 0);
+      data.startDate = now;
       startDateInputValue = yyyymmdd(now);
-      startDate = now;
     } else {
-        startDate = new Date(event.target.value)
-        startDate.setHours(24, 0, 0, 0)
-        startDateInputValue = event.target.value;
-      }
-  }
-
-  function handleCopyTableToClipboard() {
-    const newTable = document.createElement('table');
-    newTable.innerHTML = tableData
-      .map(row => `<tr>
-        <td>${row.dose}mg</td>
-        <td>${formatDate(rowStartDate)} - ${formatDate(rowEndDate)}</td>
-      </tr>`)
-      .join('\n');
-
-    // copy newTable to clipboard
-    navigator.clipboard.write([
-      new ClipboardItem({
-        [newTable.outerHTML]: newTable
-      })   
-    ])
+      data.startDate = new Date(event.target.value);
+      data.startDate.setHours(24, 0, 0, 0);
+      startDateInputValue = event.target.value;
+    }
   }
 
   function handleAddRow(index) {
-    // Remove empty rows before adding a new one
+    saveStateForUndo();
     removeEmptyRows();
 
-    tableData = [
-      ...tableData.slice(0, index + 1),
+    data.tableData = [
+      ...data.tableData.slice(0, index + 1),
       { dose: 0, daysForDose: 0 },
-      ...tableData.slice(index + 1)
+      ...data.tableData.slice(index + 1)
     ];
   }
 
+  function handleTemplateChange() {
+    saveStateForUndo();
+    data = {
+      tableData: [...TEMPLATES[template], PLACEHOLDER_ROW],
+      startDate: new Date()
+    };
+    startDateInputValue = yyyymmdd(data.startDate);
+  }
+
   function removeEmptyRows() {
-    const lastRowIndex = tableData.length - 1;
-    tableData = tableData.filter((row, i) => {
+    const lastRowIndex = data.tableData.length - 1;
+    data.tableData = data.tableData.filter((row, i) => {
       const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
       return !(isRowEmpty && i !== lastRowIndex);
     });
   }
 
   function handleRemoveRow(index) {
-    tableData = [...tableData.slice(0, index), ...tableData.slice(index + 1)];
+    saveStateForUndo();
+    data.tableData = [...data.tableData.slice(0, index), ...data.tableData.slice(index + 1)];
   }
 
+  function undo() {
+    if (undoStack.length > 0) {
+      redoStack = [...redoStack, JSON.parse(JSON.stringify(data))];
+      data = undoStack.pop();
+      data.startDate = new Date(data.startDate);
+      startDateInputValue = yyyymmdd(data.startDate);
+    }
+  }
+
+  function redo() {
+    if (redoStack.length > 0) {
+      undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
+      data = redoStack.pop();
+      data.startDate = new Date(data.startDate); // Ensure startDate is a Date object
+      startDateInputValue = yyyymmdd(data.startDate);
+    }
+  }
+
+  function handleKeyDown(e) {
+    const { ctrlKey, metaKey, shiftKey, key } = e;
+
+    if (key === 'z') {
+      if (ctrlKey || metaKey) {
+        if (shiftKey) {
+          e.preventDefault();
+          redo();
+        } else {
+          e.preventDefault();
+          undo();
+        }
+      }
+    } else if (key === 'y') {
+      if (ctrlKey || metaKey) {
+        e.preventDefault();
+        redo();
+      }
+    }
+  }
+
+  onMount(() => {
+    startDateInputValue = yyyymmdd(data.startDate);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+  });
+
+  onDestroy(() => {
+    undoStack = [];
+    redoStack = [];
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+  });
 
   // Calculate the total dosage
-  $: totalDose = tableData.reduce((sum, row) => sum + row.dose, 0);
+  $: totalDose = data.tableData.reduce((sum, row) => sum + row.dose, 0);
 
   // Calculate the total number of days
-  $: totalDays = tableData.reduce((sum, row) => sum + row.daysForDose, 0) + tableData.length - 2;
+  $: totalDays = data.tableData.reduce((sum, row) => sum + row.daysForDose, 0) + data.tableData.length - 2;
 
   // Format the total number of days in a locale-friendly format
   $: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
 
   // Calculate the end date
-  $: endDate = new Date(startDate.getTime() + totalDays * 24 * 60 * 60 * 1000);
+  $: endDate = new Date(data.startDate.getTime() + totalDays * 24 * 60 * 60 * 1000);
 
-  $: isFirstRowAPlaceholder = isRowPlaceholder(tableData[0]);
+  $: isFirstRowAPlaceholder = isRowPlaceholder(data.tableData[0]);
 
 </script>
 
 <main>
 
-    <header>
+  <header>
 
-      <label class="course-begins">
-        <span>Course begins</span>
-        <input
+    <label class="course-begins">
+      <span>Course begins</span>
+      <input type="date" bind:value={startDateInputValue} on:change={handleStartDateChange} />
+    </label>
 
-         type="date" bind:value={startDateInputValue} on:change={handleStartDateChange} />
-      </label>
-
-      <label class="template">
-        <span>Template</span>
-        <select
+    <label class="template">
+      <span>Template</span>
+      <select
         class="custom-select"
-          bind:value={template}
-          on:change={() => {
-            tableData = [...TEMPLATES[template], PLACEHOLDER_ROW];
-          }}
-        >
-          {#each Object.keys(TEMPLATES) as template}
-            <option value={template}>{template}</option>
-          {/each}
-        </select>
-      </label>
+        bind:value={template}
+        on:change={handleTemplateChange}
+      >
+        {#each Object.keys(TEMPLATES) as template}
+          <option value={template}>{template}</option>
+        {/each}
+      </select>
+    </label>
+  </header>
 
-    </header>
-
-    <div class="body">
-
-      <table class="form">
-        <thead>
+  <div class="body">
+    <table class="form">
+      <thead>
+        <tr>
+          <th class="dose">mg</th>
+          <th class="days">days</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {#if !isFirstRowAPlaceholder}
           <tr>
-            <th class="dose">mg</th>
-            <th class="days">days</th>
-            <th></th>
+            <td class="add-row-button-td" colspan="2">
+              <AddRowButton on:addRow={() => handleAddRow(-1)} />
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {#if !isFirstRowAPlaceholder}
+        {/if}
+        {#each data.tableData as row, index}
+          <FormRow
+            tableData={data.tableData}
+            startDate={data.startDate}
+            row={row}
+            index={index}
+            on:removeRow={() => handleRemoveRow(index)}
+            on:change={(event) => handleRowChange(index, event.detail)}
+          />
+          {#if index < data.tableData.length - 2}
             <tr>
               <td class="add-row-button-td" colspan="2">
-                <AddRowButton on:addRow={() => handleAddRow(-1)} />
+                <AddRowButton on:addRow={() => handleAddRow(index)} />
               </td>
             </tr>
           {/if}
-          {#each tableData as row, index}
-            <FormRow
-              {tableData}
-              {startDate}
-              row={row}
-              index={index}
-              on:removeRow={() => handleRemoveRow(index)}
-              on:change={(event) => handleRowChange(index, event.detail)}
-            />
-            {#if index < tableData.length - 2}
-              <tr>
-                <td class="add-row-button-td" colspan="2">
-                  <AddRowButton on:addRow={() => handleAddRow(index)} />
-                </td>
-              </tr>
-            {/if}
-          {/each}
-        </tbody>
-      </table>
+        {/each}
+      </tbody>
+    </table>
 
-      <div class="plan">
+    <div class="plan">
+      <h3>Plan</h3>
+      <ul>
+        {#each data.tableData as row, index}
+          <ScheduleRow
+            tableData={data.tableData}
+            startDate={data.startDate}
+            {row}
+            {index}
+            on:change={(event) => handleRowChange(index, event.detail)}
+          />
+        {/each}
+      </ul>
 
-        <h3>Plan</h3>
-
-        <ul>
-          {#each tableData as row, index}
-            <ScheduleRow
-              {tableData}
-              {startDate}
-              {row}
-              {index}
-              on:change={(event) => handleRowChange(index, event.detail)}
-            />
-          {/each}
-        </ul>
-
-        <footer class="summary">
-          <p>
-            {totalDose}mg over {formattedTotalDays} days
-          </p>
-        </footer>
-
-      </div>
-
+      <footer class="summary">
+        <p>
+          {totalDose}mg over {formattedTotalDays} days
+        </p>
+      </footer>
+    </div>
   </div>
-
 </main>
+
 
 <style>
   main {
