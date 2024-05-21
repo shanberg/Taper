@@ -1,31 +1,24 @@
 :root {
-	--font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
-	--font-size-lg: 32px;
-	--font-size-md: 16px;
-
-	--font-weight-heading: 600;
-
-	--color-fg: #223351;
-	--color-fg-muted: #7e7e96;
-	--color-fg-error: red;
-	--color-bg-error: rgba(255, 0, 0, 0.1);
-	--color-bg-error-muted: rgba(255, 0, 0, 0.05);
-	--color-border: rgba(0, 0, 0, 0.2);
-  	--color-bg: #f3f2eb;
-  	--color-bg-form: #fff;
-	--color-bg-control: rgb(227 231 232);
-	--control-transition-duration: 0.1s;
-
-	--control-radius: 0.35rem;
-
-	--control-height: 32px;
-
-	font-family: var(--font-body);
-	line-height: 1.5;
-	color: var(--color-fg);
-  	background-color: var(--color-bg);
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    --font-size-lg: 32px;
+    --font-size-md: 16px;
+    --font-weight-heading: 600;
+    --color-fg: #2B3A42; /* Updated foreground color */
+    --color-fg-muted: #7A8A99; /* Updated muted foreground color */
+    --color-fg-error: #D9534F; /* Updated foreground error color */
+    --color-bg-error: #F2DEDE; /* Updated background error color */
+    --color-bg-error-muted: rgba(210, 83, 79, .05); /* Adjusted muted background error color */
+    --color-border: #D1DDE6; /* Updated light border color */
+    --color-bg: #E6EEF4; /* Updated background color */
+    --color-bg-form: #F9F9FB; /* Updated lighter surface color */
+    --color-bg-control: #E0E8EF; /* Updated input/control background color with more contrast */
+    --control-transition-duration: .1s;
+    --control-radius: .35rem;
+    --control-height: 32px;
+    font-family: var(--font-body);
+    line-height: 1.5;
+    color: var(--color-fg);
+    background-color: var(--color-bg);
 }
 
 body {
