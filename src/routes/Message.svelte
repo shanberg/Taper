@@ -6,7 +6,7 @@
 
   const messages = [
     {
-      endDate: '2024-06-12',
+      endDate: '2024-06-07',
       content: formatNew("Undo and redo with <kbd>ctrl z</kbd>, <kbd>ctrl y</kbd>, etc.")
     },
     {
