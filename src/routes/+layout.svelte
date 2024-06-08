@@ -7,6 +7,10 @@
   	inject({ mode: dev ? 'development' : 'production' });
 </script>
 
+<svelte:head>
+    <title>Taper</title> 
+</svelte:head>
+
 <div class="app">
   	<Message />
 	<slot />
