@@ -27,7 +27,7 @@ body {
 	padding: 1rem;
 	display: flex;
 	align-items: flex-start;
-  	justify-content: center;
+  justify-content: center;
 	font-size: var(--font-size-md);
 }
 
