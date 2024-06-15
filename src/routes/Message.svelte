@@ -10,6 +10,10 @@
       content: formatNew("Undo and redo with <kbd>ctrl z</kbd>, <kbd>ctrl y</kbd>, etc.")
     },
     {
+      endDate: '2024-06-31',
+      content: formatNew("Get a schedule in Spanish, Mandarin, or Haitian Creole.")
+    },
+    {
       content: 'I hope you\'re having good day'
     }
   ];
