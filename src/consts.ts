@@ -1,4 +1,3 @@
-
 export const TEMPLATES = {
     "Default": [
       { dose: 20, daysForDose: 5 },
@@ -50,7 +49,7 @@ export const TEMPLATES = {
         { dose: 1, daysForDose: 28 },
       ],
       "PMR taper": [
-        { dose: 15, daysForDose: 14 }, // Corrected "2 aeeks" to "2 weeks" (14 days)
+        { dose: 15, daysForDose: 14 },
         { dose: 12.5, daysForDose: 14 },
         { dose: 10, daysForDose: 14 },
         { dose: 9, daysForDose: 30 },
@@ -63,4 +62,11 @@ export const TEMPLATES = {
         { dose: 2, daysForDose: 30 },
         { dose: 1, daysForDose: 30 },
       ]
+  }
+
+  export const LANGUAGES = {
+    "English": "en",
+    "Spanish": "es",
+    "Mandarin": "zh",
+    "Haitian Creole": "ht",
   }

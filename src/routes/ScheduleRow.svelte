@@ -1,8 +1,10 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { formatDate, isRowValid } from '../utils';
+  import { LANGUAGES } from '../consts';
+  import { formatDate, formatRowText, isRowValid } from '../utils';
   export let tableData;
   export let startDate;
+  export let selectedLanguageKey;
   export let row;
   export let index;
 
@@ -31,7 +33,7 @@
     class:isInvalid
     class:isRowPlaceholder
   >
-    {index === 0 ? "Take" : `Then take`} <b>{row.dose}mg</b> daily for <b>{row.daysForDose} {row.daysForDose === 1 ? 'day' : 'days'}</b> ({formatDate(rowStartDate)}–{formatDate(rowEndDate)})
+  {formatRowText(row, rowStartDate, rowEndDate, index, selectedLanguageKey)}
   </li>
 {/if}
 

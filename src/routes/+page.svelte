@@ -1,6 +1,6 @@
 <script>
   import { formatDate, isRowPlaceholder, yyyymmdd } from '../utils';
-  import { TEMPLATES } from '../templates.ts';
+  import { TEMPLATES, LANGUAGES } from '../consts.ts';
   import FormRow from './FormRow.svelte';
   import ScheduleRow from './ScheduleRow.svelte';
   import AddRowButton from './AddRowButton.svelte';
@@ -12,6 +12,7 @@
     startDate: new Date()
   };
   let template = "Default";
+  let selectedLanguageKey = Object.keys(LANGUAGES)[0];
   let undoStack = [];
   let redoStack = [];
   let startDateInputValue;
@@ -42,18 +43,35 @@
     data.tableData = [...data.tableData];
   }
 
-  function handleStartDateChange(event) {
-    saveStateForUndo();
-    if (event.target.value === '') {
-      const now = new Date().setHours(24, 0, 0, 0);
-      data.startDate = now;
-      startDateInputValue = yyyymmdd(now);
-    } else {
-      data.startDate = new Date(event.target.value);
-      data.startDate.setHours(24, 0, 0, 0);
-      startDateInputValue = event.target.value;
-    }
+
+function handleStartDateChange(event) {
+  saveStateForUndo();
+  const newDate = new Date(event.target.value);
+
+  if (event.target.value === '') {
+    // Assume we're skipping forward
+    const increment = 1;
+    const newDate = new Date(data.startDate.getTime() + increment * 24 * 60 * 60 * 1000);
+    data.startDate = newDate;
+    startDateInputValue = yyyymmdd(newDate);
   }
+
+  if (!isNaN(newDate.getTime())) {
+    newDate.setHours(24, 0, 0, 0);
+    data.startDate = newDate;
+    startDateInputValue = event.target.value;
+  } else {
+    console.error('Invalid date input');
+  }
+}
+
+function handleDateInputKeyDown(event) {
+  if (event.target.value === '') {
+    return;
+  }
+}
+
+
 
   function handleAddRow(index) {
     saveStateForUndo();
@@ -164,7 +182,10 @@
 
     <label class="course-begins">
       <span>Course begins</span>
-      <input type="date" bind:value={startDateInputValue} on:change={handleStartDateChange} />
+      <input type="date"
+       bind:value={startDateInputValue}
+       on:keydown={handleDateInputKeyDown}
+       on:change={handleStartDateChange} />
     </label>
 
     <label class="template">
@@ -176,6 +197,18 @@
       >
         {#each Object.keys(TEMPLATES) as template}
           <option value={template}>{template}</option>
+        {/each}
+      </select>
+    </label>
+
+    <label class="language">
+      <span>Language</span>
+      <select
+        class="custom-select"
+        bind:value={selectedLanguageKey}
+      >
+        {#each Object.keys(LANGUAGES) as languageKey}
+          <option value={languageKey}>{languageKey}</option>
         {/each}
       </select>
     </label>
@@ -201,7 +234,6 @@
         {#each data.tableData as row, index}
           <FormRow
             tableData={data.tableData}
-            startDate={data.startDate}
             row={row}
             index={index}
             on:removeRow={() => handleRemoveRow(index)}
@@ -220,11 +252,12 @@
 
     <div class="plan">
       <h3>Plan</h3>
-      <ul>
+      <ul lang={LANGUAGES[selectedLanguageKey]}>
         {#each data.tableData as row, index}
           <ScheduleRow
             tableData={data.tableData}
             startDate={data.startDate}
+            {selectedLanguageKey}
             {row}
             {index}
             on:change={(event) => handleRowChange(index, event.detail)}
@@ -249,7 +282,8 @@
     border-radius: calc(2 * var(--control-radius));
     overflow: clip;
     background: var(--color-bg-form);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.025);
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.025);
+    width: 720px;
   }
 
   header, 
