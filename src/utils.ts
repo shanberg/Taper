@@ -15,12 +15,23 @@ export const isRowPlaceholder = (row: { dose: number, daysForDose: number }): bo
   return row.dose === 0 && row.daysForDose === 0
 }
 
-// Helper function to format dates as 'YYYY-MM-DD'
+/** Format date in YYYY-MM-DD format
+ * @param date
+ * @returns string
+ */
 export function yyyymmdd(date: Date): string {
+  // fail if no date provided
+  if (!date) return '';
+
   const d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
+
+  // fail if date is invalid
+  if (Number.isNaN(+month) || Number.isNaN(+day) || Number.isNaN(+year)) {
+    return '';
+  }
 
   return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
 }
