@@ -1,5 +1,5 @@
 <script>
-  import { formatDate, isRowPlaceholder, yyyymmdd } from '../utils';
+  import { isRowPlaceholder, yyyymmdd } from '../utils';
   import { TEMPLATES, LANGUAGES } from '../consts.ts';
   import FormRow from '../components/FormRow.svelte';
   import ScheduleRow from '../components/ScheduleRow.svelte';
@@ -250,9 +250,13 @@ function handleDateInputKeyDown(event) {
       </tbody>
     </table>
 
-    <div class="plan">
+    <div class="plan"
+        dir={LANGUAGES[selectedLanguageKey].dir}
+    >
       <h3>Plan</h3>
-      <ul lang={LANGUAGES[selectedLanguageKey]}>
+      <ul 
+        lang={LANGUAGES[selectedLanguageKey].lang}
+      >
         {#each data.tableData as row, index}
           <ScheduleRow
             tableData={data.tableData}
@@ -372,6 +376,7 @@ function handleDateInputKeyDown(event) {
   .plan {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
   }
 
   h3 {

@@ -62,11 +62,13 @@ export const TEMPLATES = {
         { dose: 2, daysForDose: 30 },
         { dose: 1, daysForDose: 30 },
       ]
-  }
+  } as Record<string, Template[]>;
 
   export const LANGUAGES = {
-    "English": "en",
-    "Spanish": "es",
-    "Mandarin": "zh",
-    "Haitian Creole": "ht",
-  }
+    "English": {lang: "en-US", verified: true, dir: "ltr"},
+    "Spanish": {lang: "es", verified: true, dir: "ltr"},
+    "Mandarin": {lang: "zh", verified: false, dir: "ltr"},
+    "Haitian Creole": {lang: "ht", verified: false, dir: "ltr"},
+    "Swahili": {lang: "sw", verified: false, dir: "ltr"},
+    "Arabic": {lang: "ar", verified: false, dir: "rtl"},
+  } as Record<string, Language>;

@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { LANGUAGES } from '../consts';
-  import { formatDate, formatRowText, isRowInvalid } from '../utils';
+  import { formatRowText, isRowInvalid } from '../utils';
   export let tableData;
   export let startDate;
   export let selectedLanguageKey;
@@ -33,7 +33,7 @@
     class:isInvalid
     class:isRowPlaceholder
   >
-  {formatRowText(row, rowStartDate, rowEndDate, index, selectedLanguageKey)}
+  {formatRowText({row, rowStartDate, rowEndDate, index, selectedLanguageKey})}
   </li>
 {/if}
 

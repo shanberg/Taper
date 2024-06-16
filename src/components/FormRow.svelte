@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { formatDate, isRowInvalid, isRowPlaceholder } from '../utils';
+  import { isRowInvalid, isRowPlaceholder } from '../utils';
   export let tableData;
   export let row;
   export let index;
