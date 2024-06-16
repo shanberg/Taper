@@ -1,6 +1,6 @@
 <script>
 	import { inject } from '@vercel/analytics'
-  	import Message from './Message.svelte';
+  	import Message from '../components/Message.svelte';
 	import './styles.css';
 
   	const dev = process.env.NODE_ENV === 'development';

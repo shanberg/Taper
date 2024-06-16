@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { formatDate, isRowValid, isRowPlaceholder } from '../utils';
+  import { formatDate, isRowInvalid, isRowPlaceholder } from '../utils';
   export let tableData;
   export let row;
   export let index;
@@ -13,7 +13,7 @@
 
   $: rowIsOnlyRealRow = tableData.length === 2
   $: rowIsPlaceholder = isRowPlaceholder(row)
-  $: invalid = !rowIsPlaceholder && isRowValid(row);
+  $: invalid = !rowIsPlaceholder && isRowInvalid(row);
 
   function handleDoseChange(event) {
     dispatch('change', { ...row, dose: parseFloat(event.target.value) });

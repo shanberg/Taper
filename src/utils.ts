@@ -7,7 +7,7 @@ export function formatDate(dateStr: string, style = 'conciseUS') {
   return new Intl.DateTimeFormat('default', { month: 'short', day: 'numeric', year: isDateThisYear(date) ? undefined : 'numeric' }).format(new Date(date));
 }
 
-export const isRowValid = (row: { dose: number, daysForDose: number }): boolean => {
+export const isRowInvalid = (row: { dose: number, daysForDose: number }): boolean => {
   return row.dose <= 0 || row.daysForDose <= 0
 }
 

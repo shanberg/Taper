@@ -1,9 +1,9 @@
 <script>
   import { formatDate, isRowPlaceholder, yyyymmdd } from '../utils';
   import { TEMPLATES, LANGUAGES } from '../consts.ts';
-  import FormRow from './FormRow.svelte';
-  import ScheduleRow from './ScheduleRow.svelte';
-  import AddRowButton from './AddRowButton.svelte';
+  import FormRow from '../components/FormRow.svelte';
+  import ScheduleRow from '../components/ScheduleRow.svelte';
+  import AddRowButton from '../components/AddRowButton.svelte';
   import { onMount, onDestroy } from 'svelte';
 
   const PLACEHOLDER_ROW = { dose: 0, daysForDose: 0 };

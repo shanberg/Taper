@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { LANGUAGES } from '../consts';
-  import { formatDate, formatRowText, isRowValid } from '../utils';
+  import { formatDate, formatRowText, isRowInvalid } from '../utils';
   export let tableData;
   export let startDate;
   export let selectedLanguageKey;
@@ -12,7 +12,7 @@
   let rowEndDate
 
   $: isRowPlaceholder = row.dose === 0 && row.daysForDose === 0
-  $: isInvalid = !isRowPlaceholder && isRowValid(row);
+  $: isInvalid = !isRowPlaceholder && isRowInvalid(row);
   $: isLastPlaceholderRow = index === tableData.length - 1 && isRowPlaceholder
 
   // Calculate the start and end dates
@@ -38,8 +38,6 @@
 {/if}
 
 <style>
-  li {
-  }
   .isInvalid {
     color: var(--color-fg-error);
   }
@@ -50,9 +48,5 @@
     text-decoration: underline;
     text-decoration-style: wavy;
     text-decoration-skip-ink: none;
-  }
-
-  b {
-    font-weight: unset;
   }
 </style>
