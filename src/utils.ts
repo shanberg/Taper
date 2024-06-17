@@ -4,22 +4,42 @@ const isDateThisYear = (date: Date): boolean => {
   return date.getFullYear() === new Date().getFullYear();
 }
 
-/** Format date using Intl.DateTimeFormat */
-function formatDate(date: Date, locale: string = 'en-US') {
-  return new Intl.DateTimeFormat(locale, {
-    month: 'short',
-    day: 'numeric',
-    year: isDateThisYear(date) ? undefined : 'numeric'
-}).format(date);
+/** Higher-order function to create a cached formatter */
+function createCachedFormatter() {
+  const dateTimeFormatCache = new Map();
+
+  return function(date: Date, lang: string = 'en-US') {
+    const yearFormat = isDateThisYear(date) ? undefined : 'numeric';
+    const cacheKey = `${lang}-${yearFormat}`;
+
+    // Check if the formatter is already in the cache
+    if (!dateTimeFormatCache.has(cacheKey)) {
+      // Create a new formatter and store it in the cache
+      const formatter = new Intl.DateTimeFormat(lang, {
+        month: 'short',
+        day: 'numeric',
+        year: yearFormat
+      });
+      dateTimeFormatCache.set(cacheKey, formatter);
+    }
+
+    // Use the cached formatter
+    const formatter = dateTimeFormatCache.get(cacheKey);
+    return formatter.format(date);
+  };
 }
 
+// Create a cached version of formatDate
+export const cachedFormatDate = createCachedFormatter();
+
+
 /** Returns true if either dose or daysForDose are <= 0 */
-export const isRowInvalid = (row: { dose: number, daysForDose: number }): boolean => {
+export const isRowInvalid = (row: Row): boolean => {
   return row.dose <= 0 || row.daysForDose <= 0
 }
 
 /** Returns true if dose and daysForDose are both 0 */
-export const isRowPlaceholder = (row: { dose: number, daysForDose: number }): boolean => {
+export const isRowPlaceholder = (row: Row): boolean => {
   return row.dose === 0 && row.daysForDose === 0
 }
 
@@ -57,9 +77,8 @@ export const formatRowText = ({row, rowStartDate, rowEndDate, index, selectedLan
     throw new Error(`Unknown language: ${selectedLanguageKey}`);    
   }
 
-  const locale = LANGUAGES[selectedLanguageKey].lang;
-  const dir = LANGUAGES[selectedLanguageKey].dir;
-  const dates = {start: formatDate(rowStartDate, locale), end: formatDate(rowEndDate, locale)}
+  const {lang, dir } = LANGUAGES[selectedLanguageKey];
+  const dates = {start: cachedFormatDate(rowStartDate, lang), end: cachedFormatDate(rowEndDate, lang)}
   const formattedDateRange = dir === "ltr" ? `${dates.start} - ${dates.end}` : `${dates.end} - ${dates.start}`
 
   if (selectedLanguageKey === 'English') {
