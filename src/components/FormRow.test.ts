@@ -3,8 +3,13 @@ import { render, fireEvent } from '@testing-library/svelte';
 import '@testing-library/jest-dom';
 import FormRow from './FormRow.svelte'; // Adjust the import path as necessary
 
-const isRowInvalid = vi.fn();
-const isRowPlaceholder = vi.fn();
+// Mock the utility functions
+vi.mock('../utils', () => ({
+	isRowInvalid: vi.fn(),
+	isRowPlaceholder: vi.fn(),
+  }));
+
+import { isRowInvalid, isRowPlaceholder } from '../utils';
 
 describe('FormRow', () => {
 	let tableData: UITableData;
@@ -13,10 +18,10 @@ describe('FormRow', () => {
 
 	beforeEach(() => {
 		tableData = [
-			{ dose: 1, daysForDose: 1 },
-			{ dose: 2, daysForDose: 2 }
+			{ dose: 1, daysForDose: 2 },
+			{ dose: 3, daysForDose: 4 }
 		];
-		row = { dose: 1, daysForDose: 1 };
+		row = { dose: 1, daysForDose: 2 };
 		index = 0;
 		isRowInvalid.mockReturnValue(false);
 		isRowPlaceholder.mockReturnValue(false);
@@ -46,7 +51,7 @@ describe('FormRow', () => {
 
 	test('handles daysForDose change', async () => {
 		const { getByDisplayValue, component } = render(FormRow, { tableData, row, index });
-		const input = getByDisplayValue('1');
+		const input = getByDisplayValue('2');
 
 		const changeHandler = vi.fn();
 		component.$on('change', changeHandler);
