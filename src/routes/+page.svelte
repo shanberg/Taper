@@ -1,420 +1,405 @@
 <script lang="ts">
-  import { isRowPlaceholder, yyyymmdd } from '../utils';
-  import { TEMPLATES, LANGUAGES } from '../consts';
-  import FormRow from '../components/FormRow.svelte';
-  import ScheduleRow from '../components/ScheduleRow.svelte';
-  import AddRowButton from '../components/AddRowButton.svelte';
-  import { onMount, onDestroy } from 'svelte';
+	import { isRowPlaceholder, yyyymmdd } from '../utils';
+	import { TEMPLATES, LANGUAGES } from '../consts';
+	import FormRow from '../components/FormRow.svelte';
+	import ScheduleRow from '../components/ScheduleRow.svelte';
+	import AddRowButton from '../components/AddRowButton.svelte';
+	import { onMount, onDestroy } from 'svelte';
 
-  const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
-  let data: UIStateData = {
-    tableData: [...TEMPLATES.Default, PLACEHOLDER_ROW],
-    startDate: new Date()
-  };
-  let template = "Default";
-  let selectedLanguageKey = Object.keys(LANGUAGES)[0];
-  let undoStack: UIStateData[] = [];
-  let redoStack: UIStateData[] = [];
-  let startDateInputValue = "";
+	const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
+	let data: UIStateData = {
+		tableData: [...TEMPLATES.Default, PLACEHOLDER_ROW],
+		startDate: new Date()
+	};
+	let template = 'Default';
+	let selectedLanguageKey = Object.keys(LANGUAGES)[0];
+	let undoStack: UIStateData[] = [];
+	let redoStack: UIStateData[] = [];
+	let startDateInputValue = '';
 
-  function saveStateForUndo() {
-    undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
-    redoStack = [];
-  }
+	function saveStateForUndo() {
+		undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
+		redoStack = [];
+	}
 
-  function handleRowChange(index: number, newData: Row) {
-    saveStateForUndo();
-    data.tableData[index] = newData;
+	function handleRowChange(index: number, newData: Row) {
+		saveStateForUndo();
+		data.tableData[index] = newData;
 
-    // Automatically add a new row if the last row is filled
-    const isLastRow = index === data.tableData.length - 1;
-    const isRowFilled = newData.dose > 0 || newData.daysForDose > 0;
-    if (isLastRow && isRowFilled) {
-      data.tableData = [...data.tableData, { dose: 0, daysForDose: 0 }];
-    }
+		// Automatically add a new row if the last row is filled
+		const isLastRow = index === data.tableData.length - 1;
+		const isRowFilled = newData.dose > 0 || newData.daysForDose > 0;
+		if (isLastRow && isRowFilled) {
+			data.tableData = [...data.tableData, { dose: 0, daysForDose: 0 }];
+		}
 
-    // Remove empty rows, except for the last one
-    const lastRowIndex = data.tableData.length - 1;
-    data.tableData = data.tableData.filter((row, i) => {
-      const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
-      return !(isRowEmpty && i !== lastRowIndex);
-    });
+		// Remove empty rows, except for the last one
+		const lastRowIndex = data.tableData.length - 1;
+		data.tableData = data.tableData.filter((row, i) => {
+			const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
+			return !(isRowEmpty && i !== lastRowIndex);
+		});
 
-    data.tableData = [...data.tableData];
-  }
+		data.tableData = [...data.tableData];
+	}
 
+	function handleStartDateChange(event: Event) {
+		saveStateForUndo();
+		const target = event.target as HTMLInputElement;
+		const newDate = new Date(target.value);
 
-function handleStartDateChange(event: Event) {
-  saveStateForUndo();
-  const target = event.target as HTMLInputElement;
-  const newDate = new Date(target.value);
+		if (target.value === '') {
+			// Assume we're skipping forward
+			const increment = 1;
+			const incrementedDate = new Date(data.startDate.getTime() + increment * 24 * 60 * 60 * 1000);
+			data.startDate = incrementedDate;
+			startDateInputValue = yyyymmdd(incrementedDate);
+		} else if (!isNaN(newDate.getTime())) {
+			newDate.setHours(24, 0, 0, 0);
+			data.startDate = newDate;
+			startDateInputValue = target.value;
+		} else {
+			console.error('Invalid date input');
+		}
+	}
 
-  if (target.value === '') {
-    // Assume we're skipping forward
-    const increment = 1;
-    const incrementedDate = new Date(data.startDate.getTime() + increment * 24 * 60 * 60 * 1000);
-    data.startDate = incrementedDate;
-    startDateInputValue = yyyymmdd(incrementedDate);
-  } else if (!isNaN(newDate.getTime())) {
-    newDate.setHours(24, 0, 0, 0);
-    data.startDate = newDate;
-    startDateInputValue = target.value;
-  } else {
-    console.error('Invalid date input');
-  }
-}
+	function handleDateInputKeyDown(event: KeyboardEvent) {
+		const target = event.target as HTMLInputElement;
+		if (target.value === '') {
+			return;
+		}
+	}
 
-function handleDateInputKeyDown(event: KeyboardEvent) {
-  const target = event.target as HTMLInputElement;
-  if (target.value === '') {
-    return;
-  }
-}
+	function handleAddRow(index: number) {
+		saveStateForUndo();
+		removeEmptyRows();
 
+		data.tableData = [
+			...data.tableData.slice(0, index + 1),
+			{ dose: 0, daysForDose: 0 },
+			...data.tableData.slice(index + 1)
+		];
+	}
 
+	function handleTemplateChange() {
+		saveStateForUndo();
+		data = {
+			tableData: [...TEMPLATES[template], PLACEHOLDER_ROW],
+			startDate: new Date()
+		};
+		startDateInputValue = yyyymmdd(data.startDate);
+	}
 
-  function handleAddRow(index: number) {
-    saveStateForUndo();
-    removeEmptyRows();
+	function removeEmptyRows() {
+		const lastRowIndex = data.tableData.length - 1;
+		data.tableData = data.tableData.filter((row, i) => {
+			const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
+			return !(isRowEmpty && i !== lastRowIndex);
+		});
+	}
 
-    data.tableData = [
-      ...data.tableData.slice(0, index + 1),
-      { dose: 0, daysForDose: 0 },
-      ...data.tableData.slice(index + 1)
-    ];
-  }
+	function handleRemoveRow(index: number) {
+		saveStateForUndo();
+		data.tableData = [...data.tableData.slice(0, index), ...data.tableData.slice(index + 1)];
+	}
 
-  function handleTemplateChange() {
-    saveStateForUndo();
-    data = {
-      tableData: [...TEMPLATES[template], PLACEHOLDER_ROW],
-      startDate: new Date()
-    };
-    startDateInputValue = yyyymmdd(data.startDate);
-  }
+	function undo() {
+		if (undoStack.length > 0) {
+			redoStack = [...redoStack, JSON.parse(JSON.stringify(data))];
+			data = undoStack.pop() || data;
+			data.startDate = new Date(data.startDate);
+			startDateInputValue = yyyymmdd(data.startDate);
+		}
+	}
 
-  function removeEmptyRows() {
-    const lastRowIndex = data.tableData.length - 1;
-    data.tableData = data.tableData.filter((row, i) => {
-      const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
-      return !(isRowEmpty && i !== lastRowIndex);
-    });
-  }
+	function redo() {
+		if (redoStack.length > 0) {
+			undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
+			data = redoStack.pop() || data;
+			data.startDate = new Date(data.startDate); // Ensure startDate is a Date object
+			startDateInputValue = yyyymmdd(data.startDate);
+		}
+	}
 
-  function handleRemoveRow(index: number) {
-    saveStateForUndo();
-    data.tableData = [...data.tableData.slice(0, index), ...data.tableData.slice(index + 1)];
-  }
+	function handleKeyDown(e: KeyboardEvent) {
+		const { ctrlKey, metaKey, shiftKey, key } = e;
 
-  function undo() {
-    if (undoStack.length > 0) {
-      redoStack = [...redoStack, JSON.parse(JSON.stringify(data))];
-      data = undoStack.pop() || data;
-      data.startDate = new Date(data.startDate);
-      startDateInputValue = yyyymmdd(data.startDate);
-    }
-  }
+		if (key === 'z') {
+			if (ctrlKey || metaKey) {
+				if (shiftKey) {
+					e.preventDefault();
+					redo();
+				} else {
+					e.preventDefault();
+					undo();
+				}
+			}
+		} else if (key === 'y') {
+			if (ctrlKey || metaKey) {
+				e.preventDefault();
+				redo();
+			}
+		}
+	}
 
-  function redo() {
-    if (redoStack.length > 0) {
-      undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
-      data = redoStack.pop() || data;
-      data.startDate = new Date(data.startDate); // Ensure startDate is a Date object
-      startDateInputValue = yyyymmdd(data.startDate);
-    }
-  }
+	onMount(() => {
+		startDateInputValue = yyyymmdd(data.startDate);
+		if (typeof window !== 'undefined') {
+			window.addEventListener('keydown', handleKeyDown);
+		}
+	});
 
-  function handleKeyDown(e: KeyboardEvent) {
-    const { ctrlKey, metaKey, shiftKey, key } = e;
+	onDestroy(() => {
+		undoStack = [];
+		redoStack = [];
+		if (typeof window !== 'undefined') {
+			window.removeEventListener('keydown', handleKeyDown);
+		}
+	});
 
-    if (key === 'z') {
-      if (ctrlKey || metaKey) {
-        if (shiftKey) {
-          e.preventDefault();
-          redo();
-        } else {
-          e.preventDefault();
-          undo();
-        }
-      }
-    } else if (key === 'y') {
-      if (ctrlKey || metaKey) {
-        e.preventDefault();
-        redo();
-      }
-    }
-  }
+	// Calculate the total dosage
+	$: totalDose = data.tableData.reduce((sum, row) => sum + row.dose, 0);
 
-  onMount(() => {
-    startDateInputValue = yyyymmdd(data.startDate);
-    if (typeof window !== 'undefined') {
-      window.addEventListener('keydown', handleKeyDown);
-    }
-  });
+	// Calculate the total number of days
+	$: totalDays =
+		data.tableData.reduce((sum, row) => sum + row.daysForDose, 0) + data.tableData.length - 2;
 
-  onDestroy(() => {
-    undoStack = [];
-    redoStack = [];
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('keydown', handleKeyDown);
-    }
-  });
+	// Format the total number of days in a locale-friendly format
+	$: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
 
-  // Calculate the total dosage
-  $: totalDose = data.tableData.reduce((sum, row) => sum + row.dose, 0);
+	// Calculate the end date
+	$: endDate = new Date(data.startDate.getTime() + totalDays * 24 * 60 * 60 * 1000);
 
-  // Calculate the total number of days
-  $: totalDays = data.tableData.reduce((sum, row) => sum + row.daysForDose, 0) + data.tableData.length - 2;
-
-  // Format the total number of days in a locale-friendly format
-  $: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
-
-  // Calculate the end date
-  $: endDate = new Date(data.startDate.getTime() + totalDays * 24 * 60 * 60 * 1000);
-
-  $: isFirstRowAPlaceholder = isRowPlaceholder(data.tableData[0]);
-
+	$: isFirstRowAPlaceholder = isRowPlaceholder(data.tableData[0]);
 </script>
 
 <main>
+	<header>
+		<label class="course-begins">
+			<span>Course begins</span>
+			<input
+				type="date"
+				bind:value={startDateInputValue}
+				on:keydown={handleDateInputKeyDown}
+				on:change={handleStartDateChange}
+			/>
+		</label>
 
-  <header>
+		<label class="template">
+			<span>Template</span>
+			<select class="custom-select" bind:value={template} on:change={handleTemplateChange}>
+				{#each Object.keys(TEMPLATES) as template}
+					<option value={template}>{template}</option>
+				{/each}
+			</select>
+		</label>
 
-    <label class="course-begins">
-      <span>Course begins</span>
-      <input type="date"
-       bind:value={startDateInputValue}
-       on:keydown={handleDateInputKeyDown}
-       on:change={handleStartDateChange} />
-    </label>
+		<label class="language">
+			<span>Language</span>
+			<select class="custom-select" bind:value={selectedLanguageKey}>
+				{#each Object.keys(LANGUAGES) as languageKey}
+					<option value={languageKey}>{languageKey}</option>
+				{/each}
+			</select>
+		</label>
+	</header>
 
-    <label class="template">
-      <span>Template</span>
-      <select
-        class="custom-select"
-        bind:value={template}
-        on:change={handleTemplateChange}
-      >
-        {#each Object.keys(TEMPLATES) as template}
-          <option value={template}>{template}</option>
-        {/each}
-      </select>
-    </label>
+	<div class="body">
+		<table class="form">
+			<thead>
+				<tr>
+					<th class="dose">mg</th>
+					<th class="days">days</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{#if !isFirstRowAPlaceholder}
+					<tr>
+						<td class="add-row-button-td" colspan="2">
+							<AddRowButton on:addRow={() => handleAddRow(-1)} />
+						</td>
+					</tr>
+				{/if}
+				{#each data.tableData as row, index}
+					<FormRow
+						tableData={data.tableData}
+						{row}
+						{index}
+						on:removeRow={() => handleRemoveRow(index)}
+						on:change={(event) => handleRowChange(index, event.detail)}
+					/>
+					{#if index < data.tableData.length - 2}
+						<tr>
+							<td class="add-row-button-td" colspan="2">
+								<AddRowButton on:addRow={() => handleAddRow(index)} />
+							</td>
+						</tr>
+					{/if}
+				{/each}
+			</tbody>
+		</table>
 
-    <label class="language">
-      <span>Language</span>
-      <select
-        class="custom-select"
-        bind:value={selectedLanguageKey}
-      >
-        {#each Object.keys(LANGUAGES) as languageKey}
-          <option value={languageKey}>{languageKey}</option>
-        {/each}
-      </select>
-    </label>
-  </header>
+		<div class="plan" dir={LANGUAGES[selectedLanguageKey].dir}>
+			<h3>Plan</h3>
+			<ul lang={LANGUAGES[selectedLanguageKey].lang}>
+				{#each data.tableData as row, index}
+					<ScheduleRow
+						tableData={data.tableData}
+						startDate={data.startDate}
+						{selectedLanguageKey}
+						{row}
+						{index}
+						on:change={(event) => handleRowChange(index, event.detail)}
+					/>
+				{/each}
+			</ul>
 
-  <div class="body">
-    <table class="form">
-      <thead>
-        <tr>
-          <th class="dose">mg</th>
-          <th class="days">days</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {#if !isFirstRowAPlaceholder}
-          <tr>
-            <td class="add-row-button-td" colspan="2">
-              <AddRowButton on:addRow={() => handleAddRow(-1)} />
-            </td>
-          </tr>
-        {/if}
-        {#each data.tableData as row, index}
-          <FormRow
-            tableData={data.tableData}
-            row={row}
-            index={index}
-            on:removeRow={() => handleRemoveRow(index)}
-            on:change={(event) => handleRowChange(index, event.detail)}
-          />
-          {#if index < data.tableData.length - 2}
-            <tr>
-              <td class="add-row-button-td" colspan="2">
-                <AddRowButton on:addRow={() => handleAddRow(index)} />
-              </td>
-            </tr>
-          {/if}
-        {/each}
-      </tbody>
-    </table>
-
-    <div class="plan"
-        dir={LANGUAGES[selectedLanguageKey].dir}
-    >
-      <h3>Plan</h3>
-      <ul 
-        lang={LANGUAGES[selectedLanguageKey].lang}
-      >
-        {#each data.tableData as row, index}
-          <ScheduleRow
-            tableData={data.tableData}
-            startDate={data.startDate}
-            {selectedLanguageKey}
-            {row}
-            {index}
-            on:change={(event) => handleRowChange(index, event.detail)}
-          />
-        {/each}
-      </ul>
-
-      <footer class="summary">
-        <p>
-          {totalDose}mg over {formattedTotalDays} days
-        </p>
-      </footer>
-    </div>
-  </div>
+			<footer class="summary">
+				<p>
+					{totalDose}mg over {formattedTotalDays} days
+				</p>
+			</footer>
+		</div>
+	</div>
 </main>
 
-
 <style>
-  main {
-    display: flex;
-    flex-direction: column;
-    border-radius: calc(2 * var(--control-radius));
-    overflow: clip;
-    background: var(--color-bg-form);
-    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.025);
-    width: 720px;
-  }
+	main {
+		display: flex;
+		flex-direction: column;
+		border-radius: calc(2 * var(--control-radius));
+		overflow: clip;
+		background: var(--color-bg-form);
+		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.025);
+		width: 720px;
+	}
 
-  header, 
-  .body {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    padding: 1rem;
-  }
+	header,
+	.body {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+		padding: 1rem;
+	}
 
-  header {
-    border-bottom: 1px solid var(--color-border);
-  }
+	header {
+		border-bottom: 1px solid var(--color-border);
+	}
 
-  .body {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    min-width: 38rem;
-  }
+	.body {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+		min-width: 38rem;
+	}
 
-  label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+	label {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
 
-    & span {
-      font-weight: var(--font-weight-heading);
-    }
+		& span {
+			font-weight: var(--font-weight-heading);
+		}
 
-    & input {
-      width: 100%;
-      border-radius: var(--control-radius);
-    }
-  }
+		& input {
+			width: 100%;
+			border-radius: var(--control-radius);
+		}
+	}
 
-  .form,
-  label:first-child {
-    width: 12rem; 
-  }
-  label:first-child {
-    padding-right: 1.5rem;    
-  }
+	.form,
+	label:first-child {
+		width: 12rem;
+	}
+	label:first-child {
+		padding-right: 1.5rem;
+	}
 
-  .form {
-    border-collapse: collapse;
-    font-feature-settings: "tnum" 1;
-    flex: 0 0 auto;
+	.form {
+		border-collapse: collapse;
+		font-feature-settings: 'tnum' 1;
+		flex: 0 0 auto;
 
-    & th {
-      font-weight: var(--font-weight-heading);
-    }
+		& th {
+			font-weight: var(--font-weight-heading);
+		}
 
-    & td,
-    & th {
-      padding: 0;
-      height: calc(var(--font-size-md) * 2);
-      box-shadow: none;
-      text-align: start;
-    }
+		& td,
+		& th {
+			padding: 0;
+			height: calc(var(--font-size-md) * 2);
+			box-shadow: none;
+			text-align: start;
+		}
 
-    & td.dose {
-      width: 5rem;
+		& td.dose {
+			width: 5rem;
 
-      & input {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      }
-    }
+			& input {
+				border-top-right-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+		}
 
-    & td.days {
-      width: 5rem;
+		& td.days {
+			width: 5rem;
 
-      & input {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      }
-    }
+			& input {
+				border-top-left-radius: 0;
+				border-bottom-left-radius: 0;
+			}
+		}
 
-    & td.delete {
-      width: 1em;
-    }
-  }
+		& td.delete {
+			width: 1em;
+		}
+	}
 
-  .plan {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-  }
+	.plan {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+	}
 
-  h3 {
-    margin: 0;
-    user-select: none;
-    height: calc(var(--font-size-md) * 2);
-    font-weight: var(--font-weight-heading);
-    font-size: var(--font-size-md);
-    line-height: calc(var(--font-size-md) * 2);
-  }
+	h3 {
+		margin: 0;
+		user-select: none;
+		height: calc(var(--font-size-md) * 2);
+		font-weight: var(--font-weight-heading);
+		font-size: var(--font-size-md);
+		line-height: calc(var(--font-size-md) * 2);
+	}
 
-  ul {
-    user-select: all;
-    flex: 0 0 auto;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+	ul {
+		user-select: all;
+		flex: 0 0 auto;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
 
-    & li {
-      height: var(--control-height);
-      line-height: var(--control-height);
-    }
-  }
+		& li {
+			height: var(--control-height);
+			line-height: var(--control-height);
+		}
+	}
 
-  .summary {
-    color: var(--color-fg-muted);
-    height: var(--control-height);
-    line-height: var(--control-height);
-    display: flex;
-    align-items: center;
-  }
+	.summary {
+		color: var(--color-fg-muted);
+		height: var(--control-height);
+		line-height: var(--control-height);
+		display: flex;
+		align-items: center;
+	}
 
-  td.add-row-button-td {
-    padding: 0;
-    height: 1px !important;
-    font: 0 / 0 a;
-  }
+	td.add-row-button-td {
+		padding: 0;
+		height: 1px !important;
+		font: 0 / 0 a;
+	}
 </style>

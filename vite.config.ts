@@ -6,9 +6,8 @@ const config: UserConfig = {
 	test: {
 		globals: true,
 		environment: 'jsdom',
-		setupFiles: './src/setupTests.js',
-	  },
- 
+		setupFiles: './src/setupTests.js'
+	}
 };
 
 export default config;
