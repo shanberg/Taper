@@ -100,4 +100,6 @@ export const formatRowText = ({row, rowStartDate, rowEndDate, index, selectedLan
     // Arabic
     return `${index === 0 ? "احتياج" : `في ذلك الحين تحتاج`} ${row.dose}mg كل يوم ${row.daysForDose} ${row.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`;
   }
+
+  return '';
 };

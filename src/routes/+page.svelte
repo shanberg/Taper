@@ -1,28 +1,28 @@
-<script>
+<script lang="ts">
   import { isRowPlaceholder, yyyymmdd } from '../utils';
-  import { TEMPLATES, LANGUAGES } from '../consts.ts';
+  import { TEMPLATES, LANGUAGES } from '../consts';
   import FormRow from '../components/FormRow.svelte';
   import ScheduleRow from '../components/ScheduleRow.svelte';
   import AddRowButton from '../components/AddRowButton.svelte';
   import { onMount, onDestroy } from 'svelte';
 
-  const PLACEHOLDER_ROW = { dose: 0, daysForDose: 0 };
-  let data = {
+  const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
+  let data: UIStateData = {
     tableData: [...TEMPLATES.Default, PLACEHOLDER_ROW],
     startDate: new Date()
   };
   let template = "Default";
   let selectedLanguageKey = Object.keys(LANGUAGES)[0];
-  let undoStack = [];
-  let redoStack = [];
-  let startDateInputValue;
+  let undoStack: UIStateData[] = [];
+  let redoStack: UIStateData[] = [];
+  let startDateInputValue = "";
 
   function saveStateForUndo() {
     undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
     redoStack = [];
   }
 
-  function handleRowChange(index, newData) {
+  function handleRowChange(index: number, newData: Row) {
     saveStateForUndo();
     data.tableData[index] = newData;
 
@@ -44,36 +44,36 @@
   }
 
 
-function handleStartDateChange(event) {
+function handleStartDateChange(event: Event) {
   saveStateForUndo();
-  const newDate = new Date(event.target.value);
+  const target = event.target as HTMLInputElement;
+  const newDate = new Date(target.value);
 
-  if (event.target.value === '') {
+  if (target.value === '') {
     // Assume we're skipping forward
     const increment = 1;
-    const newDate = new Date(data.startDate.getTime() + increment * 24 * 60 * 60 * 1000);
-    data.startDate = newDate;
-    startDateInputValue = yyyymmdd(newDate);
-  }
-
-  if (!isNaN(newDate.getTime())) {
+    const incrementedDate = new Date(data.startDate.getTime() + increment * 24 * 60 * 60 * 1000);
+    data.startDate = incrementedDate;
+    startDateInputValue = yyyymmdd(incrementedDate);
+  } else if (!isNaN(newDate.getTime())) {
     newDate.setHours(24, 0, 0, 0);
     data.startDate = newDate;
-    startDateInputValue = event.target.value;
+    startDateInputValue = target.value;
   } else {
     console.error('Invalid date input');
   }
 }
 
-function handleDateInputKeyDown(event) {
-  if (event.target.value === '') {
+function handleDateInputKeyDown(event: KeyboardEvent) {
+  const target = event.target as HTMLInputElement;
+  if (target.value === '') {
     return;
   }
 }
 
 
 
-  function handleAddRow(index) {
+  function handleAddRow(index: number) {
     saveStateForUndo();
     removeEmptyRows();
 
@@ -101,7 +101,7 @@ function handleDateInputKeyDown(event) {
     });
   }
 
-  function handleRemoveRow(index) {
+  function handleRemoveRow(index: number) {
     saveStateForUndo();
     data.tableData = [...data.tableData.slice(0, index), ...data.tableData.slice(index + 1)];
   }
@@ -109,7 +109,7 @@ function handleDateInputKeyDown(event) {
   function undo() {
     if (undoStack.length > 0) {
       redoStack = [...redoStack, JSON.parse(JSON.stringify(data))];
-      data = undoStack.pop();
+      data = undoStack.pop() || data;
       data.startDate = new Date(data.startDate);
       startDateInputValue = yyyymmdd(data.startDate);
     }
@@ -118,13 +118,13 @@ function handleDateInputKeyDown(event) {
   function redo() {
     if (redoStack.length > 0) {
       undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
-      data = redoStack.pop();
+      data = redoStack.pop() || data;
       data.startDate = new Date(data.startDate); // Ensure startDate is a Date object
       startDateInputValue = yyyymmdd(data.startDate);
     }
   }
 
-  function handleKeyDown(e) {
+  function handleKeyDown(e: KeyboardEvent) {
     const { ctrlKey, metaKey, shiftKey, key } = e;
 
     if (key === 'z') {

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { LANGUAGES } from '../consts';
   import { formatRowText, isRowInvalid } from '../utils';
@@ -8,8 +8,8 @@
   export let row;
   export let index;
 
-  let rowStartDate
-  let rowEndDate
+  let rowStartDate: Date;
+  let rowEndDate: Date;
 
   $: isRowPlaceholder = row.dose === 0 && row.daysForDose === 0
   $: isInvalid = !isRowPlaceholder && isRowInvalid(row);
@@ -20,7 +20,7 @@
     rowStartDate = new Date(startDate.getTime());
     const totalDaysForStartDate = tableData
       .slice(0, index)
-      .reduce((acc, curr) => acc + curr.daysForDose - 1, 0) + index;
+      .reduce((acc: number, curr: { daysForDose: number }) => acc + curr.daysForDose - 1, 0) + index;
     rowStartDate.setDate(rowStartDate.getDate() + totalDaysForStartDate);
 
     rowEndDate = new Date(rowStartDate.getTime());

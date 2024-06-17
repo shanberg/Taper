@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  let currentMessage = null;
+  let currentMessage: string | null = null;
 
   const formatNew = (feature: string): string => `<b class="badge new">NEW</b>${feature}`;
 
@@ -16,7 +16,7 @@
     {
       content: 'I hope you\'re having good day'
     }
-  ];
+  ] as Message[];
 
   function getCurrentMessage() {
     const now = new Date();
@@ -55,7 +55,7 @@
   
 </script>
 
-<p key="message" class={currentMessage ? "message loaded" : "message"}>{@html currentMessage}&nbsp;</p>
+<p class={currentMessage ? "message loaded" : "message"}>{@html currentMessage}&nbsp;</p>
 
 <style>
   .message {

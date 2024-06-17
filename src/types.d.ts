@@ -1,3 +1,10 @@
+type UITableData = Row[];
+
+type UIStateData = {
+    tableData: UITableData;
+    startDate: Date;
+}
+
 type Language = {
     lang: string;
     verified: boolean;
@@ -10,3 +17,9 @@ type Row = {
 }
 
 type Template = Row
+
+type Message = {
+  startDate?: string | null;
+  endDate?: string | null;
+  content: string;
+};

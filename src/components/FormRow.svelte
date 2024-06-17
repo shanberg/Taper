@@ -1,26 +1,30 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { isRowInvalid, isRowPlaceholder } from '../utils';
   export let tableData;
-  export let row;
-  export let index;
+  export let row: Row;
+  export let index: number;
+
+  let rowStartDate: Date
+  let rowEndDate: Date
+  let rowIsPlaceholder: boolean = false;
+  let rowIsOnlyRealRow: boolean;
+  let invalid: boolean;
 
   const dispatch = createEventDispatcher();
 
-  let rowStartDate
-  let rowEndDate
-  let rowIsPlaceholder = false
-
   $: rowIsOnlyRealRow = tableData.length === 2
   $: rowIsPlaceholder = isRowPlaceholder(row)
-  $: invalid = !rowIsPlaceholder && isRowInvalid(row);
+  $: isInvalid = !rowIsPlaceholder && isRowInvalid(row);
 
-  function handleDoseChange(event) {
-    dispatch('change', { ...row, dose: parseFloat(event.target.value) });
+  function handleDoseChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    dispatch('change', { ...row, dose: parseFloat(target.value) });
   }
 
-  function handleDaysForDoseChange(event) {
-    dispatch('change', { ...row, daysForDose: parseInt(event.target.value) });
+  function handleDaysForDoseChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    dispatch('change', { ...row, daysForDose: parseInt(target.value) });
   }
 
   function handleRemoveRow() {
@@ -29,7 +33,7 @@
   
 </script>
 
-<tr class="row {rowIsPlaceholder ? 'placeholder' : ''} {invalid ? 'invalid' : ''}">
+<tr class="row {rowIsPlaceholder ? 'placeholder' : ''} {isInvalid ? 'isInvalid' : ''}">
   <td class="dose">
     <input 
       min={1}
@@ -50,7 +54,7 @@
     />
   </td>
   <td class="delete">
-    <button disabled={rowIsOnlyRealRow ? "disabled" : undefined} title="Remove this step" class="remove-btn" on:click={handleRemoveRow}>×</button>
+    <button disabled={rowIsOnlyRealRow} title="Remove this step" class="remove-btn" on:click={handleRemoveRow}>×</button>
   </td>
 </tr>
 
@@ -72,11 +76,11 @@
     }
   }
 
-  .invalid td input {
+  .isInvalid td input {
     background: var(--color-bg-error);
   }
 
-  .invalid:focus-within td input {
+  .isInvalid:focus-within td input {
     background: var(--color-bg-error-muted);
   }
 
