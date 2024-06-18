@@ -64,6 +64,8 @@ export const TEMPLATES = {
 	]
 } as Record<string, Template[]>;
 
+export const PLACEHOLDER_ROW = { dose: 0, daysForDose: 0 } as Row;
+
 export const LANGUAGES = {
 	English: { lang: 'en-US', verified: true, dir: 'ltr' },
 	Spanish: { lang: 'es', verified: true, dir: 'ltr' },

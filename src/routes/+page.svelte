@@ -3,7 +3,7 @@
     sumDose,
     sumDays,
     calculateEndDate, } from '../utils';
-	import { TEMPLATES, LANGUAGES } from '../consts';
+	import { TEMPLATES, LANGUAGES, PLACEHOLDER_ROW } from '../consts';
 	import FormRow from '../components/FormRow.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
 	import AddRowButton from '../components/AddRowButton.svelte';
@@ -81,6 +81,7 @@
 	}
 
 	function handleTemplateChange() {
+		console.log('handleTemplateChange');
 		saveStateForUndo();
 		data = {
 			tableData: [...TEMPLATES[template], PLACEHOLDER_ROW],
