@@ -5,6 +5,7 @@
     calculateEndDate, } from '../utils';
 	import { TEMPLATES, LANGUAGES, PLACEHOLDER_ROW } from '../consts';
 	import FormRow from '../components/FormRow.svelte';
+	import Badge from '../components/Badge.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
 	import AddRowButton from '../components/AddRowButton.svelte';
 	import { onMount, onDestroy } from 'svelte';
@@ -81,7 +82,6 @@
 	}
 
 	function handleTemplateChange() {
-		console.log('handleTemplateChange');
 		saveStateForUndo();
 		data = {
 			tableData: [...TEMPLATES[template], PLACEHOLDER_ROW],
@@ -175,10 +175,12 @@
 	$: isFirstRowAPlaceholder = isRowPlaceholder(data.tableData[0]);
 
 	$: selectedLanguage = LANGUAGES.find(language => language.lang === selectedLanguageLang) ?? LANGUAGES[0];
+	$: selectedLanguageIsVerified = selectedLanguage.verified;
 </script>
 
 <main>
-	<header>
+	<header class="vstack">
+	<div class="hstack">
 		<label class="course-begins">
 			<span>Course begins</span>
 			<input
@@ -199,8 +201,13 @@
 		</label>
 
 		<label class="language">
-			<span>Language</span>
-			<select class="custom-select" bind:value={selectedLanguageLang}>
+			<span>
+			Language 
+			{#if !selectedLanguageIsVerified}
+				<Badge>Unverified</Badge>
+			{/if}
+			</span>
+			<select class="custom-select" bind:value={selectedLanguageLang} class:warn={!selectedLanguageIsVerified}>
 				{#each VERIFIED_LANGUAGES as language}
 					<option value={language.lang}>{language.labelEn}</option>
 				{/each}
@@ -213,6 +220,7 @@
 				{/if}
 			</select>
 		</label>
+		</div>
 	</header>
 
 	<div class="body">
@@ -286,7 +294,6 @@
 		width: 720px;
 	}
 
-	header,
 	.body {
 		display: flex;
 		flex-direction: row;
@@ -296,6 +303,7 @@
 
 	header {
 		border-bottom: 1px solid var(--color-border);
+		padding: 1rem;
 	}
 
 	.body {

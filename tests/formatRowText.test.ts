@@ -1,5 +1,13 @@
 import { describe, test, expect } from 'vitest';
 import { formatRowText } from '../src/utils';
+import { LANGUAGES } from '../src/consts';
+
+const English = LANGUAGES.find(language => language.labelEn === 'English');
+const Spanish = LANGUAGES.find(language => language.labelEn === 'Spanish');
+const HaitianCreole = LANGUAGES.find(language => language.labelEn === 'Haitian Creole');
+const Mandarin = LANGUAGES.find(language => language.labelEn === 'Mandarin');
+const Swahili = LANGUAGES.find(language => language.labelEn === 'Swahili');
+const Arabic = LANGUAGES.find(language => language.labelEn === 'Arabic');
 
 describe('formatRowText', () => {
 	const row = { dose: 50, daysForDose: 5 };
@@ -12,7 +20,7 @@ describe('formatRowText', () => {
 			rowStartDate,
 			rowEndDate,
 			index: 0,
-			selectedLanguageKey: 'English'
+			selectedLanguage: English
 		});
 		expect(result).toBe('Take 50mg daily for 5 days (Jun 1 - Jun 5)');
 	});
@@ -23,7 +31,7 @@ describe('formatRowText', () => {
 			rowStartDate,
 			rowEndDate,
 			index: 1,
-			selectedLanguageKey: 'Spanish'
+			selectedLanguage: Spanish
 		});
 		expect(result).toBe('Después tome 50mg cada día durante 5 días (1 jun - 5 jun)');
 	});
@@ -34,7 +42,7 @@ describe('formatRowText', () => {
 			rowStartDate,
 			rowEndDate,
 			index: 0,
-			selectedLanguageKey: 'Haitian Creole'
+			selectedLanguage: HaitianCreole
 		});
 		expect(result).toBe('Pran 50mg chak jou pou 5 jou (Jun 1 - Jun 5)');
 	});
@@ -45,7 +53,7 @@ describe('formatRowText', () => {
 			rowStartDate,
 			rowEndDate,
 			index: 1,
-			selectedLanguageKey: 'Mandarin'
+			selectedLanguage: Mandarin
 		});
 		expect(result).toBe('然后服用 50毫克，每天服用5 天 (6月1日 - 6月5日)');
 	});
@@ -56,7 +64,7 @@ describe('formatRowText', () => {
 			rowStartDate,
 			rowEndDate,
 			index: 0,
-			selectedLanguageKey: 'Swahili'
+			selectedLanguage: Swahili
 		});
 		expect(result).toBe('Kutoka 50mg kwa saa 5 siku (1 Jun - 5 Jun)');
 	});
@@ -67,14 +75,8 @@ describe('formatRowText', () => {
 			rowStartDate,
 			rowEndDate,
 			index: 1,
-			selectedLanguageKey: 'Arabic'
+			selectedLanguage: Arabic
 		});
 		expect(result).toBe('في ذلك الحين تحتاج 50mg كل يوم 5 يوم (٥ يونيو - ١ يونيو)');
-	});
-
-	test('throws error for unknown language', () => {
-		expect(() => {
-			formatRowText({ row, rowStartDate, rowEndDate, index: 0, selectedLanguageKey: 'Unknown' });
-		}).toThrow('Unknown language: Unknown');
 	});
 });
