@@ -1,0 +1,44 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FormRow > renders correctly 1`] = `
+<div>
+  <tr
+    class="row   svelte-4q5etb"
+  >
+    <td
+      class="dose"
+    >
+      <input
+        class="svelte-4q5etb"
+        inputmode="decimal"
+        min="1"
+        step="0.25"
+        type="number"
+      />
+    </td>
+     
+    <td
+      class="days"
+    >
+      <input
+        class="svelte-4q5etb"
+        inputmode="decimal"
+        min="1"
+        type="number"
+      />
+    </td>
+     
+    <td
+      class="delete"
+    >
+      <button
+        class="remove-btn svelte-4q5etb"
+        disabled=""
+        title="Remove this step"
+      >
+        ×
+      </button>
+    </td>
+  </tr>
+</div>
+`;

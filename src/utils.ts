@@ -1,41 +1,137 @@
-const isDateThisYear = (date: Date) => {
-  return date.getFullYear() === new Date().getFullYear();
+import { TEMPLATES, LANGUAGES } from './consts';
+
+const isDateThisYear = (date: Date): boolean => {
+	return date.getFullYear() === new Date().getFullYear();
+};
+
+/** Higher-order function to create a cached formatter */
+function createCachedFormatter() {
+	const dateTimeFormatCache = new Map();
+
+	return function (date: Date, lang: string = 'en-US') {
+		const yearFormat = isDateThisYear(date) ? undefined : 'numeric';
+		const cacheKey = `${lang}-${yearFormat}`;
+
+		// Check if the formatter is already in the cache
+		if (!dateTimeFormatCache.has(cacheKey)) {
+			// Create a new formatter and store it in the cache
+			const formatter = new Intl.DateTimeFormat(lang, {
+				month: 'short',
+				day: 'numeric',
+				year: yearFormat
+			});
+			dateTimeFormatCache.set(cacheKey, formatter);
+		}
+
+		// Use the cached formatter
+		const formatter = dateTimeFormatCache.get(cacheKey);
+		return formatter.format(date);
+	};
 }
 
-export function formatDate(dateStr: string, style = 'conciseUS') {
-  const date = new Date(dateStr);
-  return new Intl.DateTimeFormat('default', { month: 'short', day: 'numeric', year: isDateThisYear(date) ? undefined : 'numeric' }).format(new Date(date));
-}
+// Create a cached version of formatDate
+export const cachedFormatDate = createCachedFormatter();
 
-export const isRowValid = (row: { dose: number, daysForDose: number }): boolean => {
-  return row.dose <= 0 || row.daysForDose <= 0
-}
+/** Returns true if either dose or daysForDose are <= 0 */
+export const isRowInvalid = (row: Row): boolean => {
+	return row.dose <= 0 || row.daysForDose <= 0;
+};
 
-export const isRowPlaceholder = (row: { dose: number, daysForDose: number }): boolean => {
-  return row.dose === 0 && row.daysForDose === 0
-}
+/** Returns true if dose and daysForDose are both 0 */
+export const isRowPlaceholder = (row: Row): boolean => {
+	return row.dose === 0 && row.daysForDose === 0;
+};
 
-// Helper function to format dates as 'YYYY-MM-DD'
+/** Format date in YYYY-MM-DD format
+ * Returns empty string if date is invalid
+ */
 export function yyyymmdd(date: Date): string {
-  const d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+	// fail if no date provided
+	if (!date) return '';
 
-  return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+	const d = new Date(date),
+		month = '' + (d.getMonth() + 1),
+		day = '' + d.getDate(),
+		year = d.getFullYear();
+
+	// fail if date is invalid
+	if (Number.isNaN(+month) || Number.isNaN(+day) || Number.isNaN(+year)) {
+		return '';
+	}
+
+	return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
 }
 
-export const formatRowText = (row: { dose: number, daysForDose: number }, rowStartDate: Date, rowEndDate: Date, index: number, selectedLanguageKey: string) => {
-  const formattedDateRange = formatDate(yyyymmdd(rowStartDate)) + ' - ' + formatDate(yyyymmdd(rowEndDate));
+type FormatRowTextParams = {
+	row: Row;
+	rowStartDate: Date;
+	rowEndDate: Date;
+	index: number;
+	selectedLanguageKey: string;
+};
 
-  if (selectedLanguageKey === 'English') {
-    return `${index === 0 ? "Take" : `Then take`} ${row.dose}mg daily for ${row.daysForDose} ${row.daysForDose === 1 ? 'day' : 'days'} (${formattedDateRange})`;
-  } else if (selectedLanguageKey === 'Spanish') {
-    return `${index === 0 ? "Tomar" : `Después tome`} ${row.dose}mg cada día durante ${row.daysForDose} ${row.daysForDose === 1 ? 'día' : 'días'} (${formattedDateRange})`;
-  } else if (selectedLanguageKey === 'Haitian Creole') {
-    return `${index === 0 ? "Pran" : `Apre sa pran`} ${row.dose}mg chak jou pou ${row.daysForDose} ${row.daysForDose === 1 ? 'jou' : 'jou'} (${formattedDateRange})`;
-  } else if (selectedLanguageKey === 'Mandarin') {
-    return `${index === 0 ? "服用" : `然后服用`} ${row.dose}毫克，每天服用${row.daysForDose} ${row.daysForDose === 1 ? '天' : '天'} (${formattedDateRange})`;
-  }
-  return "";
+/** Format row content based on selected language */
+export const formatRowText = ({
+	row,
+	rowStartDate,
+	rowEndDate,
+	index,
+	selectedLanguageKey
+}: FormatRowTextParams): string => {
+	if (!LANGUAGES[selectedLanguageKey]) {
+		throw new Error(`Unknown language: ${selectedLanguageKey}`);
+	}
+
+	const { lang, dir } = LANGUAGES[selectedLanguageKey];
+	const dates = {
+		start: cachedFormatDate(rowStartDate, lang),
+		end: cachedFormatDate(rowEndDate, lang)
+	};
+	const formattedDateRange =
+		dir === 'ltr' ? `${dates.start} - ${dates.end}` : `${dates.end} - ${dates.start}`;
+
+	if (selectedLanguageKey === 'English') {
+		// English
+		return `${index === 0 ? 'Take' : `Then take`} ${row.dose}mg daily for ${row.daysForDose} ${row.daysForDose === 1 ? 'day' : 'days'} (${formattedDateRange})`;
+	} else if (selectedLanguageKey === 'Spanish') {
+		// Spanish
+		return `${index === 0 ? 'Tomar' : `Después tome`} ${row.dose}mg cada día durante ${row.daysForDose} ${row.daysForDose === 1 ? 'día' : 'días'} (${formattedDateRange})`;
+	} else if (selectedLanguageKey === 'Haitian Creole') {
+		// Haitian Creole
+		return `${index === 0 ? 'Pran' : `Apre sa pran`} ${row.dose}mg chak jou pou ${row.daysForDose} ${row.daysForDose === 1 ? 'jou' : 'jou'} (${formattedDateRange})`;
+	} else if (selectedLanguageKey === 'Mandarin') {
+		// Mandarin
+		return `${index === 0 ? '服用' : `然后服用`} ${row.dose}毫克，每天服用${row.daysForDose} ${row.daysForDose === 1 ? '天' : '天'} (${formattedDateRange})`;
+	} else if (selectedLanguageKey === 'Swahili') {
+		// Swahili
+		return `${index === 0 ? 'Kutoka' : `Sasa kutoka`} ${row.dose}mg kwa saa ${row.daysForDose} ${row.daysForDose === 1 ? 'siku' : 'siku'} (${formattedDateRange})`;
+	} else if (selectedLanguageKey === 'Arabic') {
+		// Arabic
+		return `${index === 0 ? 'احتياج' : `في ذلك الحين تحتاج`} ${row.dose}mg كل يوم ${row.daysForDose} ${row.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`;
+	}
+
+	return '';
+};
+
+
+
+const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
+
+export function createInitialState(): UIStateData {
+	return {
+		tableData: [...TEMPLATES.Default, PLACEHOLDER_ROW],
+		startDate: new Date()
+	};
+}
+
+export const sumDose = (data: UIStateData): number => {
+	return data.tableData.reduce((sum, row) => sum + row.dose * row.daysForDose, 0);
+};
+
+export const sumDays = (data: UIStateData): number => {
+	return data.tableData.reduce((sum, row) => sum + row.daysForDose, 0) + data.tableData.length - 2;
+};
+
+export const calculateEndDate = (data: UIStateData): Date => {
+	return new Date(data.startDate.getTime() + sumDays(data) * 24 * 60 * 60 * 1000);
 };
