@@ -11,7 +11,7 @@
 
 	let data: UIStateData = createInitialState();
 	let template = 'Default';
-	let selectedLanguageKey = Object.keys(LANGUAGES)[0];
+	let selectedLanguageLang = LANGUAGES[0].lang;
 	let undoStack: UIStateData[] = [];
 	let redoStack: UIStateData[] = [];
 	let startDateInputValue = '';
@@ -157,6 +157,9 @@
 		}
 	});
 
+	const VERIFIED_LANGUAGES = LANGUAGES.filter(language => language.verified);
+	const UNVERIFIED_LANGUAGES = LANGUAGES.filter(language => !language.verified);
+
 	// Calculate the total dosage
 	$: totalDose = sumDose(data);
 
@@ -170,6 +173,8 @@
 	$: endDate = calculateEndDate(data);
 
 	$: isFirstRowAPlaceholder = isRowPlaceholder(data.tableData[0]);
+
+	$: selectedLanguage = LANGUAGES.find(language => language.lang === selectedLanguageLang) ?? LANGUAGES[0];
 </script>
 
 <main>
@@ -195,10 +200,17 @@
 
 		<label class="language">
 			<span>Language</span>
-			<select class="custom-select" bind:value={selectedLanguageKey}>
-				{#each Object.keys(LANGUAGES) as languageKey}
-					<option value={languageKey}>{languageKey}</option>
+			<select class="custom-select" bind:value={selectedLanguageLang}>
+				{#each VERIFIED_LANGUAGES as language}
+					<option value={language.lang}>{language.labelEn}</option>
 				{/each}
+				{#if UNVERIFIED_LANGUAGES.length > 0}
+					<hr />
+          			<option disabled value="unverified">Unverified Languages</option>
+					{#each UNVERIFIED_LANGUAGES as language}
+						<option value={language.lang}>{language.labelEn}</option>
+					{/each}
+				{/if}
 			</select>
 		</label>
 	</header>
@@ -239,14 +251,14 @@
 			</tbody>
 		</table>
 
-		<div class="plan" dir={LANGUAGES[selectedLanguageKey].dir}>
+		<div class="plan" dir={selectedLanguage.dir}>
 			<h3>Plan</h3>
-			<ul lang={LANGUAGES[selectedLanguageKey].lang}>
+			<ul lang={selectedLanguage.lang}>
 				{#each data.tableData as row, index}
 					<ScheduleRow
 						tableData={data.tableData}
 						startDate={data.startDate}
-						{selectedLanguageKey}
+						{selectedLanguage}
 						{row}
 						{index}
 						on:change={(event) => handleRowChange(index, event.detail)}

@@ -6,6 +6,7 @@ type UIStateData = {
 };
 
 type Language = {
+    labelEn: string;
 	lang: string;
 	verified: boolean;
 	dir: 'ltr' | 'rtl';
