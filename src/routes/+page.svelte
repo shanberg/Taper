@@ -1,16 +1,15 @@
 <script lang="ts">
-	import { isRowPlaceholder, yyyymmdd } from '../utils';
+	import { isRowPlaceholder, yyyymmdd, createInitialState,
+    sumDose,
+    sumDays,
+    calculateEndDate, } from '../utils';
 	import { TEMPLATES, LANGUAGES } from '../consts';
 	import FormRow from '../components/FormRow.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
 	import AddRowButton from '../components/AddRowButton.svelte';
 	import { onMount, onDestroy } from 'svelte';
 
-	const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
-	let data: UIStateData = {
-		tableData: [...TEMPLATES.Default, PLACEHOLDER_ROW],
-		startDate: new Date()
-	};
+	let data: UIStateData = createInitialState();
 	let template = 'Default';
 	let selectedLanguageKey = Object.keys(LANGUAGES)[0];
 	let undoStack: UIStateData[] = [];
@@ -158,17 +157,16 @@
 	});
 
 	// Calculate the total dosage
-	$: totalDose = data.tableData.reduce((sum, row) => sum + row.dose, 0);
+	$: totalDose = sumDose(data);
 
 	// Calculate the total number of days
-	$: totalDays =
-		data.tableData.reduce((sum, row) => sum + row.daysForDose, 0) + data.tableData.length - 2;
-
+	$: totalDays = sumDays(data);
+		
 	// Format the total number of days in a locale-friendly format
 	$: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
 
 	// Calculate the end date
-	$: endDate = new Date(data.startDate.getTime() + totalDays * 24 * 60 * 60 * 1000);
+	$: endDate = calculateEndDate(data);
 
 	$: isFirstRowAPlaceholder = isRowPlaceholder(data.tableData[0]);
 </script>

@@ -1,4 +1,4 @@
-import { LANGUAGES } from './consts';
+import { TEMPLATES, LANGUAGES } from './consts';
 
 const isDateThisYear = (date: Date): boolean => {
 	return date.getFullYear() === new Date().getFullYear();
@@ -111,4 +111,27 @@ export const formatRowText = ({
 	}
 
 	return '';
+};
+
+
+
+const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
+
+export function createInitialState(): UIStateData {
+	return {
+		tableData: [...TEMPLATES.Default, PLACEHOLDER_ROW],
+		startDate: new Date()
+	};
+}
+
+export const sumDose = (data: UIStateData): number => {
+	return data.tableData.reduce((sum, row) => sum + row.dose * row.daysForDose, 0);
+};
+
+export const sumDays = (data: UIStateData): number => {
+	return data.tableData.reduce((sum, row) => sum + row.daysForDose, 0) + data.tableData.length - 2;
+};
+
+export const calculateEndDate = (data: UIStateData): Date => {
+	return new Date(data.startDate.getTime() + sumDays(data) * 24 * 60 * 60 * 1000);
 };

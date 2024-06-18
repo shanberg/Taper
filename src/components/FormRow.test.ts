@@ -6,8 +6,8 @@ import FormRow from './FormRow.svelte'; // Adjust the import path as necessary
 // Mock the utility functions
 vi.mock('../utils', () => ({
 	isRowInvalid: vi.fn(),
-	isRowPlaceholder: vi.fn(),
-  }));
+	isRowPlaceholder: vi.fn()
+}));
 
 import { isRowInvalid, isRowPlaceholder } from '../utils';
 
