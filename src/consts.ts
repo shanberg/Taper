@@ -1,4 +1,4 @@
-export const TEMPLATES = {
+export const TEMPLATES: Record<string, Template[]> = {
 	Default: [
 		{ dose: 20, daysForDose: 5 },
 		{ dose: 15, daysForDose: 5 },
@@ -62,15 +62,15 @@ export const TEMPLATES = {
 		{ dose: 2, daysForDose: 30 },
 		{ dose: 1, daysForDose: 30 }
 	]
-} as Record<string, Template[]>;
+};
 
-export const PLACEHOLDER_ROW = { dose: 0, daysForDose: 0 } as Row;
+export const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
 
-export const LANGUAGES = {
-	English: { lang: 'en-US', verified: true, dir: 'ltr' },
-	Spanish: { lang: 'es', verified: true, dir: 'ltr' },
-	Mandarin: { lang: 'zh', verified: false, dir: 'ltr' },
-	'Haitian Creole': { lang: 'ht', verified: false, dir: 'ltr' },
-	Swahili: { lang: 'sw', verified: false, dir: 'ltr' },
-	Arabic: { lang: 'ar', verified: false, dir: 'rtl' }
-} as Record<string, Language>;
+export const LANGUAGES: Language[] = [
+	{ labelEn: 'English', lang: 'en-US', verified: true, dir: 'ltr' },
+	{ labelEn: 'Spanish', lang: 'es', verified: true, dir: 'ltr' },
+	{ labelEn: 'Mandarin', lang: 'zh', verified: false, dir: 'ltr' },
+	{ labelEn: 'Haitian Creole', lang: 'ht', verified: false, dir: 'ltr' },
+	{ labelEn: 'Swahili', lang: 'sw', verified: false, dir: 'ltr' },
+	{ labelEn: 'Arabic', lang: 'ar', verified: false, dir: 'rtl' }
+]

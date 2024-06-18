@@ -80,11 +80,11 @@
 	}
 
 	.isInvalid td input {
-		background: var(--color-bg-error);
+		background: var(--color-status-error-bg);
 	}
 
 	.isInvalid:focus-within td input {
-		background: var(--color-bg-error-muted);
+		background: var(--color-status-error-bg-muted);
 	}
 
 	tr:last-child .remove-btn {
@@ -122,6 +122,6 @@
 	.remove-btn:hover:not(:disabled),
 	.remove-btn:focus:not(:disabled) {
 		color: var(--color-fg-error);
-		background: var(--color-bg-error-muted);
+		background: var(--color-status-error-bg-muted);
 	}
 </style>

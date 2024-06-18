@@ -5,13 +5,14 @@
     calculateEndDate, } from '../utils';
 	import { TEMPLATES, LANGUAGES, PLACEHOLDER_ROW } from '../consts';
 	import FormRow from '../components/FormRow.svelte';
+	import Badge from '../components/Badge.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
 	import AddRowButton from '../components/AddRowButton.svelte';
 	import { onMount, onDestroy } from 'svelte';
 
 	let data: UIStateData = createInitialState();
 	let template = 'Default';
-	let selectedLanguageKey = Object.keys(LANGUAGES)[0];
+	let selectedLanguageLang = LANGUAGES[0].lang;
 	let undoStack: UIStateData[] = [];
 	let redoStack: UIStateData[] = [];
 	let startDateInputValue = '';
@@ -81,7 +82,6 @@
 	}
 
 	function handleTemplateChange() {
-		console.log('handleTemplateChange');
 		saveStateForUndo();
 		data = {
 			tableData: [...TEMPLATES[template], PLACEHOLDER_ROW],
@@ -157,6 +157,9 @@
 		}
 	});
 
+	const VERIFIED_LANGUAGES = LANGUAGES.filter(language => language.verified);
+	const UNVERIFIED_LANGUAGES = LANGUAGES.filter(language => !language.verified);
+
 	// Calculate the total dosage
 	$: totalDose = sumDose(data);
 
@@ -170,10 +173,14 @@
 	$: endDate = calculateEndDate(data);
 
 	$: isFirstRowAPlaceholder = isRowPlaceholder(data.tableData[0]);
+
+	$: selectedLanguage = LANGUAGES.find(language => language.lang === selectedLanguageLang) ?? LANGUAGES[0];
+	$: selectedLanguageIsVerified = selectedLanguage.verified;
 </script>
 
 <main>
-	<header>
+	<header class="vstack">
+	<div class="hstack">
 		<label class="course-begins">
 			<span>Course begins</span>
 			<input
@@ -194,13 +201,26 @@
 		</label>
 
 		<label class="language">
-			<span>Language</span>
-			<select class="custom-select" bind:value={selectedLanguageKey}>
-				{#each Object.keys(LANGUAGES) as languageKey}
-					<option value={languageKey}>{languageKey}</option>
+			<span>
+			Language 
+			{#if !selectedLanguageIsVerified}
+				<Badge>Unverified</Badge>
+			{/if}
+			</span>
+			<select class="custom-select" bind:value={selectedLanguageLang} class:warn={!selectedLanguageIsVerified}>
+				{#each VERIFIED_LANGUAGES as language}
+					<option value={language.lang}>{language.labelEn}</option>
 				{/each}
+				{#if UNVERIFIED_LANGUAGES.length > 0}
+					<hr />
+          			<option disabled value="unverified">Unverified Languages</option>
+					{#each UNVERIFIED_LANGUAGES as language}
+						<option value={language.lang}>{language.labelEn}</option>
+					{/each}
+				{/if}
 			</select>
 		</label>
+		</div>
 	</header>
 
 	<div class="body">
@@ -239,14 +259,14 @@
 			</tbody>
 		</table>
 
-		<div class="plan" dir={LANGUAGES[selectedLanguageKey].dir}>
+		<div class="plan" dir={selectedLanguage.dir}>
 			<h3>Plan</h3>
-			<ul lang={LANGUAGES[selectedLanguageKey].lang}>
+			<ul lang={selectedLanguage.lang}>
 				{#each data.tableData as row, index}
 					<ScheduleRow
 						tableData={data.tableData}
 						startDate={data.startDate}
-						{selectedLanguageKey}
+						{selectedLanguage}
 						{row}
 						{index}
 						on:change={(event) => handleRowChange(index, event.detail)}
@@ -274,7 +294,6 @@
 		width: 720px;
 	}
 
-	header,
 	.body {
 		display: flex;
 		flex-direction: row;
@@ -284,6 +303,7 @@
 
 	header {
 		border-bottom: 1px solid var(--color-border);
+		padding: 1rem;
 	}
 
 	.body {

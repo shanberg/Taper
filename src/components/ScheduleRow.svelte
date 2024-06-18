@@ -4,7 +4,7 @@
 	import { formatRowText, isRowInvalid } from '../utils';
 	export let tableData;
 	export let startDate;
-	export let selectedLanguageKey;
+	export let selectedLanguage;
 	export let row;
 	export let index;
 
@@ -32,7 +32,7 @@
 
 {#if !isLastPlaceholderRow}
 	<li class:isInvalid class:isRowPlaceholder>
-		{formatRowText({ row, rowStartDate, rowEndDate, index, selectedLanguageKey })}
+		{formatRowText({ row, rowStartDate, rowEndDate, index, selectedLanguage })}
 	</li>
 {/if}
 
