@@ -4,15 +4,15 @@
 	const dispatch = createEventDispatcher();
 
 	function handleClick() {
-		dispatch('addRow');
+		dispatch('addSegment');
 	}
 </script>
 
-<button title="Add a row" on:click={handleClick}></button>
+<button title="Add a segment" on:click={handleClick}></button>
 
 <style>
 	:root {
-		--add-row-button-height: calc((1 / 7) * var(--control-height));
+		--add-segment-button-height: calc((1 / 7) * var(--control-height));
 	}
 
 	button {
@@ -21,7 +21,7 @@
 		background-color: transparent;
 		cursor: cell;
 		border: 0;
-		height: var(--add-row-button-height);
+		height: var(--add-segment-button-height);
 		margin: calc((1 / 4) * var(--control-height) * -1) 0;
 		z-index: 10;
 		position: relative;

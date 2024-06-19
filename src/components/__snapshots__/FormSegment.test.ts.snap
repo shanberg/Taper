@@ -3,13 +3,13 @@
 exports[`FormSegment > renders correctly 1`] = `
 <div>
   <tr
-    class="row   svelte-rgg7ao"
+    class="segment   svelte-gkm2f"
   >
     <td
       class="dose"
     >
       <input
-        class="svelte-rgg7ao"
+        class="svelte-gkm2f"
         inputmode="decimal"
         min="1"
         step="0.25"
@@ -21,7 +21,7 @@ exports[`FormSegment > renders correctly 1`] = `
       class="days"
     >
       <input
-        class="svelte-rgg7ao"
+        class="svelte-gkm2f"
         inputmode="decimal"
         min="1"
         type="number"
@@ -32,7 +32,7 @@ exports[`FormSegment > renders correctly 1`] = `
       class="delete"
     >
       <button
-        class="remove-btn svelte-rgg7ao"
+        class="remove-btn svelte-gkm2f"
         disabled=""
         title="Remove this step"
       >

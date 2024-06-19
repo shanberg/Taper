@@ -1,23 +1,28 @@
-type UITableData = Row[];
+type Segment = {
+	dose: number;
+	daysForDose: number;
+};
 
-type UIStateData = {
-	tableData: UITableData;
+type Schedule = {
+	segments: Segment[];
 	startDate: Date;
 };
 
+type AppState = Writeable & {
+	schedule: Schedule;
+	undoStack: Schedule[];
+	redoStack: Schedule[];
+	startDateInputValue: string;
+};
+
 type Language = {
-    labelEn: string;
+	labelEn: string;
 	lang: string;
 	verified: boolean;
 	dir: 'ltr' | 'rtl';
 };
 
-type Row = {
-	dose: number;
-	daysForDose: number;
-};
-
-type Template = Row;
+type Template = Segment;
 
 type Message = {
 	startDate?: string | null;

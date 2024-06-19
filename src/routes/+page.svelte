@@ -1,65 +1,44 @@
 <script lang="ts">
-	import { isRowPlaceholder, yyyymmdd, createInitialState,
-    sumDose,
-    sumDays,
-    calculateEndDate, } from '../utils';
-	import { TEMPLATES, LANGUAGES, PLACEHOLDER_ROW } from '../consts';
-	import FormRow from '../components/FormRow.svelte';
-	import Badge from '../components/Badge.svelte';
-	import ScheduleRow from '../components/ScheduleRow.svelte';
-	import AddRowButton from '../components/AddRowButton.svelte';
 	import { onMount, onDestroy } from 'svelte';
+	import { appState } from '../stores';
+	import { LANGUAGES, TEMPLATES } from '../consts';
+	import FormSegment from '../components/FormSegment.svelte';
+	import Badge from '../components/Badge.svelte';
+	import ScheduleSegment from '../components/ScheduleSegment.svelte';
+	import AddSegmentButton from '../components/AddSegmentButton.svelte';
+	import { sumDose, sumDays, isSegmentPlaceholder } from '../utils';
 
-	let data: UIStateData = createInitialState();
-	let template = 'Default';
-	let selectedLanguageLang = LANGUAGES[0].lang;
-	let undoStack: UIStateData[] = [];
-	let redoStack: UIStateData[] = [];
-	let startDateInputValue = '';
+	let templateKey: string = 'Default';
+	let selectedLanguageLang: string = LANGUAGES[0].lang;
 
-	function saveStateForUndo() {
-		undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
-		redoStack = [];
-	}
+	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);
+	const UNVERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => !language.verified);
 
-	function handleRowChange(index: number, newData: Row) {
-		saveStateForUndo();
-		data.tableData[index] = newData;
+	$: totalDose = sumDose($appState.schedule);
+	$: totalDays = sumDays($appState.schedule);
+	$: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
+	$: selectedLanguage =
+		LANGUAGES.find((language) => language.lang === selectedLanguageLang) ?? LANGUAGES[0];
+	$: selectedLanguageIsVerified = selectedLanguage.verified;
+    $: lastSegmentIsPlaceholder = isSegmentPlaceholder($appState.schedule.segments[$appState.schedule.segments.length - 1])
 
-		// Automatically add a new row if the last row is filled
-		const isLastRow = index === data.tableData.length - 1;
-		const isRowFilled = newData.dose > 0 || newData.daysForDose > 0;
-		if (isLastRow && isRowFilled) {
-			data.tableData = [...data.tableData, { dose: 0, daysForDose: 0 }];
-		}
+    function insertPlaceholderSegmentAtEnd() {
+        appState.insertPlaceholderSegmentBeforeIndex($appState.schedule.segments.length)
+    }
 
-		// Remove empty rows, except for the last one
-		const lastRowIndex = data.tableData.length - 1;
-		data.tableData = data.tableData.filter((row, i) => {
-			const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
-			return !(isRowEmpty && i !== lastRowIndex);
-		});
+	function handleKeyDown(e: KeyboardEvent) {
+		const { ctrlKey, metaKey, shiftKey, key } = e;
 
-		data.tableData = [...data.tableData];
-	}
-
-	function handleStartDateChange(event: Event) {
-		saveStateForUndo();
-		const target = event.target as HTMLInputElement;
-		const newDate = new Date(target.value);
-
-		if (target.value === '') {
-			// Assume we're skipping forward
-			const increment = 1;
-			const incrementedDate = new Date(data.startDate.getTime() + increment * 24 * 60 * 60 * 1000);
-			data.startDate = incrementedDate;
-			startDateInputValue = yyyymmdd(incrementedDate);
-		} else if (!isNaN(newDate.getTime())) {
-			newDate.setHours(24, 0, 0, 0);
-			data.startDate = newDate;
-			startDateInputValue = target.value;
-		} else {
-			console.error('Invalid date input');
+		if (key === 'z' && (ctrlKey || metaKey)) {
+			e.preventDefault();
+			if (shiftKey) {
+				appState.redo();
+			} else {
+				appState.undo();
+			}
+		} else if (key === 'y' && (ctrlKey || metaKey)) {
+			e.preventDefault();
+			appState.redo();
 		}
 	}
 
@@ -70,156 +49,111 @@
 		}
 	}
 
-	function handleAddRow(index: number) {
-		saveStateForUndo();
-		removeEmptyRows();
+	function isAfterPlaceholder(segment: Segment) {
+		if (!segment) return false;
+        const segments: Segment[] = $appState.schedule.segments;
+        const thisSegmentIndex: number = segments.findIndex(s => s === segment);
 
-		data.tableData = [
-			...data.tableData.slice(0, index + 1),
-			{ dose: 0, daysForDose: 0 },
-			...data.tableData.slice(index + 1)
-		];
+        if (thisSegmentIndex === -1) {
+            return false;
+        }
+
+		const prevSegment =
+			$appState.schedule.segments[$appState.schedule.segments.indexOf(segment) - 1];
+		if (!prevSegment) return false;
+		return isSegmentPlaceholder(prevSegment);
 	}
 
-	function handleTemplateChange() {
-		saveStateForUndo();
-		data = {
-			tableData: [...TEMPLATES[template], PLACEHOLDER_ROW],
-			startDate: new Date()
-		};
-		startDateInputValue = yyyymmdd(data.startDate);
-	}
+	function segmentIsOrAfterPlaceholder(segment: Segment) {
+        
+		if (!segment) return false;
 
-	function removeEmptyRows() {
-		const lastRowIndex = data.tableData.length - 1;
-		data.tableData = data.tableData.filter((row, i) => {
-			const isRowEmpty = row.dose === 0 && row.daysForDose === 0;
-			return !(isRowEmpty && i !== lastRowIndex);
-		});
-	}
+		const is = isSegmentPlaceholder(segment);
+		const isAfter = isAfterPlaceholder(segment);
 
-	function handleRemoveRow(index: number) {
-		saveStateForUndo();
-		data.tableData = [...data.tableData.slice(0, index), ...data.tableData.slice(index + 1)];
-	}
+		if (is) {
+			console.log('is a placeholder', segment);
+			return true;
 
-	function undo() {
-		if (undoStack.length > 0) {
-			redoStack = [...redoStack, JSON.parse(JSON.stringify(data))];
-			data = undoStack.pop() || data;
-			data.startDate = new Date(data.startDate);
-			startDateInputValue = yyyymmdd(data.startDate);
 		}
-	}
+        console.log(segment, "false")
 
-	function redo() {
-		if (redoStack.length > 0) {
-			undoStack = [...undoStack, JSON.parse(JSON.stringify(data))];
-			data = redoStack.pop() || data;
-			data.startDate = new Date(data.startDate); // Ensure startDate is a Date object
-			startDateInputValue = yyyymmdd(data.startDate);
+		if (isAfter) {
+			console.log('is after a placeholder', segment);
+			return true;
 		}
-	}
 
-	function handleKeyDown(e: KeyboardEvent) {
-		const { ctrlKey, metaKey, shiftKey, key } = e;
-
-		if (key === 'z') {
-			if (ctrlKey || metaKey) {
-				if (shiftKey) {
-					e.preventDefault();
-					redo();
-				} else {
-					e.preventDefault();
-					undo();
-				}
-			}
-		} else if (key === 'y') {
-			if (ctrlKey || metaKey) {
-				e.preventDefault();
-				redo();
-			}
-		}
+		return false;
 	}
 
 	onMount(() => {
-		startDateInputValue = yyyymmdd(data.startDate);
 		if (typeof window !== 'undefined') {
 			window.addEventListener('keydown', handleKeyDown);
 		}
 	});
 
 	onDestroy(() => {
-		undoStack = [];
-		redoStack = [];
 		if (typeof window !== 'undefined') {
 			window.removeEventListener('keydown', handleKeyDown);
 		}
 	});
 
-	const VERIFIED_LANGUAGES = LANGUAGES.filter(language => language.verified);
-	const UNVERIFIED_LANGUAGES = LANGUAGES.filter(language => !language.verified);
-
-	// Calculate the total dosage
-	$: totalDose = sumDose(data);
-
-	// Calculate the total number of days
-	$: totalDays = sumDays(data);
-		
-	// Format the total number of days in a locale-friendly format
-	$: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
-
-	// Calculate the end date
-	$: endDate = calculateEndDate(data);
-
-	$: isFirstRowAPlaceholder = isRowPlaceholder(data.tableData[0]);
-
-	$: selectedLanguage = LANGUAGES.find(language => language.lang === selectedLanguageLang) ?? LANGUAGES[0];
-	$: selectedLanguageIsVerified = selectedLanguage.verified;
+    const handleStartDateChange = (e: Event) => {
+        const target = e.target as EventTarget;
+        appState.changeStartDate(target.value);
+    }
 </script>
 
 <main>
 	<header class="vstack">
-	<div class="hstack">
-		<label class="course-begins">
-			<span>Course begins</span>
-			<input
-				type="date"
-				bind:value={startDateInputValue}
-				on:keydown={handleDateInputKeyDown}
-				on:change={handleStartDateChange}
-			/>
-		</label>
+		<div class="hstack">
+			<label class="course-begins">
+				<span>Course begins</span>
+				<input
+					type="date"
+					bind:value={$appState.startDateInputValue}
+					on:keydown={handleDateInputKeyDown}
+					on:change={handleStartDateChange}
+				/>
+			</label>
 
-		<label class="template">
-			<span>Template</span>
-			<select class="custom-select" bind:value={template} on:change={handleTemplateChange}>
-				{#each Object.keys(TEMPLATES) as template}
-					<option value={template}>{template}</option>
-				{/each}
-			</select>
-		</label>
+			<label class="template">
+				<span>Template</span>
+				<select
+					class="custom-select"
+					bind:value={templateKey}
+					on:change={() => appState.switchTemplate(templateKey)}
+				>
+					{#each Object.keys(TEMPLATES) as template}
+						<option value={template}>{template}</option>
+					{/each}
+				</select>
+			</label>
 
-		<label class="language">
-			<span>
-			Language 
-			{#if !selectedLanguageIsVerified}
-				<Badge>Unverified</Badge>
-			{/if}
-			</span>
-			<select class="custom-select" bind:value={selectedLanguageLang} class:warn={!selectedLanguageIsVerified}>
-				{#each VERIFIED_LANGUAGES as language}
-					<option value={language.lang}>{language.labelEn}</option>
-				{/each}
-				{#if UNVERIFIED_LANGUAGES.length > 0}
-					<hr />
-          			<option disabled value="unverified">Unverified Languages</option>
-					{#each UNVERIFIED_LANGUAGES as language}
+			<label class="language">
+				<span>
+					Language
+					{#if !selectedLanguageIsVerified}
+						<Badge>Unverified</Badge>
+					{/if}
+				</span>
+				<select
+					class="custom-select"
+					bind:value={selectedLanguageLang}
+					class:warn={!selectedLanguageIsVerified}
+				>
+					{#each VERIFIED_LANGUAGES as language}
 						<option value={language.lang}>{language.labelEn}</option>
 					{/each}
-				{/if}
-			</select>
-		</label>
+					{#if UNVERIFIED_LANGUAGES.length > 0}
+						<hr />
+						<option disabled value="unverified">Unverified Languages</option>
+						{#each UNVERIFIED_LANGUAGES as language}
+							<option value={language.lang}>{language.labelEn}</option>
+						{/each}
+					{/if}
+				</select>
+			</label>
 		</div>
 	</header>
 
@@ -233,43 +167,47 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#if !isFirstRowAPlaceholder}
-					<tr>
-						<td class="add-row-button-td" colspan="2">
-							<AddRowButton on:addRow={() => handleAddRow(-1)} />
-						</td>
-					</tr>
-				{/if}
-				{#each data.tableData as row, index}
-					<FormRow
-						tableData={data.tableData}
-						{row}
-						{index}
-						on:removeRow={() => handleRemoveRow(index)}
-						on:change={(event) => handleRowChange(index, event.detail)}
-					/>
-					{#if index < data.tableData.length - 2}
+				{#each $appState.schedule.segments as segment, index}
+					{#if !segmentIsOrAfterPlaceholder(segment)}
 						<tr>
-							<td class="add-row-button-td" colspan="2">
-								<AddRowButton on:addRow={() => handleAddRow(index)} />
+							<td class="add-segment-button-td" colspan="2">
+								<AddSegmentButton
+									on:addSegment={() => appState.insertPlaceholderSegmentBeforeIndex(index - 1)}
+								/>
 							</td>
 						</tr>
 					{/if}
+					<FormSegment
+						segments={$appState.schedule.segments}
+						{segment}
+						{index}
+						on:removeSegment={() => appState.deleteSegmentAtIndex(index)}
+						on:change={(event) => appState.editSegmentAtIndex(index, event.detail)}
+					/>
 				{/each}
+                {#if (!lastSegmentIsPlaceholder)}
+                    <tr>
+                        <td class="add-segment-button-td" colspan="2">
+                            <AddSegmentButton
+                                on:addSegment={insertPlaceholderSegmentAtEnd}
+                            />
+                        </td>
+                    </tr>
+                {/if}
 			</tbody>
 		</table>
 
 		<div class="plan" dir={selectedLanguage.dir}>
 			<h3>Plan</h3>
 			<ul lang={selectedLanguage.lang}>
-				{#each data.tableData as row, index}
-					<ScheduleRow
-						tableData={data.tableData}
-						startDate={data.startDate}
+				{#each $appState.schedule.segments as segment, index}
+					<ScheduleSegment
+						segments={$appState.schedule.segments}
+						startDate={$appState.schedule.startDate}
 						{selectedLanguage}
-						{row}
+						{segment}
 						{index}
-						on:change={(event) => handleRowChange(index, event.detail)}
+						on:change={(event) => appState.editSegmentAtIndex(index, event.detail)}
 					/>
 				{/each}
 			</ul>
@@ -416,7 +354,7 @@
 		align-items: center;
 	}
 
-	td.add-row-button-td {
+	td.add-segment-button-td {
 		padding: 0;
 		height: 1px !important;
 		font: 0 / 0 a;

@@ -10,31 +10,7 @@ exports[`Message > renders correctly 1`] = `
     >
       NEW
     </b>
-    Get a schedule in Spanish, Mandarin, or Haitian Creole.
-     
-  </p>
-</div>
-`;
-
-exports[`Message > renders correctly with a current message 1`] = `
-<div>
-  <p
-    class="message loaded svelte-qkthna"
-  >
-    <b
-      class="badge new"
-    >
-      NEW
-    </b>
-    Undo and redo with 
-    <kbd>
-      ctrl z
-    </kbd>
-    , 
-    <kbd>
-      ctrl y
-    </kbd>
-    , etc.
+    Swahili and Arabic (both unverified!) now available.
      
   </p>
 </div>

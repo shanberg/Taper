@@ -1,45 +1,42 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { isRowInvalid, isRowPlaceholder } from '../utils';
-	export let tableData;
-	export let row: Row;
+	import { isSegmentInvalid, isSegmentPlaceholder } from '../utils';
+	export let segments: Segment[];
+	export let segment: Segment;
 	export let index: number;
 
-	let rowStartDate: Date;
-	let rowEndDate: Date;
-	let rowIsPlaceholder: boolean = false;
-	let rowIsOnlyRealRow: boolean;
-	let invalid: boolean;
+	let isPlaceholder: boolean = false;
+	let isOnlyRealSegment: boolean = false;
 
 	const dispatch = createEventDispatcher();
 
-	$: rowIsOnlyRealRow = tableData.length === 2;
-	$: rowIsPlaceholder = isRowPlaceholder(row);
-	$: isInvalid = !rowIsPlaceholder && isRowInvalid(row);
+	$: isOnlyRealSegment = segments.length === 2;
+	$: isPlaceholder = isSegmentPlaceholder(segment);
+	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
 
 	function handleDoseChange(event: Event) {
 		const target = event.target as HTMLInputElement;
-		dispatch('change', { ...row, dose: parseFloat(target.value) });
+		dispatch('change', { ...segment, dose: parseFloat(target.value) });
 	}
 
 	function handleDaysForDoseChange(event: Event) {
 		const target = event.target as HTMLInputElement;
-		dispatch('change', { ...row, daysForDose: parseInt(target.value) });
+		dispatch('change', { ...segment, daysForDose: parseInt(target.value) });
 	}
 
-	function handleRemoveRow() {
-		dispatch('removeRow', index);
+	function deleteSegmentAtIndex() {
+		dispatch('removeSegment', index);
 	}
 </script>
 
-<tr class="row {rowIsPlaceholder ? 'placeholder' : ''} {isInvalid ? 'isInvalid' : ''}">
+<tr class="segment {isPlaceholder ? 'placeholder' : ''} {isInvalid ? 'isInvalid' : ''}">
 	<td class="dose">
 		<input
 			min={1}
-			step={row.dose > 5 ? 1 : 0.25}
+			step={segment.dose > 5 ? 1 : 0.25}
 			type="number"
 			inputmode="decimal"
-			bind:value={row.dose}
+			bind:value={segment.dose}
 			on:change={handleDoseChange}
 		/>
 	</td>
@@ -48,16 +45,16 @@
 			min={1}
 			type="number"
 			inputmode="decimal"
-			bind:value={row.daysForDose}
+			bind:value={segment.daysForDose}
 			on:change={handleDaysForDoseChange}
 		/>
 	</td>
 	<td class="delete">
 		<button
-			disabled={rowIsOnlyRealRow}
+			{...isOnlyRealSegment ? { disabled: true } : {}}
 			title="Remove this step"
 			class="remove-btn"
-			on:click={handleRemoveRow}>×</button
+			on:click={deleteSegmentAtIndex}>×</button
 		>
 	</td>
 </tr>
@@ -110,7 +107,7 @@
 		cursor: not-allowed;
 	}
 
-	/* hide remove button on last row */
+	/* hide remove button on last segment */
 
 	tr:focus-within .remove-btn,
 	tr:hover .remove-btn,

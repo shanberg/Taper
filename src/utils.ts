@@ -33,13 +33,13 @@ function createCachedFormatter() {
 export const cachedFormatDate = createCachedFormatter();
 
 /** Returns true if either dose or daysForDose are <= 0 */
-export const isRowInvalid = (row: Row): boolean => {
-	return row.dose <= 0 || row.daysForDose <= 0;
+export const isSegmentInvalid = (segment: Segment): boolean => {
+	return segment.dose <= 0 || segment.daysForDose <= 0;
 };
 
 /** Returns true if dose and daysForDose are both 0 */
-export const isRowPlaceholder = (row: Row): boolean => {
-	return row.dose === 0 && row.daysForDose === 0;
+export const isSegmentPlaceholder = (segment: Segment): boolean => {
+	return segment.dose === 0 && segment.daysForDose === 0;
 };
 
 /** Format date in YYYY-MM-DD format
@@ -62,72 +62,74 @@ export function yyyymmdd(date: Date): string {
 	return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
 }
 
-type FormatRowTextParams = {
-	row: Row;
-	rowStartDate: Date;
-	rowEndDate: Date;
+type FormatSegmentTextParams = {
+	segment: Segment;
+	segmentStartDate: Date;
+	segmentEndDate: Date;
 	index: number;
 	selectedLanguage: Language;
 };
 
-/** Format row content based on selected language */
-export const formatRowText = ({
-	row,
-	rowStartDate,
-	rowEndDate,
+/** Format segment content based on selected language */
+export const formatSegmentText = ({
+	segment,
+	segmentStartDate,
+	segmentEndDate,
 	index,
 	selectedLanguage
-}: FormatRowTextParams): string => {
+}: FormatSegmentTextParams): string => {
 	const { lang, dir } = selectedLanguage;
 	const dates = {
-		start: cachedFormatDate(rowStartDate, lang),
-		end: cachedFormatDate(rowEndDate, lang)
+		start: cachedFormatDate(segmentStartDate, lang),
+		end: cachedFormatDate(segmentEndDate, lang)
 	};
 	const formattedDateRange =
 		dir === 'ltr' ? `${dates.start} - ${dates.end}` : `${dates.end} - ${dates.start}`;
 
 	if (selectedLanguage.labelEn === 'English') {
 		// English
-		return `${index === 0 ? 'Take' : `Then take`} ${row.dose}mg daily for ${row.daysForDose} ${row.daysForDose === 1 ? 'day' : 'days'} (${formattedDateRange})`;
+		return `${index === 0 ? 'Take' : `Then take`} ${segment.dose}mg daily for ${segment.daysForDose} ${segment.daysForDose === 1 ? 'day' : 'days'} (${formattedDateRange})`;
 	} else if (selectedLanguage.labelEn === 'Spanish') {
 		// Spanish
-		return `${index === 0 ? 'Tomar' : `Después tome`} ${row.dose}mg cada día durante ${row.daysForDose} ${row.daysForDose === 1 ? 'día' : 'días'} (${formattedDateRange})`;
+		return `${index === 0 ? 'Tomar' : `Después tome`} ${segment.dose}mg cada día durante ${segment.daysForDose} ${segment.daysForDose === 1 ? 'día' : 'días'} (${formattedDateRange})`;
 	} else if (selectedLanguage.labelEn === 'Haitian Creole') {
 		// Haitian Creole
-		return `${index === 0 ? 'Pran' : `Apre sa pran`} ${row.dose}mg chak jou pou ${row.daysForDose} ${row.daysForDose === 1 ? 'jou' : 'jou'} (${formattedDateRange})`;
+		return `${index === 0 ? 'Pran' : `Apre sa pran`} ${segment.dose}mg chak jou pou ${segment.daysForDose} ${segment.daysForDose === 1 ? 'jou' : 'jou'} (${formattedDateRange})`;
 	} else if (selectedLanguage.labelEn === 'Mandarin') {
 		// Mandarin
-		return `${index === 0 ? '服用' : `然后服用`} ${row.dose}毫克，每天服用${row.daysForDose} ${row.daysForDose === 1 ? '天' : '天'} (${formattedDateRange})`;
+		return `${index === 0 ? '服用' : `然后服用`} ${segment.dose}毫克，每天服用${segment.daysForDose} ${segment.daysForDose === 1 ? '天' : '天'} (${formattedDateRange})`;
 	} else if (selectedLanguage.labelEn === 'Swahili') {
 		// Swahili
-		return `${index === 0 ? 'Kutoka' : `Sasa kutoka`} ${row.dose}mg kwa saa ${row.daysForDose} ${row.daysForDose === 1 ? 'siku' : 'siku'} (${formattedDateRange})`;
+		return `${index === 0 ? 'Kutoka' : `Sasa kutoka`} ${segment.dose}mg kwa saa ${segment.daysForDose} ${segment.daysForDose === 1 ? 'siku' : 'siku'} (${formattedDateRange})`;
 	} else if (selectedLanguage.labelEn === 'Arabic') {
 		// Arabic
-		return `${index === 0 ? 'احتياج' : `في ذلك الحين تحتاج`} ${row.dose}mg كل يوم ${row.daysForDose} ${row.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`;
+		return `${index === 0 ? 'احتياج' : `في ذلك الحين تحتاج`} ${segment.dose}mg كل يوم ${segment.daysForDose} ${segment.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`;
 	}
 
 	return '';
 };
 
+const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };
 
-
-const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
-
-export function createInitialState(): UIStateData {
+export function createInitialSchedule(): Schedule {
 	return {
-		tableData: [...TEMPLATES.Default, PLACEHOLDER_ROW],
+		segments: [...TEMPLATES.Default, PLACEHOLDER_SEGMENT],
 		startDate: new Date()
 	};
 }
 
-export const sumDose = (data: UIStateData): number => {
-	return data.tableData.reduce((sum, row) => sum + row.dose * row.daysForDose, 0);
+export const sumDose = (schedule: Schedule): number => {
+	return schedule.segments.reduce((sum, segment) => sum + segment.dose * segment.daysForDose, 0);
 };
 
-export const sumDays = (data: UIStateData): number => {
-	return data.tableData.reduce((sum, row) => sum + row.daysForDose, 0) + data.tableData.length - 2;
+export const sumDays = (schedule: Schedule): number => {
+	return (
+		schedule.segments.reduce((sum, segment) => sum + segment.daysForDose, 0) +
+		schedule.segments.length -
+		2
+	);
 };
 
-export const calculateEndDate = (data: UIStateData): Date => {
-	return new Date(data.startDate.getTime() + sumDays(data) * 24 * 60 * 60 * 1000);
+export const calculateEndDate = (schedule: Schedule): Date => {
+	return new Date(schedule.startDate.getTime() + sumDays(schedule) * 24 * 60 * 60 * 1000);
 };
