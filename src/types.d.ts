@@ -7,11 +7,12 @@ type Schedule = {
 	segments: Segment[];
 	startDate: ScheduleDate;
 	templateKey: string;
-}
+	languageKey: string;
+};
 
 type SerializedSchedule = string & {
-	__brand: "SerializedSchedule"
-}
+	__brand: 'SerializedSchedule';
+};
 
 type AppState = {
 	schedule: Schedule;
@@ -36,13 +37,13 @@ type Message = {
 };
 
 type ScheduleDate = Date & {
-	__brand: "ScheduleDate"
-}
+	__brand: 'ScheduleDate';
+};
 
 type InputStringDate = string & {
-	__brand: "InputStringDate"
-}
+	__brand: 'InputStringDate';
+};
 
 type LocaleDate = string & {
-	__brand: "LocaleDate"
-}
+	__brand: 'LocaleDate';
+};

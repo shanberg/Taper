@@ -13,7 +13,7 @@ const Arabic = LANGUAGES.find((language) => language.labelEn === 'Arabic');
 describe('formatSegmentText', () => {
 	const segment = { dose: 50, daysForDose: 5 };
 	const segmentStartDate = new TaperDate('2024-06-01').toScheduleDate();
-	const segmentEndDate = new TaperDate('2024-06-05').toScheduleDate()
+	const segmentEndDate = new TaperDate('2024-06-05').toScheduleDate();
 
 	test('formats text for English language', () => {
 		const result = formatSegmentText({

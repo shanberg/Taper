@@ -8,7 +8,7 @@
 	const dispatch = createEventDispatcher();
 	$: isOnlyRealSegment = segments.length === 2;
 	$: isPlaceholder = isSegmentPlaceholder(segment);
-	$: isInvalid = (!isPlaceholder && isSegmentInvalid(segment));
+	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
 
 	function handleDoseChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -25,11 +25,7 @@
 	}
 </script>
 
-<tr 
-  class="segment"
-  class:isInvalid
-  class:isPlaceholder
->
+<tr class="segment" class:isInvalid class:isPlaceholder>
 	<td class="dose">
 		<input
 			min={1}
@@ -115,7 +111,6 @@
 		outline: none;
 		opacity: 1;
 	}
-
 
 	tr.isPlaceholder .remove-btn,
 	tr.isInvalid .remove-btn,

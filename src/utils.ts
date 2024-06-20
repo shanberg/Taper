@@ -1,4 +1,4 @@
-import { DEFAULT_TEMPLATE_KEY, TEMPLATES } from './consts';
+import { DEFAULT_TEMPLATE_KEY, DEFAULT_LANGUAGE_KEY, TEMPLATES } from './consts';
 import { TaperDate } from './TaperDate';
 
 const isDateThisYear = (date: ScheduleDate): boolean => {
@@ -117,7 +117,8 @@ export function createInitialSchedule(): Schedule {
 	return {
 		segments: [...TEMPLATES.Default, PLACEHOLDER_SEGMENT],
 		startDate: new TaperDate().toScheduleDate(),
-		templateKey: DEFAULT_TEMPLATE_KEY
+		templateKey: DEFAULT_TEMPLATE_KEY,
+		languageKey: DEFAULT_LANGUAGE_KEY
 	};
 }
 
@@ -134,24 +135,50 @@ export const sumDays = (schedule: Schedule): number => {
 };
 
 export const calculateEndDate = (schedule: Schedule): ScheduleDate => {
-	return new TaperDate(new Date(schedule.startDate.getTime() + sumDays(schedule) * 24 * 60 * 60 * 1000)).toScheduleDate();
+	return new TaperDate(
+		new Date(schedule.startDate.getTime() + sumDays(schedule) * 24 * 60 * 60 * 1000)
+	).toScheduleDate();
 };
-
 
 export const serializeSchedule = (schedule: Schedule): SerializedSchedule => {
 	return JSON.stringify(schedule, (key, value) => {
-		if (key === "startDate" || key === "endDate" || key === "startDateInputValue") {
+		if (key === 'startDate' || key === 'endDate' || key === 'startDateInputValue') {
 			return { __brand: 'Date', value: new TaperDate(value).toYYYYMMDD() };
 		}
 		return value;
-	}) as SerializedSchedule
+	}) as SerializedSchedule;
 };
 
 export const deserializeSchedule = (serializedSchedule: SerializedSchedule): Schedule => {
 	return JSON.parse(serializedSchedule, (key, value) => {
 		if (value && value.__brand === 'Date') {
-			return new TaperDate(value.value).toScheduleDate()
+			return new TaperDate(value.value).toScheduleDate();
 		}
 		return value;
-	}) as Schedule
+	}) as Schedule;
 };
+
+export function isSegmentAfterPlaceholder(segment: Segment, segments: Segment[]) {
+	if (!segment) return false;
+	const thisSegmentIndex: number = segments.findIndex((s) => s === segment);
+
+	if (thisSegmentIndex === -1) {
+		return false;
+	}
+
+	const prevSegment = segments[segments.indexOf(segment) - 1];
+	if (!prevSegment) return false;
+	return isSegmentPlaceholder(prevSegment);
+}
+
+export function segmentIsOrAfterPlaceholder(segment: Segment, segments: Segment[]) {
+	if (!segment) return false;
+
+	if (isSegmentPlaceholder(segment)) {
+		return true;
+	}
+	if (isSegmentAfterPlaceholder(segment, segments)) {
+		return true;
+	}
+	return false;
+}

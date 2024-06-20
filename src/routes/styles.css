@@ -87,6 +87,22 @@ select {
 	background-size: 1.25rem;
 }
 
+label {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
+
+	& span {
+		font-weight: var(--font-weight-heading);
+	}
+
+	& input {
+		width: 100%;
+		border-radius: var(--control-radius);
+	}
+}
+
 p {
 	line-height: 1.5;
 	margin: unset;

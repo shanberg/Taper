@@ -85,13 +85,21 @@ describe('FormSegment', () => {
 
 	test('applies isPlaceholder class when segment is a placeholder', () => {
 		// isSegmentPlaceholder.mockReturnValue(true);
-		const { container } = render(FormSegment, { segments, segment: { dose: 0, daysForDose: 0 }, index });
+		const { container } = render(FormSegment, {
+			segments,
+			segment: { dose: 0, daysForDose: 0 },
+			index
+		});
 		expect(container.querySelector('.segment')).toHaveClass('isPlaceholder');
 	});
 
 	test('applies isInvalid class when segment is invalid', () => {
 		// isSegmentInvalid.mockReturnValue(true);
-		const { container } = render(FormSegment, { segments, segment: { dose: -1, daysForDose: 0 }, index });
+		const { container } = render(FormSegment, {
+			segments,
+			segment: { dose: -1, daysForDose: 0 },
+			index
+		});
 		expect(container.querySelector('.segment')).toHaveClass('isInvalid');
 	});
 });
