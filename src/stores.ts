@@ -112,25 +112,37 @@ export function createAppStore(): AppStore {
 
                 const allSegments = state.schedule.segments;
                 const allButLastSegment = allSegments.slice(0, -1);
+                const scheduleContainsInnerPlaceholders = allButLastSegment.some(s => isSegmentPlaceholder(s));
 
+                // simplest case, just insert and return
+                if (!scheduleContainsInnerPlaceholders) {
+                    state.schedule.segments.splice(index, 0, { ...PLACEHOLDER_SEGMENT });
+                    return state;
+                }
+
+                // otherwise...
+
+                // check if the insertion point is before the existing inner placeholder
                 const currentInnerPlaceholderIndex = allButLastSegment.findIndex((segment: Segment) =>
                     isSegmentPlaceholder(segment)
                 );
+                const isIndexBeforeCurrentInnerPlaceholder = (index < currentInnerPlaceholderIndex)
 
-                const isIndexAfterCurrentInnerPlaceholder = (index > currentInnerPlaceholderIndex)
-
-                if (isIndexAfterCurrentInnerPlaceholder) {
-                    // first remove the preceding placeholder
+                // if it is, remove the existing placeholder and insert the new one
+                if (isIndexBeforeCurrentInnerPlaceholder) {
                     _removeNonLastPlaceholder();
-                    // then insert at the index *before* the one specified
-                    state.schedule.segments.splice(index, 0, { ...PLACEHOLDER_SEGMENT });
-                } else {
-                    // first remove all other placeholders
-                    _removeNonLastPlaceholder();
-                    // then insert one at the index specified
-                    state.schedule.segments.splice(index - 1, 0, { ...PLACEHOLDER_SEGMENT });
+                    state.schedule.segments.splice(Math.max(0, index), 0, { ...PLACEHOLDER_SEGMENT });
+                    return state;
                 }
 
+                // otherwise...
+
+                // the insertion point is after an existing placeholder,
+                // so we get cute with the index before returning updated state
+
+                _removeNonLastPlaceholder();
+                // then insert at the index *before* the one specified
+                state.schedule.segments.splice(index - 1, 0, { ...PLACEHOLDER_SEGMENT });
                 return state;
             }),
         /**

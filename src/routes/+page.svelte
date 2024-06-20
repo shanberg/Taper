@@ -24,11 +24,11 @@
 		LANGUAGES.find((language) => language.lang === selectedLanguageLang) ?? LANGUAGES[0];
 		$: selectedLanguageIsVerified = selectedLanguage.verified;
 
-		// Date
-		$: startDateInputValue = $appStore.startDateInputValue;
+	// Date
+	$: startDateInputValue = $appStore.startDateInputValue;
 
-		// Template
-		$: selectedTemplateKey = $appStore.schedule.templateKey;
+	// Template
+	$: selectedTemplateKey = $appStore.schedule.templateKey;
 
 	// Logic
 	$: lastSegmentIsPlaceholder = isSegmentPlaceholder($appStore.schedule.segments[$appStore.schedule.segments.length - 1])
@@ -179,7 +179,7 @@
 				{#each $appStore.schedule.segments as segment, index}
 					{#if !segmentIsOrAfterPlaceholder(segment)}
 						<tr>
-							<td class="add-segment-button-td" colspan="2">
+							<td class="add-segment-button-td" colspan="2" data-insert-before={index}>
 								<AddSegmentButton
 									on:addSegment={() => appStore.insertPlaceholderSegmentBeforeIndex(index)}
 								/>

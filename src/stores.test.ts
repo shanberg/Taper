@@ -64,40 +64,70 @@ describe('appStore', () => {
 		expect(afterState.redoStack).toEqual([]);
 	});
 
-	test('insertPlaceholderSegmentBeforeIndex at 3', () => {
-		const indexToInsert = 3;
+	test('insertPlaceholderSegmentBeforeIndex before existing placeholder', () => {
+		// prepare test data 
+		const startingSegments = [
+			{ dose: 1, daysForDose: 1 }, // 0
+			{ dose: 2, daysForDose: 2 }, // 1
+			{ dose: 3, daysForDose: 3 }, // 2
+			{ dose: 4, daysForDose: 4 }, // 3 - insert before here
+			{ dose: 0, daysForDose: 0 }, // 4 - end placeholder
+		]
 
-		// Insert a placeholder segment before index 3
-		appStore.insertPlaceholderSegmentBeforeIndex(indexToInsert);
+		const resultingSegments = [
+			{ dose: 1, daysForDose: 1 }, // 0
+			{ dose: 2, daysForDose: 2 }, // 1
+			{ dose: 3, daysForDose: 3 }, // 2
+			{ dose: 0, daysForDose: 0 }, // 3 - added placeholder
+			{ dose: 4, daysForDose: 4 }, // 4 - inserted before here
+			{ dose: 0, daysForDose: 0 }, // 5 - end placeholder
+		];
+
+		// prepare initial state
+		const beforeState = get(appStore);
+		let preparedAppState = beforeState;
+		preparedAppState.schedule.segments = startingSegments;
+		appStore.set(preparedAppState);
+
+		// insert the placeholder
+		appStore.insertPlaceholderSegmentBeforeIndex(3)
 
 		// verify changes
 		const afterState = get(appStore);
-		expect(afterState.schedule.segments[indexToInsert]).toEqual(PLACEHOLDER_SEGMENT);
-		expect(afterState.undoStack.length).toBe(1);
-		expect(afterState.redoStack).toEqual([]);
+		expect(afterState.schedule.segments).toEqual(resultingSegments);
 	});
 
-	test('insertPlaceholderSegmentBeforeIndex before existing placeholder', () => {
+	test('insertPlaceholderSegmentBeforeIndex after existing placeholder', () => {
+		// prepare test data 
 		const startingSegments = [
-			{ dose: 1, daysForDose: 1 },
-			{ dose: 2, daysForDose: 2 },
-			{ dose: 3, daysForDose: 3 },
-			{ dose: 4, daysForDose: 4 },
-			{ dose: 0, daysForDose: 0 }, // placeholder
+			{ dose: 1, daysForDose: 1 }, // 0
+			{ dose: 0, daysForDose: 0 }, // 1 - inner placeholder
+			{ dose: 2, daysForDose: 2 }, // 2
+			{ dose: 3, daysForDose: 3 }, // 3 - insert before here
+			{ dose: 0, daysForDose: 0 }, // 4 - end placeholder
 		]
 
-		// get initial state
-		const beforeState = get(appStore);
+		const resultingSegments = [
+			{ dose: 1, daysForDose: 1 }, // 0
+			// placeholder removed
+			{ dose: 2, daysForDose: 2 }, // 1
+			{ dose: 0, daysForDose: 0 }, // 2 - placeholder added
+			{ dose: 3, daysForDose: 3 }, // 3 - insert before here
+			{ dose: 0, daysForDose: 0 }, // 4 - end placeholder
+		];
 
+		// prepare initial state
+		const beforeState = get(appStore);
 		let preparedAppState = beforeState;
 		preparedAppState.schedule.segments = startingSegments;
-
-		// set to test schedule
 		appStore.set(preparedAppState);
 
+		// insert the placeholder
+		appStore.insertPlaceholderSegmentBeforeIndex(3)
+
 		// verify changes
-		// const afterState = get(appStore);
-		// expect(afterState.schedule.segments).toEqual(startingSegments);
+		const afterState = get(appStore);
+		expect(afterState.schedule.segments).toEqual(resultingSegments);
 	});
 
 	test('switchTemplate', () => {
