@@ -2,15 +2,7 @@
 	import { appStore } from '../stores';
 	import FormSegment from '../components/FormSegment.svelte';
 	import AddSegmentButton from '../components/AddSegmentButton.svelte';
-	import { isSegmentPlaceholder, segmentIsOrAfterPlaceholder } from '../utils';
-
-	$: lastSegmentIsPlaceholder = isSegmentPlaceholder(
-		$appStore.schedule.segments[$appStore.schedule.segments.length - 1]
-	);
-
-	function insertPlaceholderSegmentAtEnd() {
-		appStore.insertPlaceholderSegmentBeforeIndex($appStore.schedule.segments.length);
-	}
+	import { segmentIsOrAfterPlaceholder } from '../utils';
 </script>
 
 <table class="form">
@@ -40,13 +32,6 @@
 				on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
 			/>
 		{/each}
-		{#if !lastSegmentIsPlaceholder}
-			<tr>
-				<td class="add-segment-button-td" colspan="2">
-					<AddSegmentButton on:addSegment={insertPlaceholderSegmentAtEnd} />
-				</td>
-			</tr>
-		{/if}
 	</tbody>
 </table>
 

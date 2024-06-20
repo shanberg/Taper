@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for Taper/src/components/FormSegment.svelte</title>
+    <title>Code coverage report for Taper/src/components/FormHeader.svelte</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">Taper/src/components</a> FormSegment.svelte</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">Taper/src/components</a> FormHeader.svelte</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>128/128</span>
+                <span class='fraction'>112/112</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.94% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/17</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>128/128</span>
+                <span class='fraction'>112/112</span>
             </div>
         
             
@@ -175,39 +175,7 @@
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
 <a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -320,131 +288,115 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;script lang="ts"&gt;
-	import { createEventDispatcher } from 'svelte';
-	import { isSegmentInvalid, isSegmentPlaceholder } from '../utils';
-	export let segments: Segment[];
-	export let segment: Segment;
-	export let index: number;
+	import { LANGUAGES, TEMPLATES } from '../consts';
+	import Badge from './Badge.svelte';
+	import { getLanguageFromKey } from '../utils'
+	import { appStore } from '../stores';
 &nbsp;
-	const dispatch = createEventDispatcher();
-	$: isOnlyRealSegment = segments.length === 2;
-	$: isPlaceholder = isSegmentPlaceholder(segment);
-	$: isInvalid = !isPlaceholder &amp;&amp; isSegmentInvalid(segment);
+	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) =&gt; language.verified);
+	const UNVERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) =&gt; !language.verified);
 &nbsp;
-	function deleteSegmentAtIndex() {
-		dispatch('removeSegment', index);
-	}
+	// Date
+	$: startDateInputValue = $appStore.startDateInputValue;
+&nbsp;
+	// Template
+	$: selectedTemplateKey = $appStore.schedule.templateKey;
+&nbsp;
+	// Language
+	$: selectedLanguageKey = $appStore.schedule.languageKey;
+	$: selectedLanguage = getLanguageFromKey(selectedLanguageKey);
+	$: selectedLanguageIsVerified = selectedLanguage.verified;
+&nbsp;
+	// event handlers
+	const handleChangeDate = (e: Event) =&gt; {
+		const target = e.target as HTMLInputElement;
+		appStore.changeStartDate(target.value as InputStringDate);
+	};
+&nbsp;
+	const handleChangeTemplateKey = (e: Event) =&gt; {
+		const target = e.target as HTMLInputElement;
+		appStore.switchTemplate(target.value);
+	};
+&nbsp;
+	const handleDateInputKeyDown = (e: KeyboardEvent) =&gt; {
+		const target = e.target as HTMLInputElement;
+		if (target.value === '') {
+			return;
+		}
+	};
+&nbsp;
+	const handleChangeLanguage = (e: Event) =&gt; {
+		const target = e.target as HTMLSelectElement;
+		appStore.changeLanguageKey(target.value);
+	};
 &lt;/script&gt;
 &nbsp;
-&lt;tr class="segment" class:isInvalid class:isPlaceholder&gt;
-	&lt;td class="dose"&gt;
-		&lt;label for="dose-{<span class="branch-0 cbranch-no" title="branch not covered" >index}"&gt;</span>
+&lt;header class="vstack"&gt;
+	&lt;div class="hstack"&gt;
+		&lt;label class="course-begins"&gt;
+			&lt;span&gt;Course begins&lt;/span&gt;
 			&lt;input
-				min={1}
-				id="dose-{<span class="branch-0 cbranch-no" title="branch not covered" >index}"</span>
-				step={segment.dose &gt; 5<span class="branch-0 cbranch-no" title="branch not covered" > ? 1 </span>: 0.25}
-				type="number"
-				inputmode="decimal"
-				pattern="[1-9]\d*"
-				aria-label="dose-{<span class="branch-0 cbranch-no" title="branch not covered" >index}"</span>
-				bind:value={segment.dose}
-				on:change={() =&gt; dispatch('change', segment)}
+				type="date"
+				value={startDateInputValue}
+				on:keydown={handleDateInputKeyDown}
+				on:change={handleChangeDate}
 			/&gt;
 		&lt;/label&gt;
-	&lt;/td&gt;
-	&lt;td class="days"&gt;
-		&lt;label for="days-{<span class="branch-0 cbranch-no" title="branch not covered" >index}"&gt;</span>
-			&lt;input
-				min={1}
-				id="days-{<span class="branch-0 cbranch-no" title="branch not covered" >index}"</span>
-				type="number"
-				inputmode="decimal"
-				pattern="[1-9]\d*"
-				aria-label="days-{<span class="branch-0 cbranch-no" title="branch not covered" >index}"</span>
-				bind:value={segment.daysForDose}
-				on:change={() =&gt; dispatch('change', segment)}
-			/&gt;
+&nbsp;
+		&lt;label class="template"&gt;
+			&lt;span&gt;Template&lt;/span&gt;
+			&lt;select class="custom-select" value={selectedTemplateKey} on:change={handleChangeTemplateKey}&gt;
+				{#each Object.keys(TEMPLATES) as template}
+					&lt;option value={template}&gt;{template}&lt;/option&gt;
+				{/each}
+			&lt;/select&gt;
 		&lt;/label&gt;
-	&lt;/td&gt;
-	&lt;td class="delete"&gt;
-		&lt;button
-			{...<span class="branch-0 cbranch-no" title="branch not covered" >isOnlyRealSegment ? { disabled: true } : {}}</span>
-			title="Remove this step"
-			class="remove-btn"
-			on:click={deleteSegmentAtIndex}&gt;×&lt;/button
-		&gt;
-	&lt;/td&gt;
-&lt;/tr&gt;
+&nbsp;
+		&lt;label class="language"&gt;
+			&lt;span&gt;
+				Language
+				{#if !selectedLanguageIsVerified}
+					&lt;Badge&gt;Unverified&lt;/Badge&gt;
+				{/if}
+			&lt;/span&gt;
+			&lt;select
+				class="custom-select"
+				value={selectedLanguage.lang}
+				class:warn={!selectedLanguageIsVerified}
+				on:change={handleChangeLanguage}
+			&gt;
+				{#each VERIFIED_LANGUAGES as language}
+					&lt;option value={language.lang}&gt;{language.labelEn}&lt;/option&gt;
+				{/each}
+				{#if UNVERIFIED_LANGUAGES.length &gt; 0}
+					&lt;hr /&gt;
+					&lt;option disabled value="unverified"&gt;Unverified Languages&lt;/option&gt;
+					{#each UNVERIFIED_LANGUAGES as language}
+						&lt;option value={language.lang}&gt;{language.labelEn}&lt;/option&gt;
+					{/each}
+				{/if}
+			&lt;/select&gt;
+		&lt;/label&gt;
+	&lt;/div&gt;
+&lt;/header&gt;
 &nbsp;
 &lt;style&gt;
-&nbsp;
-	label {
-		display: contents;
+	header {
+		border-bottom: 1px solid var(--color-border);
+		padding: 1rem;
 	}
 &nbsp;
-	input {
-		width: 100%;
-		height: 100%;
-		border: none;
-		outline: none;
+	label.course-begins {
+		flex: 0 0 11.5rem;
 	}
 &nbsp;
-	.isPlaceholder {
-		color: var(--color-fg-muted);
-		user-select: none;
-&nbsp;
-		&amp; input {
-			background: transparent;
-		}
+	label.course-begins {
+		padding-right: 1.5rem;
 	}
 &nbsp;
-	.isInvalid td input {
-		background: var(--color-status-error-bg);
-	}
-&nbsp;
-	.isInvalid:focus-within td input {
-		background: var(--color-status-error-bg-muted);
-	}
-&nbsp;
-	tr:last-child .remove-btn {
-		display: none;
-	}
-&nbsp;
-	.remove-btn {
-		width: 1.5rem;
-		height: 100%;
-		border: 0;
-		margin-left: 1px;
-		border-radius: var(--control-radius);
-		transition: all var(--control-transition-duration) ease-in-out;
-		color: inherit;
-		background: transparent;
-		cursor: pointer;
-		opacity: 0.25;
-		padding: 0;
-		text-align: center;
-	}
-&nbsp;
-	.remove-btn:disabled {
-		cursor: not-allowed;
-	}
-&nbsp;
-	/* hide remove button on last segment */
-&nbsp;
-	tr:focus-within .remove-btn,
-	tr:hover .remove-btn,
-	.remove-btn:focus {
-		outline: none;
-		opacity: 1;
-	}
-&nbsp;
-	tr.isPlaceholder .remove-btn,
-	tr.isInvalid .remove-btn,
-	.remove-btn:hover:not(:disabled),
-	.remove-btn:focus:not(:disabled) {
-		opacity: 1;
-		color: var(--color-fg-error);
-		background: var(--color-status-error-bg-muted);
+	.template,
+	.language {
+		flex: 1 0 auto;
 	}
 &lt;/style&gt;
 &nbsp;</pre></td></tr></table></pre>

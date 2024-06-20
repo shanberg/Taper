@@ -18,6 +18,23 @@ export const INITIAL_STORE_STATE: AppState = {
 	startDateInputValue: new TaperDate(initialSchedule.startDate).toYYYYMMDD()
 };
 
+// function validateSegmentValue(value: number | null | string, prevValue: number): number {
+// 	// console.log(value, prevValue);
+// 	if (value === null || value === '' || value === 'NaN') {
+// 		// If the value is null, an empty string, or the string "NaN", revert to the previous value
+// 		return prevValue;
+// 	} else {
+// 		const parsedValue = parseFloat(value.toString());
+// 		if (isNaN(parsedValue) || !Number.isSafeInteger(parsedValue) || parsedValue < 0) {
+// 			// If the value is invalid, revert to the previous value
+// 			return prevValue;
+// 		} else {
+// 			// Remove leading zeroes from the value
+// 			return parseFloat(parsedValue.toString().replace(/^0+/, ''));
+// 		}
+// 	}
+// }
+
 export type AppStore = Writable<AppState> & {
 	editSegmentAtIndex: (index: number, updatedSegment: Segment) => void;
 	changeStartDate: (newDate: ScheduleDate | InputStringDate) => void;
@@ -53,9 +70,23 @@ export function createAppStore(): AppStore {
 			})),
 		editSegmentAtIndex: (index: number, updatedSegment: Segment): void =>
 			update((state) => {
+				const prevSegments = [...state.schedule.segments];
 				const newState = _saveScheduleForUndo(state);
-				const newSegments = [...newState.schedule.segments];
+				let newSegments = [...prevSegments];
+
+				updatedSegment.dose = updatedSegment.dose || 0
+				updatedSegment.daysForDose = updatedSegment.daysForDose || 0
+
 				newSegments[index] = updatedSegment;
+
+				// console.log(newSegments, newSegments.some(s => isSegmentPlaceholder(s)))
+
+				if (!newSegments.some(s => isSegmentPlaceholder(s))) {
+					newSegments = [...newSegments, { ...PLACEHOLDER_SEGMENT }];
+				}
+
+				// console.log(newSegments, newSegments.some(s => isSegmentPlaceholder(s)))
+
 				return { ...newState, schedule: { ...newState.schedule, segments: newSegments } };
 			}),
 		changeStartDate: (newDate: ScheduleDate | InputStringDate): void =>
@@ -98,7 +129,7 @@ export function createAppStore(): AppStore {
 
 				const newSegments = allSegments.filter((segment) => !isSegmentPlaceholder(segment));
 				if (!newSegments.some(isSegmentPlaceholder)) {
-					newSegments.push(PLACEHOLDER_SEGMENT);
+					newSegments.push({ ...PLACEHOLDER_SEGMENT });
 				}
 
 				if (isIndexBeforeCurrentInnerPlaceholder) {

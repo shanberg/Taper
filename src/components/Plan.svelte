@@ -1,13 +1,11 @@
 <script lang="ts">
 	import { appStore } from '../stores';
-	import ScheduleSegment from '../components/ScheduleSegment.svelte';
-	import { LANGUAGES } from '../consts';
-	import { sumDose, sumDays } from '../utils';
+	import ScheduleSegment from './ScheduleSegment.svelte';
+	import { sumDose, sumDays, getLanguageFromKey } from '../utils';
 
 	// Language
 	$: selectedLanguageKey = $appStore.schedule.languageKey;
-	$: selectedLanguage =
-		LANGUAGES.find((language) => language.lang === selectedLanguageKey) ?? LANGUAGES[0];
+	$: selectedLanguage = getLanguageFromKey(selectedLanguageKey)
 
 	// Summary
 	$: totalDose = sumDose($appStore.schedule);

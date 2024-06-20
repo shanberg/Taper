@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach } from 'vitest';
-import { appStore, INITIAL_STORE_STATE } from './stores';
+import { appStore, createAppStore, INITIAL_STORE_STATE } from './stores';
 import { get } from 'svelte/store';
 import { PLACEHOLDER_SEGMENT, TEMPLATES } from './consts';
 import { TaperDate } from './TaperDate';
@@ -8,8 +8,29 @@ import { isSegmentPlaceholder, serializeSchedule } from './utils';
 describe('appStore', () => {
 	beforeEach(() => {
 		// Reset the state before each test
-		// appStore.set(INITIAL_STORE_STATE);
 		appStore.reset();
+	});
+
+	// Test for appStore initialization
+	test('appStore initialization', () => {
+		// Create a new instance of the app store
+		const store = createAppStore();
+
+		// Get the initial state of the store
+		const initialState = get(store);
+
+		// Verify the initial state matches the expected initial state
+		expect(initialState).toEqual(INITIAL_STORE_STATE);
+
+		// Verify that the store methods are defined
+		expect(typeof store.editSegmentAtIndex).toBe('function');
+		expect(typeof store.changeStartDate).toBe('function');
+		expect(typeof store.insertPlaceholderSegmentBeforeIndex).toBe('function');
+		expect(typeof store.deleteSegmentAtIndex).toBe('function');
+		expect(typeof store.switchTemplate).toBe('function');
+		expect(typeof store.undo).toBe('function');
+		expect(typeof store.redo).toBe('function');
+		expect(typeof store.reset).toBe('function');
 	});
 
 	test('initial state', () => {
@@ -41,7 +62,7 @@ describe('appStore', () => {
 		const updatedSegment = { dose: 99, daysForDose: 99 };
 
 		// edit the segment
-		appStore.editSegmentAtIndex(indexToUpdate, updatedSegment);
+		appStore.editSegmentAtIndex(indexToUpdate, { ...updatedSegment });
 
 		// verify changes
 		const afterState = get(appStore);
@@ -55,6 +76,39 @@ describe('appStore', () => {
 
 		// verify redo stack still empty
 		expect(afterState.redoStack).toEqual([]);
+	});
+
+	test('editSegmentAtIndex last index when it was a placeholder', () => {
+		// prepare test data
+		const startingSegments = [
+			{ dose: 1, daysForDose: 1 }, // 0
+			{ dose: 2, daysForDose: 2 }, // 1
+			{ dose: 3, daysForDose: 3 }, // 2
+			{ dose: 4, daysForDose: 4 }, // 3
+			{ dose: 0, daysForDose: 0 }  // 4 - the one to edit
+		];
+
+		const resultingSegments = [
+			{ dose: 1, daysForDose: 1 }, // 0
+			{ dose: 2, daysForDose: 2 }, // 1
+			{ dose: 3, daysForDose: 3 }, // 2
+			{ dose: 4, daysForDose: 4 }, // 3
+			{ dose: 1, daysForDose: 0 }, // 4 - edited
+			{ dose: 0, daysForDose: 0 }  // 5 - created automatically
+		];
+
+		// prepare initial state
+		const beforeState = get(appStore);
+		let preparedAppState = beforeState;
+		preparedAppState.schedule.segments = startingSegments;
+		appStore.set(preparedAppState);
+
+		// insert the placeholder
+		appStore.editSegmentAtIndex(4, { dose: 1, daysForDose: 0 });
+
+		// verify changes
+		const afterState = get(appStore);
+		expect(afterState.schedule.segments).toEqual(resultingSegments);
 	});
 
 	test('changeStartDate', () => {
@@ -367,14 +421,75 @@ describe('appStore', () => {
 		expect(afterUndo7.startDateInputValue).toEqual(INITIAL_STORE_STATE.startDateInputValue);
 	});
 
-	// test('redo', () => {
-	//     const initialSegment = { /* segment details */ };
-	//     appStore.editSegmentAtIndex(0, initialSegment);
-	//     appStore.undo();
-	//     appStore.redo();
+	test('redo', () => {
+		const initialState = get(appStore);
 
-	//     const afterState = get(appStore);
-	//     expect(afterState.schedule.segments[0]).toEqual(initialSegment);
-	//     expect(afterState.undoStack.length).toBe(1);
-	// });
+		// Perform some actions
+		appStore.editSegmentAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
+		const afterEdit1 = get(appStore);
+		expect(afterEdit1.undoStack.length).toEqual(1);
+
+		appStore.editSegmentAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
+		const afterEdit2 = get(appStore);
+		expect(afterEdit2.undoStack.length).toEqual(2);
+
+		appStore.editSegmentAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
+		const afterEdit3 = get(appStore);
+		expect(afterEdit3.undoStack.length).toEqual(3);
+
+		// Perform undo actions
+		appStore.undo(); // undo last edit
+		const afterUndo1 = get(appStore);
+		expect(afterUndo1.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
+		expect(afterUndo1.redoStack.length).toEqual(1);
+
+		appStore.undo(); // undo second edit
+		const afterUndo2 = get(appStore);
+		expect(afterUndo2.schedule.segments[1]).toEqual({ dose: 1, daysForDose: 1 });
+		expect(afterUndo2.redoStack.length).toEqual(2);
+
+		// Perform redo actions
+		appStore.redo(); // redo second edit
+		const afterRedo1 = get(appStore);
+		expect(afterRedo1.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
+		expect(afterRedo1.redoStack.length).toEqual(1);
+
+		appStore.redo(); // redo last edit
+		const afterRedo2 = get(appStore);
+		expect(afterRedo2.schedule.segments[1]).toEqual({ dose: 3, daysForDose: 1 });
+		expect(afterRedo2.redoStack.length).toEqual(0);
+	});
+
+	test('redo after multiple undos', () => {
+		const initialState = get(appStore);
+
+		// Perform some actions
+		appStore.editSegmentAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
+		appStore.editSegmentAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
+		appStore.editSegmentAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
+
+		// Perform multiple undo actions
+		appStore.undo(); // undo last edit
+		appStore.undo(); // undo second edit
+		appStore.undo(); // undo first edit
+
+		const afterUndoAll = get(appStore);
+		expect(afterUndoAll.schedule.segments[1]).toEqual(initialState.schedule.segments[1]);
+		expect(afterUndoAll.redoStack.length).toEqual(3);
+
+		// Perform multiple redo actions
+		appStore.redo(); // redo first edit
+		const afterRedo1 = get(appStore);
+		expect(afterRedo1.schedule.segments[1]).toEqual({ dose: 1, daysForDose: 1 });
+
+		appStore.redo(); // redo second edit
+		const afterRedo2 = get(appStore);
+		expect(afterRedo2.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
+
+		appStore.redo(); // redo last edit
+		const afterRedo3 = get(appStore);
+		expect(afterRedo3.schedule.segments[1]).toEqual({ dose: 3, daysForDose: 1 });
+		expect(afterRedo3.redoStack.length).toEqual(0);
+	});
+
 });

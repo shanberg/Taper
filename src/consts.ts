@@ -75,6 +75,6 @@ export const LANGUAGES: Language[] = [
 	{ labelEn: 'Arabic', lang: 'ar', verified: false, dir: 'rtl' }
 ];
 
-export const DEFAULT_LANGUAGE_KEY: string = LANGUAGES[0].labelEn;
+export const DEFAULT_LANGUAGE_KEY: string = LANGUAGES[0].lang;
 
 export const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };

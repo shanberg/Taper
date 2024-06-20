@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { LANGUAGES, TEMPLATES } from '../consts';
 	import Badge from './Badge.svelte';
+	import { getLanguageFromKey } from '../utils'
 	import { appStore } from '../stores';
 
 	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);
@@ -14,8 +15,7 @@
 
 	// Language
 	$: selectedLanguageKey = $appStore.schedule.languageKey;
-	$: selectedLanguage =
-		LANGUAGES.find((language) => language.lang === selectedLanguageKey) ?? LANGUAGES[0];
+	$: selectedLanguage = getLanguageFromKey(selectedLanguageKey);
 	$: selectedLanguageIsVerified = selectedLanguage.verified;
 
 	// event handlers
@@ -29,8 +29,8 @@
 		appStore.switchTemplate(target.value);
 	};
 
-	const handleDateInputKeyDown = (event: KeyboardEvent) => {
-		const target = event.target as HTMLInputElement;
+	const handleDateInputKeyDown = (e: KeyboardEvent) => {
+		const target = e.target as HTMLInputElement;
 		if (target.value === '') {
 			return;
 		}

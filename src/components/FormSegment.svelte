@@ -10,16 +10,6 @@
 	$: isPlaceholder = isSegmentPlaceholder(segment);
 	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
 
-	function handleDoseChange(event: Event) {
-		const target = event.target as HTMLInputElement;
-		dispatch('change', { ...segment, dose: parseFloat(target.value) });
-	}
-
-	function handleDaysForDoseChange(event: Event) {
-		const target = event.target as HTMLInputElement;
-		dispatch('change', { ...segment, daysForDose: parseInt(target.value) });
-	}
-
 	function deleteSegmentAtIndex() {
 		dispatch('removeSegment', index);
 	}
@@ -27,23 +17,33 @@
 
 <tr class="segment" class:isInvalid class:isPlaceholder>
 	<td class="dose">
-		<input
-			min={1}
-			step={segment.dose > 5 ? 1 : 0.25}
-			type="number"
-			inputmode="decimal"
-			bind:value={segment.dose}
-			on:change={handleDoseChange}
-		/>
+		<label for="dose-{index}">
+			<input
+				min={1}
+				id="dose-{index}"
+				step={segment.dose > 5 ? 1 : 0.25}
+				type="number"
+				inputmode="decimal"
+				pattern="[1-9]\d*"
+				aria-label="dose-{index}"
+				bind:value={segment.dose}
+				on:change={() => dispatch('change', segment)}
+			/>
+		</label>
 	</td>
 	<td class="days">
-		<input
-			min={1}
-			type="number"
-			inputmode="decimal"
-			bind:value={segment.daysForDose}
-			on:change={handleDaysForDoseChange}
-		/>
+		<label for="days-{index}">
+			<input
+				min={1}
+				id="days-{index}"
+				type="number"
+				inputmode="decimal"
+				pattern="[1-9]\d*"
+				aria-label="days-{index}"
+				bind:value={segment.daysForDose}
+				on:change={() => dispatch('change', segment)}
+			/>
+		</label>
 	</td>
 	<td class="delete">
 		<button
@@ -56,6 +56,11 @@
 </tr>
 
 <style>
+
+	label {
+		display: contents;
+	}
+
 	input {
 		width: 100%;
 		height: 100%;

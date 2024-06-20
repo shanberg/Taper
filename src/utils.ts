@@ -1,4 +1,4 @@
-import { DEFAULT_TEMPLATE_KEY, DEFAULT_LANGUAGE_KEY, TEMPLATES } from './consts';
+import { DEFAULT_TEMPLATE_KEY, DEFAULT_LANGUAGE_KEY, TEMPLATES, LANGUAGES } from './consts';
 import { TaperDate } from './TaperDate';
 
 const isDateThisYear = (date: ScheduleDate): boolean => {
@@ -181,4 +181,8 @@ export function segmentIsOrAfterPlaceholder(segment: Segment, segments: Segment[
 		return true;
 	}
 	return false;
+}
+
+export function getLanguageFromKey(languageKey: string): Language {
+	return LANGUAGES.find(l => (l.lang === languageKey)) || LANGUAGES[0]
 }

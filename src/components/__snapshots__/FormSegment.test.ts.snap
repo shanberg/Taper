@@ -3,36 +3,52 @@
 exports[`FormSegment > renders correctly 1`] = `
 <div>
   <tr
-    class="segment svelte-1o3e579"
+    class="segment svelte-107sp02"
   >
     <td
       class="dose"
     >
-      <input
-        class="svelte-1o3e579"
-        inputmode="decimal"
-        min="1"
-        step="0.25"
-        type="number"
-      />
+      <label
+        class="svelte-107sp02"
+        for="dose-0"
+      >
+        <input
+          aria-label="dose-0"
+          class="svelte-107sp02"
+          id="dose-0"
+          inputmode="decimal"
+          min="1"
+          pattern="[1-9]\\d*"
+          step="0.25"
+          type="number"
+        />
+      </label>
     </td>
      
     <td
       class="days"
     >
-      <input
-        class="svelte-1o3e579"
-        inputmode="decimal"
-        min="1"
-        type="number"
-      />
+      <label
+        class="svelte-107sp02"
+        for="days-0"
+      >
+        <input
+          aria-label="days-0"
+          class="svelte-107sp02"
+          id="days-0"
+          inputmode="decimal"
+          min="1"
+          pattern="[1-9]\\d*"
+          type="number"
+        />
+      </label>
     </td>
      
     <td
       class="delete"
     >
       <button
-        class="remove-btn svelte-1o3e579"
+        class="remove-btn svelte-107sp02"
         disabled=""
         title="Remove this step"
       >
