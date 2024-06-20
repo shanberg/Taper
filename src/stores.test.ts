@@ -70,7 +70,6 @@ describe('appStore', () => {
 
 	test('insertPlaceholderSegmentBeforeIndex at zero', () => {
 		const indexToInsert = 0;
-		const beforeState = get(appStore);
 
 		// Insert a placeholder segment before index 0
 		appStore.insertPlaceholderSegmentBeforeIndex(indexToInsert);
@@ -248,23 +247,26 @@ describe('appStore', () => {
 		// increment a segment a few times
 		appStore.editSegmentAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
 		const after1 = get(appStore);
-		expect(after1.undoStack.length).toEqual(1)
+		expect(after1.undoStack.length).toEqual(1);
 		appStore.editSegmentAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
 		const after2 = get(appStore);
-		expect(after2.undoStack.length).toEqual(2)
+		expect(after2.undoStack.length).toEqual(2);
 		appStore.editSegmentAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
 		const after3 = get(appStore);
-		expect(after3.undoStack.length).toEqual(3)
+		expect(after3.undoStack.length).toEqual(3);
 
-		const editedAppStore = get(appStore)
+		const editedAppStore = get(appStore);
 		expect(editedAppStore.schedule.segments[1]).toEqual({ dose: 3, daysForDose: 1 });
 
-		appStore.undo();
-		expect(editedAppStore.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
+		appStore.undo(); // first undo
+		const afterUndo1 = get(appStore);
+		expect(afterUndo1.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
 
-		appStore.undo();
-		expect(editedAppStore.schedule.segments[1]).toEqual({ dose: 1, daysForDose: 1 });
-	})
+		appStore.undo(); // second undo
+		const afterUndo2 = get(appStore);
+		expect(afterUndo2.schedule.segments[1]).toEqual({ dose: 1, daysForDose: 1 });
+	});
+
 
 	test('undo', () => {
 		// prepare test data 
