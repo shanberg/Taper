@@ -7,6 +7,7 @@
 	import ScheduleSegment from '../components/ScheduleSegment.svelte';
 	import AddSegmentButton from '../components/AddSegmentButton.svelte';
 	import { sumDose, sumDays, isSegmentPlaceholder } from '../utils';
+	import { TaperDate } from '../TaperDate';
 
 	let templateKey: string = 'Default';
 	let selectedLanguageLang: string = LANGUAGES[0].lang;
@@ -20,11 +21,11 @@
 	$: selectedLanguage =
 		LANGUAGES.find((language) => language.lang === selectedLanguageLang) ?? LANGUAGES[0];
 	$: selectedLanguageIsVerified = selectedLanguage.verified;
-    $: lastSegmentIsPlaceholder = isSegmentPlaceholder($appState.schedule.segments[$appState.schedule.segments.length - 1])
+	$: lastSegmentIsPlaceholder = isSegmentPlaceholder($appState.schedule.segments[$appState.schedule.segments.length - 1])
 
-    function insertPlaceholderSegmentAtEnd() {
-        appState.insertPlaceholderSegmentBeforeIndex($appState.schedule.segments.length)
-    }
+	function insertPlaceholderSegmentAtEnd() {
+			appState.insertPlaceholderSegmentBeforeIndex($appState.schedule.segments.length)
+	}
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
@@ -65,24 +66,14 @@
 	}
 
 	function segmentIsOrAfterPlaceholder(segment: Segment) {
-        
 		if (!segment) return false;
 
-		const is = isSegmentPlaceholder(segment);
-		const isAfter = isAfterPlaceholder(segment);
-
-		if (is) {
-			console.log('is a placeholder', segment);
-			return true;
-
-		}
-        console.log(segment, "false")
-
-		if (isAfter) {
-			console.log('is after a placeholder', segment);
-			return true;
-		}
-
+		if (isSegmentPlaceholder(segment)) {
+            return true
+        }
+		if (isAfterPlaceholder(segment)) {
+            return true;
+        }
 		return false;
 	}
 
@@ -98,10 +89,11 @@
 		}
 	});
 
-    const handleStartDateChange = (e: Event) => {
-        const target = e.target as EventTarget;
-        appState.changeStartDate(target.value);
-    }
+	const handleStartDateChange = (e: Event) => {
+			const target = e.target as HTMLInputElement;
+			console.log(target.value);
+			appState.changeStartDate2(target.value as InputStringDate);
+	}
 </script>
 
 <main>

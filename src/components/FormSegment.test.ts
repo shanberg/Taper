@@ -1,15 +1,7 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent } from '@testing-library/svelte';
 import '@testing-library/jest-dom';
-import FormSegment from './FormSegment.svelte'; // Adjust the import path as necessary
-
-// Mock the utility functions
-vi.mock('../utils', () => ({
-	isSegmentInvalid: vi.fn(),
-	isSegmentPlaceholder: vi.fn()
-}));
-
-import { isSegmentInvalid, isSegmentPlaceholder } from '../utils';
+import FormSegment from './FormSegment.svelte';
 
 describe('FormSegment', () => {
 	let segments: Segment[];
@@ -23,8 +15,6 @@ describe('FormSegment', () => {
 		];
 		segment = { dose: 1, daysForDose: 2 };
 		index = 0;
-		isSegmentInvalid.mockReturnValue(false);
-		isSegmentPlaceholder.mockReturnValue(false);
 	});
 
 	test('renders correctly', () => {
@@ -93,17 +83,15 @@ describe('FormSegment', () => {
 		expect(button).toBeDisabled();
 	});
 
-	test('applies placeholder class when segment is a placeholder', () => {
-		isSegmentPlaceholder.mockReturnValue(true);
-		const { container } = render(FormSegment, { segments, segment, index });
-
-		expect(container.querySelector('.segment')).toHaveClass('placeholder');
+	test('applies isPlaceholder class when segment is a placeholder', () => {
+		// isSegmentPlaceholder.mockReturnValue(true);
+		const { container } = render(FormSegment, { segments, segment: { dose: 0, daysForDose: 0 }, index });
+		expect(container.querySelector('.segment')).toHaveClass('isPlaceholder');
 	});
 
 	test('applies isInvalid class when segment is invalid', () => {
-		isSegmentInvalid.mockReturnValue(true);
-		const { container } = render(FormSegment, { segments, segment, index });
-
+		// isSegmentInvalid.mockReturnValue(true);
+		const { container } = render(FormSegment, { segments, segment: { dose: -1, daysForDose: 0 }, index });
 		expect(container.querySelector('.segment')).toHaveClass('isInvalid');
 	});
 });

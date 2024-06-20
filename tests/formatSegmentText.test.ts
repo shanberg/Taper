@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { formatSegmentText } from '../src/utils';
 import { LANGUAGES } from '../src/consts';
+import { TaperDate } from '../src/TaperDate';
 
 const English = LANGUAGES.find((language) => language.labelEn === 'English');
 const Spanish = LANGUAGES.find((language) => language.labelEn === 'Spanish');
@@ -11,8 +12,8 @@ const Arabic = LANGUAGES.find((language) => language.labelEn === 'Arabic');
 
 describe('formatSegmentText', () => {
 	const segment = { dose: 50, daysForDose: 5 };
-	const segmentStartDate = new Date('2024-06-01');
-	const segmentEndDate = new Date('2024-06-05');
+	const segmentStartDate = new TaperDate('2024-06-01').toScheduleDate();
+	const segmentEndDate = new TaperDate('2024-06-05').toScheduleDate()
 
 	test('formats text for English language', () => {
 		const result = formatSegmentText({

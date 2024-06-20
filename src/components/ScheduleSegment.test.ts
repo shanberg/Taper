@@ -29,8 +29,8 @@ describe('ScheduleSegment', () => {
 		index = 0;
 
 		(formatSegmentText as Mock).mockImplementation(
-			({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage }) => {
-				return `Segment ${index + 1}: ${segment.dose} dose(s) from ${segmentStartDate.toDateString()} to ${segmentEndDate.toDateString()}`;
+			({ segment, segmentStartDate, segmentEndDate, index }) => {
+				return `Segment ${index + 1}: ${segment.dose} dose(s) from ${segmentStartDate.toLocaleDateString()} to ${segmentEndDate.toLocaleDateString()}`;
 			}
 		);
 

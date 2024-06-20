@@ -5,14 +5,10 @@
 	export let segment: Segment;
 	export let index: number;
 
-	let isPlaceholder: boolean = false;
-	let isOnlyRealSegment: boolean = false;
-
 	const dispatch = createEventDispatcher();
-
-	$: isOnlyRealSegment = segments.length === 2;
-	$: isPlaceholder = isSegmentPlaceholder(segment);
-	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
+	const isOnlyRealSegment = segments.length === 2;
+	const isPlaceholder = isSegmentPlaceholder(segment);
+	const isInvalid = (!isPlaceholder && isSegmentInvalid(segment));
 
 	function handleDoseChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -29,7 +25,11 @@
 	}
 </script>
 
-<tr class="segment {isPlaceholder ? 'placeholder' : ''} {isInvalid ? 'isInvalid' : ''}">
+<tr 
+  class="segment"
+  class:isInvalid
+  class:isPlaceholder
+>
 	<td class="dose">
 		<input
 			min={1}

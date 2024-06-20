@@ -5,14 +5,14 @@ type Segment = {
 
 type Schedule = {
 	segments: Segment[];
-	startDate: Date;
+	startDate: ScheduleDate;
 };
 
 type AppState = Writeable & {
 	schedule: Schedule;
 	undoStack: Schedule[];
 	redoStack: Schedule[];
-	startDateInputValue: string;
+	startDateInputValue: InputStringDate;
 };
 
 type Language = {
@@ -29,3 +29,15 @@ type Message = {
 	endDate?: string | null;
 	content: string;
 };
+
+type InputStringDate = string & {
+	__brand: "InputStringDate"
+}
+
+type ScheduleDate = Date & {
+	__brand: "ScheduleDate"
+}
+
+type LocaleDate = string & {
+	__brand: "LocaleDate"
+}

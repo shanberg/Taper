@@ -1,6 +1,7 @@
-import { TEMPLATES, LANGUAGES } from './consts';
+import { TEMPLATES } from './consts';
+import { TaperDate } from './TaperDate';
 
-const isDateThisYear = (date: Date): boolean => {
+const isDateThisYear = (date: ScheduleDate): boolean => {
 	return date.getFullYear() === new Date().getFullYear();
 };
 
@@ -8,7 +9,7 @@ const isDateThisYear = (date: Date): boolean => {
 function createCachedFormatter() {
 	const dateTimeFormatCache = new Map();
 
-	return function (date: Date, lang: string = 'en-US') {
+	return function (date: ScheduleDate, lang: string = 'en-US'): LocaleDate {
 		const yearFormat = isDateThisYear(date) ? undefined : 'numeric';
 		const cacheKey = `${lang}-${yearFormat}`;
 
@@ -25,7 +26,7 @@ function createCachedFormatter() {
 
 		// Use the cached formatter
 		const formatter = dateTimeFormatCache.get(cacheKey);
-		return formatter.format(date);
+		return formatter.format(date) as LocaleDate;
 	};
 }
 
@@ -45,9 +46,9 @@ export const isSegmentPlaceholder = (segment: Segment): boolean => {
 /** Format date in YYYY-MM-DD format
  * Returns empty string if date is invalid
  */
-export function yyyymmdd(date: Date): string {
+export function yyyymmdd(date: Date | ScheduleDate): InputStringDate {
 	// fail if no date provided
-	if (!date) return '';
+	if (!date) return '' as InputStringDate;
 
 	const d = new Date(date),
 		month = '' + (d.getMonth() + 1),
@@ -56,16 +57,16 @@ export function yyyymmdd(date: Date): string {
 
 	// fail if date is invalid
 	if (Number.isNaN(+month) || Number.isNaN(+day) || Number.isNaN(+year)) {
-		return '';
+		return '' as InputStringDate;
 	}
 
-	return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+	return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-') as InputStringDate;
 }
 
 type FormatSegmentTextParams = {
 	segment: Segment;
-	segmentStartDate: Date;
-	segmentEndDate: Date;
+	segmentStartDate: ScheduleDate;
+	segmentEndDate: ScheduleDate;
 	index: number;
 	selectedLanguage: Language;
 };
@@ -79,6 +80,7 @@ export const formatSegmentText = ({
 	selectedLanguage
 }: FormatSegmentTextParams): string => {
 	const { lang, dir } = selectedLanguage;
+
 	const dates = {
 		start: cachedFormatDate(segmentStartDate, lang),
 		end: cachedFormatDate(segmentEndDate, lang)
@@ -114,7 +116,7 @@ const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };
 export function createInitialSchedule(): Schedule {
 	return {
 		segments: [...TEMPLATES.Default, PLACEHOLDER_SEGMENT],
-		startDate: new Date()
+		startDate: new TaperDate().toScheduleDate()
 	};
 }
 
@@ -130,6 +132,6 @@ export const sumDays = (schedule: Schedule): number => {
 	);
 };
 
-export const calculateEndDate = (schedule: Schedule): Date => {
-	return new Date(schedule.startDate.getTime() + sumDays(schedule) * 24 * 60 * 60 * 1000);
+export const calculateEndDate = (schedule: Schedule): ScheduleDate => {
+	return new TaperDate(new Date(schedule.startDate.getTime() + sumDays(schedule) * 24 * 60 * 60 * 1000)).toScheduleDate();
 };

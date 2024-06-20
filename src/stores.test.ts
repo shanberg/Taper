@@ -2,19 +2,16 @@ import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 import { appState } from './stores';
 import { get } from 'svelte/store';
 import { PLACEHOLDER_SEGMENT, TEMPLATES } from './consts';
-import { yyyymmdd } from './utils';
+import { TaperDate } from './TaperDate';
 
-function datesAlmostEqual(date1: Date, date2: Date, tolerance = 10) {
-	return Math.abs(date1.getTime() - date2.getTime()) <= tolerance;
-}
 
 describe('appState', () => {
-	let unsubscribe = () => {};
+	let unsubscribe = () => { };
 
 	beforeEach(() => {
 		// Reset the state before each test
-		unsubscribe = appState.subscribe(() => {});
-		const startDate = new Date();
+		unsubscribe = appState.subscribe(() => { });
+		const startDate = new TaperDate();
 		appState.set({
 			schedule: {
 				segments: TEMPLATES[Object.keys(TEMPLATES)[0]],
@@ -22,7 +19,7 @@ describe('appState', () => {
 			},
 			undoStack: [],
 			redoStack: [],
-			startDateInputValue: yyyymmdd(startDate)
+			startDateInputValue: startDate.toYYYYMMDD()
 		});
 	});
 
@@ -31,13 +28,15 @@ describe('appState', () => {
 	});
 
 	test('initial state', () => {
+		const expectedDate = new TaperDate();
+
 		// verify initial state
 		const afterState: AppState = get(appState);
 		expect(afterState.schedule.segments).toEqual(TEMPLATES[Object.keys(TEMPLATES)[0]]);
-		expect(datesAlmostEqual(afterState.schedule.startDate, new Date())).toBe(true);
+		expect(afterState.schedule.startDate).toEqual(expectedDate);
 		expect(afterState.undoStack).toEqual([]);
 		expect(afterState.redoStack).toEqual([]);
-		expect(afterState.startDateInputValue).toBe(yyyymmdd(new Date()));
+		expect(afterState.startDateInputValue).toBe(expectedDate.toYYYYMMDD());
 	});
 
 	test('editSegmentAtIndex', () => {
@@ -55,18 +54,16 @@ describe('appState', () => {
 	});
 
 	test('changeStartDate', () => {
-		// Create a new date
-		const newDate = '2024-06-01';
+		const newDate = new TaperDate('2425-11-11');
 
 		// change the date
-		appState.changeStartDate(newDate);
+		appState.changeStartDate2(newDate.toScheduleDate());
 
 		// verify changes
 		const afterState: AppState = get(appState);
-		const expectedDate = new Date(newDate);
-		expectedDate.setDate(expectedDate.getDate() + 1); // Expect the date to be incremented by one day
-		expect(afterState.schedule.startDate).toEqual(expectedDate);
-		expect(afterState.startDateInputValue).toBe(newDate);
+		const expectedDate = newDate;
+		expect(afterState.schedule.startDate).toEqual(expectedDate.toScheduleDate());
+		expect(afterState.startDateInputValue).toBe(expectedDate.toYYYYMMDD());
 		expect(afterState.undoStack.length).toBe(1);
 	});
 

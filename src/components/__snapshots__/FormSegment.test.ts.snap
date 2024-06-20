@@ -3,7 +3,7 @@
 exports[`FormSegment > renders correctly 1`] = `
 <div>
   <tr
-    class="segment   svelte-gkm2f"
+    class="segment svelte-gkm2f"
   >
     <td
       class="dose"
