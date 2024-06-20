@@ -9,7 +9,7 @@ type Schedule = {
 	templateKey: string;
 };
 
-type AppState = Writeable & {
+type AppState = {
 	schedule: Schedule;
 	undoStack: Schedule[];
 	redoStack: Schedule[];

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { appState } from '../stores';
+	import { appStore } from '../stores';
 	import { LANGUAGES, TEMPLATES } from '../consts';
 	import FormSegment from '../components/FormSegment.svelte';
 	import Badge from '../components/Badge.svelte';
@@ -15,8 +15,8 @@
 	const UNVERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => !language.verified);
 
 	// Summary
-	$: totalDose = sumDose($appState.schedule);
-	$: totalDays = sumDays($appState.schedule);
+	$: totalDose = sumDose($appStore.schedule);
+	$: totalDays = sumDays($appStore.schedule);
 	$: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
 
 	// Language
@@ -25,16 +25,16 @@
 		$: selectedLanguageIsVerified = selectedLanguage.verified;
 
 		// Date
-		$: startDateInputValue = $appState.startDateInputValue;
+		$: startDateInputValue = $appStore.startDateInputValue;
 
 		// Template
-		$: selectedTemplateKey = $appState.schedule.templateKey;
+		$: selectedTemplateKey = $appStore.schedule.templateKey;
 
 	// Logic
-	$: lastSegmentIsPlaceholder = isSegmentPlaceholder($appState.schedule.segments[$appState.schedule.segments.length - 1])
+	$: lastSegmentIsPlaceholder = isSegmentPlaceholder($appStore.schedule.segments[$appStore.schedule.segments.length - 1])
 
 	function insertPlaceholderSegmentAtEnd() {
-			appState.insertPlaceholderSegmentBeforeIndex($appState.schedule.segments.length)
+			appStore.insertPlaceholderSegmentBeforeIndex($appStore.schedule.segments.length)
 	}
 
 	function handleKeyDown(e: KeyboardEvent) {
@@ -43,13 +43,13 @@
 		if (key === 'z' && (ctrlKey || metaKey)) {
 			e.preventDefault();
 			if (shiftKey) {
-				appState.redo();
+				appStore.redo();
 			} else {
-				appState.undo();
+				appStore.undo();
 			}
 		} else if (key === 'y' && (ctrlKey || metaKey)) {
 			e.preventDefault();
-			appState.redo();
+			appStore.redo();
 		}
 	}
 
@@ -62,7 +62,7 @@
 
 	function isAfterPlaceholder(segment: Segment) {
 		if (!segment) return false;
-        const segments: Segment[] = $appState.schedule.segments;
+        const segments: Segment[] = $appStore.schedule.segments;
         const thisSegmentIndex: number = segments.findIndex(s => s === segment);
 
         if (thisSegmentIndex === -1) {
@@ -70,7 +70,7 @@
         }
 
 		const prevSegment =
-			$appState.schedule.segments[$appState.schedule.segments.indexOf(segment) - 1];
+			$appStore.schedule.segments[$appStore.schedule.segments.indexOf(segment) - 1];
 		if (!prevSegment) return false;
 		return isSegmentPlaceholder(prevSegment);
 	}
@@ -101,13 +101,15 @@
 
 	const handleStartDateChange = (e: Event) => {
 			const target = e.target as HTMLInputElement;
-			appState.changeStartDate(target.value as InputStringDate);
+			appStore.changeStartDate(target.value as InputStringDate);
 	}
 
 	const handleTemplateKeyChange = (e: Event) => {
 			const target = e.target as HTMLInputElement;
-			appState.switchTemplate(target.value);
+			appStore.switchTemplate(target.value);
 	}
+
+	$: console.log($appStore);
 
 </script>
 
@@ -174,22 +176,22 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each $appState.schedule.segments as segment, index}
+				{#each $appStore.schedule.segments as segment, index}
 					{#if !segmentIsOrAfterPlaceholder(segment)}
 						<tr>
 							<td class="add-segment-button-td" colspan="2">
 								<AddSegmentButton
-									on:addSegment={() => appState.insertPlaceholderSegmentBeforeIndex(index - 1)}
+									on:addSegment={() => appStore.insertPlaceholderSegmentBeforeIndex(index)}
 								/>
 							</td>
 						</tr>
 					{/if}
 					<FormSegment
-						segments={$appState.schedule.segments}
+						segments={$appStore.schedule.segments}
 						{segment}
 						{index}
-						on:removeSegment={() => appState.deleteSegmentAtIndex(index)}
-						on:change={(event) => appState.editSegmentAtIndex(index, event.detail)}
+						on:removeSegment={() => appStore.deleteSegmentAtIndex(index)}
+						on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
 					/>
 				{/each}
 				{#if (!lastSegmentIsPlaceholder)}
@@ -207,14 +209,14 @@
 		<div class="plan" dir={selectedLanguage.dir}>
 			<h3>Plan</h3>
 			<ul lang={selectedLanguage.lang}>
-				{#each $appState.schedule.segments as segment, index}
+				{#each $appStore.schedule.segments as segment, index}
 					<ScheduleSegment
-						segments={$appState.schedule.segments}
-						startDate={$appState.schedule.startDate}
+						segments={$appStore.schedule.segments}
+						startDate={$appStore.schedule.startDate}
 						{selectedLanguage}
 						{segment}
 						{index}
-						on:change={(event) => appState.editSegmentAtIndex(index, event.detail)}
+						on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
 					/>
 				{/each}
 			</ul>
