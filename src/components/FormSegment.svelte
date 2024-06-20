@@ -98,7 +98,7 @@
 		color: inherit;
 		background: transparent;
 		cursor: pointer;
-		opacity: 0;
+		opacity: 0.25;
 		padding: 0;
 		text-align: center;
 	}
@@ -116,8 +116,12 @@
 		opacity: 1;
 	}
 
+
+	tr.isPlaceholder .remove-btn,
+	tr.isInvalid .remove-btn,
 	.remove-btn:hover:not(:disabled),
 	.remove-btn:focus:not(:disabled) {
+		opacity: 1;
 		color: var(--color-fg-error);
 		background: var(--color-status-error-bg-muted);
 	}

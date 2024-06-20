@@ -101,7 +101,6 @@
 
 	const handleStartDateChange = (e: Event) => {
 			const target = e.target as HTMLInputElement;
-			console.log(target.value);
 			appState.changeStartDate(target.value as InputStringDate);
 	}
 
@@ -193,15 +192,15 @@
 						on:change={(event) => appState.editSegmentAtIndex(index, event.detail)}
 					/>
 				{/each}
-                {#if (!lastSegmentIsPlaceholder)}
-                    <tr>
-                        <td class="add-segment-button-td" colspan="2">
-                            <AddSegmentButton
-                                on:addSegment={insertPlaceholderSegmentAtEnd}
-                            />
-                        </td>
-                    </tr>
-                {/if}
+				{#if (!lastSegmentIsPlaceholder)}
+						<tr>
+								<td class="add-segment-button-td" colspan="2">
+										<AddSegmentButton
+												on:addSegment={insertPlaceholderSegmentAtEnd}
+										/>
+								</td>
+						</tr>
+				{/if}
 			</tbody>
 		</table>
 
@@ -276,11 +275,16 @@
 	}
 
 	.form,
-	label:first-child {
-		width: 12rem;
+	label.course-begins {
+		flex: 0 0 12rem;
 	}
-	label:first-child {
-		padding-right: 1.5rem;
+
+	label.course-begins {
+		padding-right: 1.875rem;
+	}
+	
+	.template, .language {
+		flex: 1 1 100%;
 	}
 
 	.form {

@@ -13,11 +13,14 @@ function createAppState(): AppState {
         startDateInputValue: new TaperDate(initialSchedule.startDate).toYYYYMMDD()
     });
 
-    const _removePlaceholderSegments = (): void =>
+    const _removeNonLastPlaceholder = (): void =>
         update((state) => {
             state.schedule.segments = state.schedule.segments.filter(
                 (segment: Segment) => !isSegmentPlaceholder(segment)
             );
+            if (!state.schedule.segments.some(s => isSegmentPlaceholder(s))) {
+                state.schedule.segments.push(PLACEHOLDER_SEGMENT);
+            }
             return state;
         });
 
@@ -38,18 +41,21 @@ function createAppState(): AppState {
         /**
          * Handles segment changes, pushing the current schedule to the undo stack and clears the redo stack
          */
-        editSegmentAtIndex: (index: number, newSegment: Segment): void =>
+        editSegmentAtIndex: (index: number, updatedSegment: Segment): void =>
             update((state) => {
                 _saveScheduleForUndo();
+                const originalSegment = state.schedule.segments[index]
+
+                if (isSegmentPlaceholder(originalSegment)) {
+
+                }
+
+                if (isSegmentPlaceholder(updatedSegment)) {
+
+                }
 
                 // Update the segment
-                state.schedule.segments[index] = newSegment;
-
-                // Remove empty segments
-                _removePlaceholderSegments();
-
-                // Add a placeholder back at the end
-                state.schedule.segments.push({ ...PLACEHOLDER_SEGMENT });
+                state.schedule.segments[index] = updatedSegment;
 
                 return state;
             }),
@@ -88,7 +94,7 @@ function createAppState(): AppState {
                 }
 
                 // Remove existing placeholder
-                _removePlaceholderSegments();
+                _removeNonLastPlaceholder();
 
                 // Add placeholder before index
                 state.schedule.segments.splice(index, 0, { ...PLACEHOLDER_SEGMENT });
