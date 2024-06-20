@@ -43,26 +43,6 @@ export const isSegmentPlaceholder = (segment: Segment): boolean => {
 	return segment.dose === 0 && segment.daysForDose === 0;
 };
 
-/** Format date in YYYY-MM-DD format
- * Returns empty string if date is invalid
- */
-export function yyyymmdd(date: Date | ScheduleDate): InputStringDate {
-	// fail if no date provided
-	if (!date) return '' as InputStringDate;
-
-	const d = new Date(date),
-		month = '' + (d.getMonth() + 1),
-		day = '' + d.getDate(),
-		year = d.getFullYear();
-
-	// fail if date is invalid
-	if (Number.isNaN(+month) || Number.isNaN(+day) || Number.isNaN(+year)) {
-		return '' as InputStringDate;
-	}
-
-	return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-') as InputStringDate;
-}
-
 type FormatSegmentTextParams = {
 	segment: Segment;
 	segmentStartDate: ScheduleDate;
@@ -108,7 +88,7 @@ export const formatSegmentText = ({
 		return `${index === 0 ? 'احتياج' : `في ذلك الحين تحتاج`} ${segment.dose}mg كل يوم ${segment.daysForDose} ${segment.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`;
 	}
 
-	return '';
+	return ""
 };
 
 const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };
@@ -132,12 +112,6 @@ export const sumDays = (schedule: Schedule): number => {
 		schedule.segments.length -
 		2
 	);
-};
-
-export const calculateEndDate = (schedule: Schedule): ScheduleDate => {
-	return new TaperDate(
-		new Date(schedule.startDate.getTime() + sumDays(schedule) * 24 * 60 * 60 * 1000)
-	).toScheduleDate();
 };
 
 export const serializeSchedule = (schedule: Schedule): SerializedSchedule => {

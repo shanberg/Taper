@@ -421,6 +421,20 @@ describe('appStore', () => {
 		expect(afterUndo7.startDateInputValue).toEqual(INITIAL_STORE_STATE.startDateInputValue);
 	});
 
+	test('undo returns current state when undoStack is empty', () => {
+		// Get the initial state
+		const initialState: AppState = get(appStore);
+
+		// Call undo
+		appStore.undo();
+
+		// Get the state after undo
+		const stateAfterUndo: AppState = get(appStore);
+
+		// Verify that the state has not changed
+		expect(stateAfterUndo).toEqual(initialState);
+	});
+
 	test('redo', () => {
 		const initialState = get(appStore);
 
@@ -490,6 +504,27 @@ describe('appStore', () => {
 		const afterRedo3 = get(appStore);
 		expect(afterRedo3.schedule.segments[1]).toEqual({ dose: 3, daysForDose: 1 });
 		expect(afterRedo3.redoStack.length).toEqual(0);
+	});
+
+	test('redo returns current state when redoStack is empty', () => {
+		// Perform an action to modify the state
+		appStore.editSegmentAtIndex(0, { dose: 5, daysForDose: 10 });
+
+		// Call undo to enable redo
+		appStore.undo();
+
+		// Call redo to revert the undo
+		appStore.redo();
+
+		// Call redo again when redoStack is empty
+		appStore.redo();
+
+		// Get the state after redo
+		const stateAfterRedo: AppState = get(appStore);
+
+		// Verify that the state has not changed
+		const expectedState: AppState = get(appStore);
+		expect(stateAfterRedo).toEqual(expectedState);
 	});
 
 });

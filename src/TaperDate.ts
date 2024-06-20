@@ -12,7 +12,7 @@ export class TaperDate {
 			const now = new Date();
 			this.date = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 		}
-		this.setTo24thHour();
+		this.setTo12thHour();
 	}
 
 	private parseYYYYMMDD(yyyymmdd: string): Date {
@@ -20,19 +20,19 @@ export class TaperDate {
 		return new Date(Date.UTC(year, month - 1, day)); // Months are 0-based in JavaScript Date
 	}
 
-	private setTo24thHour(): void {
-		this.date.setUTCHours(12, 0, 0, 0); // 24th hour is effectively the next day at 00:00:00.000 UTC
+	private setTo12thHour(): void {
+		this.date.setUTCHours(12, 0, 0, 0);
 	}
 
 	public incrementByOneDay() {
 		this.date.setUTCDate(this.date.getUTCDate() + 1);
-		this.setTo24thHour();
+		this.setTo12thHour();
 		return this;
 	}
 
 	public incrementByDays(days: number): this {
 		this.date.setUTCDate(this.date.getUTCDate() + days);
-		this.setTo24thHour();
+		this.setTo12thHour();
 		return this;
 	}
 
@@ -46,7 +46,7 @@ export class TaperDate {
 		} else {
 			throw new Error('Invalid input type. Expected string or Date.');
 		}
-		this.setTo24thHour();
+		this.setTo12thHour();
 		return this;
 	}
 

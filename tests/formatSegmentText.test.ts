@@ -80,4 +80,16 @@ describe('formatSegmentText', () => {
 		});
 		expect(result).toBe('في ذلك الحين تحتاج 50mg كل يوم 5 يوم (٥ يونيو - ١ يونيو)');
 	});
+
+	test('returns empty string for unsupported language', () => {
+		const result = formatSegmentText({
+			segment,
+			segmentStartDate,
+			segmentEndDate,
+			index: 1,
+			selectedLanguage: { labelEn: 'Unsupported Language', lang: 'xx', dir: 'ltr' }
+		});
+
+		expect(result).toBe('');
+	});
 });
