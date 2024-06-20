@@ -7,8 +7,8 @@ const initialSchedule = createInitialSchedule();
 
 export const INITIAL_STATE: AppState = {
     schedule: initialSchedule,
-    undoStack: [] as Schedule[],
-    redoStack: [] as Schedule[],
+    undoStack: [],
+    redoStack: [],
     startDateInputValue: new TaperDate(initialSchedule.startDate).toYYYYMMDD()
 }
 
@@ -43,9 +43,9 @@ export function createAppStore(): AppStore {
     /**
      * Pushes the current schedule to the undo stack and clears the redo stack
      */
-    const _saveScheduleForUndo = (): void =>
+    const _saveStateForUndo = (): void =>
         update((state: AppState): AppState => {
-            state.undoStack.push(JSON.parse(JSON.stringify(state.schedule)));
+            state.undoStack.push(JSON.parse(JSON.stringify(state)));
             state.redoStack = [];
             return state;
         });
@@ -67,17 +67,7 @@ export function createAppStore(): AppStore {
          */
         editSegmentAtIndex: (index: number, updatedSegment: Segment): void =>
             update((state: AppState): AppState => {
-                _saveScheduleForUndo();
-                const originalSegment = state.schedule.segments[index]
-
-                if (isSegmentPlaceholder(originalSegment)) {
-
-                }
-
-                if (isSegmentPlaceholder(updatedSegment)) {
-
-                }
-
+                _saveStateForUndo();
                 // Update the segment
                 state.schedule.segments[index] = updatedSegment;
 
@@ -89,7 +79,7 @@ export function createAppStore(): AppStore {
          */
         changeStartDate: (newDate: ScheduleDate | InputStringDate): void =>
             update((state: AppState): AppState => {
-                _saveScheduleForUndo();
+                _saveStateForUndo();
 
                 if (newDate === '') {
                     const updatedDate = new TaperDate().incrementByOneDay();
@@ -108,7 +98,7 @@ export function createAppStore(): AppStore {
          */
         insertPlaceholderSegmentBeforeIndex: (index: number): void =>
             update((state: AppState): AppState => {
-                _saveScheduleForUndo();
+                _saveStateForUndo();
 
                 const allSegments = state.schedule.segments;
                 const allButLastSegment = allSegments.slice(0, -1);
@@ -150,7 +140,7 @@ export function createAppStore(): AppStore {
          */
         switchTemplate: (newTemplateKey: string): void =>
             update((state: AppState): AppState => {
-                _saveScheduleForUndo();
+                _saveStateForUndo();
                 state.schedule.segments = [...TEMPLATES[newTemplateKey], { ...PLACEHOLDER_SEGMENT }]
                 state.schedule.templateKey = newTemplateKey;
                 return state;
@@ -160,33 +150,30 @@ export function createAppStore(): AppStore {
          */
         deleteSegmentAtIndex: (index: number): void =>
             update((state) => {
-                _saveScheduleForUndo();
+                _saveStateForUndo();
                 state.schedule.segments.splice(index, 1);
-
                 return state;
             }),
         undo: (): void =>
             update((state: AppState): AppState => {
+                // console.log("beforeState", state)
                 if (state.undoStack.length > 0) {
                     state.redoStack.push(JSON.parse(JSON.stringify(state)));
-                    const poppedSchedule = state.undoStack.pop();
-                    if (poppedSchedule) {
-                        state.schedule.segments = poppedSchedule.segments;
-                        state.schedule.startDate = new TaperDate(poppedSchedule.startDate).toScheduleDate()
-                        state.schedule.templateKey = poppedSchedule.templateKey;
+                    const poppedState = state.undoStack.pop();
+                    if (poppedState) {
+                        state = poppedState
                     }
                 }
+                // console.log("stateAfterUndo", state)
                 return state;
             }),
         redo: (): void =>
             update((state: AppState): AppState => {
                 if (state.redoStack.length > 0) {
                     state.undoStack.push(JSON.parse(JSON.stringify(state.schedule)));
-                    const poppedSchedule = state.redoStack.pop();
-                    if (poppedSchedule) {
-                        state.schedule.segments = poppedSchedule.segments;
-                        state.schedule.startDate = new TaperDate(poppedSchedule.startDate).toScheduleDate()
-                        state.schedule.templateKey = poppedSchedule.templateKey;
+                    const poppedState = state.redoStack.pop();
+                    if (poppedState) {
+                        state = poppedState
                     }
                 }
                 return state;

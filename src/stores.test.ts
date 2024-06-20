@@ -23,16 +23,19 @@ describe('appStore', () => {
 	});
 
 	test('editSegmentAtIndex', () => {
+		const initialState = get(appStore);
+
 		// Create a new segment
-		const newSegment = { dose: 99, daysForDose: 99 };
+		const updatedSegment = { dose: 99, daysForDose: 99 };
 
 		// edit the segment
-		appStore.editSegmentAtIndex(0, newSegment);
+		appStore.editSegmentAtIndex(0, updatedSegment);
 
 		// verify changes
 		const afterState = get(appStore);
-		expect(afterState.schedule.segments[0]).toEqual(newSegment);
+		expect(afterState.schedule.segments[0]).toEqual(updatedSegment);
 		expect(afterState.undoStack.length).toBe(1);
+		expect(afterState.undoStack[0]).toEqual(initialState)
 		expect(afterState.redoStack).toEqual([]);
 	});
 
@@ -199,7 +202,8 @@ describe('appStore', () => {
 		appStore.undo() // 7
 
 		const afterState2 = get(appStore);
-		expect(afterState2).toEqual(INITIAL_STATE);
+		expect(afterState2.schedule).toEqual(INITIAL_STATE.schedule);
+		expect(afterState2.startDateInputValue).toEqual(INITIAL_STATE.startDateInputValue);
 	});
 
 	// test('redo', () => {

@@ -11,8 +11,8 @@ type Schedule = {
 
 type AppState = {
 	schedule: Schedule;
-	undoStack: Schedule[];
-	redoStack: Schedule[];
+	undoStack: AppState[];
+	redoStack: AppState[];
 	startDateInputValue: InputStringDate;
 };
 

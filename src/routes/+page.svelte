@@ -278,15 +278,15 @@
 
 	.form,
 	label.course-begins {
-		flex: 0 0 12rem;
+		flex: 0 0 11.5rem;
 	}
 
 	label.course-begins {
-		padding-right: 1.875rem;
+		padding-right: 1.5rem;
 	}
 	
 	.template, .language {
-		flex: 1 1 100%;
+		flex: 1 0 auto;
 	}
 
 	.form {
