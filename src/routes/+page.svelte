@@ -7,20 +7,30 @@
 	import ScheduleSegment from '../components/ScheduleSegment.svelte';
 	import AddSegmentButton from '../components/AddSegmentButton.svelte';
 	import { sumDose, sumDays, isSegmentPlaceholder } from '../utils';
-	import { TaperDate } from '../TaperDate';
 
-	let templateKey: string = 'Default';
+	// let templateKey: string = 'Default';
 	let selectedLanguageLang: string = LANGUAGES[0].lang;
 
 	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);
 	const UNVERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => !language.verified);
 
+	// Summary
 	$: totalDose = sumDose($appState.schedule);
 	$: totalDays = sumDays($appState.schedule);
 	$: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
+
+	// Language
 	$: selectedLanguage =
 		LANGUAGES.find((language) => language.lang === selectedLanguageLang) ?? LANGUAGES[0];
-	$: selectedLanguageIsVerified = selectedLanguage.verified;
+		$: selectedLanguageIsVerified = selectedLanguage.verified;
+
+		// Date
+		$: startDateInputValue = $appState.startDateInputValue;
+
+		// Template
+		$: selectedTemplateKey = $appState.schedule.templateKey;
+
+	// Logic
 	$: lastSegmentIsPlaceholder = isSegmentPlaceholder($appState.schedule.segments[$appState.schedule.segments.length - 1])
 
 	function insertPlaceholderSegmentAtEnd() {
@@ -92,8 +102,14 @@
 	const handleStartDateChange = (e: Event) => {
 			const target = e.target as HTMLInputElement;
 			console.log(target.value);
-			appState.changeStartDate2(target.value as InputStringDate);
+			appState.changeStartDate(target.value as InputStringDate);
 	}
+
+	const handleTemplateKeyChange = (e: Event) => {
+			const target = e.target as HTMLInputElement;
+			appState.switchTemplate(target.value);
+	}
+
 </script>
 
 <main>
@@ -103,7 +119,7 @@
 				<span>Course begins</span>
 				<input
 					type="date"
-					bind:value={$appState.startDateInputValue}
+					value={startDateInputValue}
 					on:keydown={handleDateInputKeyDown}
 					on:change={handleStartDateChange}
 				/>
@@ -113,8 +129,8 @@
 				<span>Template</span>
 				<select
 					class="custom-select"
-					bind:value={templateKey}
-					on:change={() => appState.switchTemplate(templateKey)}
+					value={selectedTemplateKey}
+					on:change={handleTemplateKeyChange}
 				>
 					{#each Object.keys(TEMPLATES) as template}
 						<option value={template}>{template}</option>

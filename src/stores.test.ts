@@ -57,7 +57,7 @@ describe('appState', () => {
 		const newDate = new TaperDate('2425-11-11');
 
 		// change the date
-		appState.changeStartDate2(newDate.toScheduleDate());
+		appState.changeStartDate(newDate.toScheduleDate());
 
 		// verify changes
 		const afterState: AppState = get(appState);

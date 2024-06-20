@@ -1,4 +1,4 @@
-import { TEMPLATES } from './consts';
+import { DEFAULT_TEMPLATE_KEY, TEMPLATES } from './consts';
 import { TaperDate } from './TaperDate';
 
 const isDateThisYear = (date: ScheduleDate): boolean => {
@@ -116,7 +116,8 @@ const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };
 export function createInitialSchedule(): Schedule {
 	return {
 		segments: [...TEMPLATES.Default, PLACEHOLDER_SEGMENT],
-		startDate: new TaperDate().toScheduleDate()
+		startDate: new TaperDate().toScheduleDate(),
+		templateKey: DEFAULT_TEMPLATE_KEY
 	};
 }
 

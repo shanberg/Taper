@@ -57,7 +57,7 @@ function createAppState(): AppState {
         /**
          * Handles changing the start date, pushing the current schedule to the undo stack and clears the redo stack
          */
-        changeStartDate2: (newDate: ScheduleDate | InputStringDate): void =>
+        changeStartDate: (newDate: ScheduleDate | InputStringDate): void =>
             update((state) => {
                 _saveScheduleForUndo();
 
@@ -102,6 +102,7 @@ function createAppState(): AppState {
             update((state) => {
                 _saveScheduleForUndo();
                 state.schedule.segments = [...TEMPLATES[newTemplateKey], { ...PLACEHOLDER_SEGMENT }]
+                state.schedule.templateKey = newTemplateKey;
                 return state;
             }),
         /**

@@ -6,6 +6,7 @@ type Segment = {
 type Schedule = {
 	segments: Segment[];
 	startDate: ScheduleDate;
+	templateKey: string;
 };
 
 type AppState = Writeable & {

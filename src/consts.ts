@@ -64,6 +64,8 @@ export const TEMPLATES: Record<string, Template[]> = {
 	]
 };
 
+export const DEFAULT_TEMPLATE_KEY: string = Object.keys(TEMPLATES)[0]
+
 export const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };
 
 export const LANGUAGES: Language[] = [
