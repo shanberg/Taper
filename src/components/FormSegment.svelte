@@ -6,9 +6,9 @@
 	export let index: number;
 
 	const dispatch = createEventDispatcher();
-	const isOnlyRealSegment = segments.length === 2;
-	const isPlaceholder = isSegmentPlaceholder(segment);
-	const isInvalid = (!isPlaceholder && isSegmentInvalid(segment));
+	$: isOnlyRealSegment = segments.length === 2;
+	$: isPlaceholder = isSegmentPlaceholder(segment);
+	$: isInvalid = (!isPlaceholder && isSegmentInvalid(segment));
 
 	function handleDoseChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -67,7 +67,7 @@
 		outline: none;
 	}
 
-	.placeholder {
+	.isPlaceholder {
 		color: var(--color-fg-muted);
 		user-select: none;
 
