@@ -1,11 +1,13 @@
 import { writable, type Writable } from 'svelte/store';
-import { createInitialSchedule, isSegmentPlaceholder } from './utils';
+import { createInitialSchedule, isSegmentPlaceholder, serializeSchedule, deserializeSchedule } from './utils';
 import { TEMPLATES, PLACEHOLDER_SEGMENT } from './consts';
 import { TaperDate } from './TaperDate';
 
 const initialSchedule = createInitialSchedule();
 
-export const INITIAL_STATE: AppState = {
+const MAX_STACK_SIZE = 50;
+
+export const INITIAL_STORE_STATE: AppState = {
     schedule: initialSchedule,
     undoStack: [],
     redoStack: [],
@@ -24,13 +26,14 @@ export type AppStore = Writable<AppState> & {
 }
 
 export function createAppStore(): AppStore {
-    const { subscribe, set, update } = writable<AppState>(INITIAL_STATE);
+    const { subscribe, set, update } = writable<AppState>(INITIAL_STORE_STATE);
 
     /**
      * Filters out all placeholders, then adds one back to the end
      */
     const _removeNonLastPlaceholder = (): void =>
         update((state: AppState): AppState => {
+            console.log("_removeNonLastPlaceholder");
             state.schedule.segments = state.schedule.segments.filter(
                 (segment: Segment) => !isSegmentPlaceholder(segment)
             );
@@ -43,12 +46,21 @@ export function createAppStore(): AppStore {
     /**
      * Pushes the current schedule to the undo stack and clears the redo stack
      */
-    const _saveStateForUndo = (): void =>
-        update((state: AppState): AppState => {
-            state.undoStack.push(JSON.parse(JSON.stringify(state)));
-            state.redoStack = [];
-            return state;
-        });
+    // const _saveScheduleForUndo = (state: AppState): AppState => {
+    //     const serializedSchedule = serializeSchedule({ ...state.schedule })
+    //     console.log("adding to undo stack...", serializedSchedule)
+    //     state.undoStack.push(serializedSchedule);
+    //     state.redoStack = [];
+    //     return state;
+    // };
+    const _saveScheduleForUndo = (state: AppState): void => {
+        const serializedSchedule = serializeSchedule(state.schedule)
+        // state.undoStack.push(serializedSchedule);
+        state.undoStack = [...state.undoStack, serializedSchedule].slice(-MAX_STACK_SIZE);
+        state.redoStack = [];
+    };
+
+
 
     return {
         update,
@@ -56,22 +68,23 @@ export function createAppStore(): AppStore {
         set,
         reset: (): void =>
             update((state: AppState): AppState => {
-                state.schedule = INITIAL_STATE.schedule;
-                state.undoStack = []
-                state.redoStack = []
-                state.startDateInputValue = INITIAL_STATE.startDateInputValue;
-                return state
+                return {
+                    ...state,
+                    schedule: INITIAL_STORE_STATE.schedule,
+                    undoStack: [],
+                    redoStack: [],
+                    startDateInputValue: INITIAL_STORE_STATE.startDateInputValue
+                };
             }),
         /**
          * Handles segment changes, pushing the current schedule to the undo stack and clears the redo stack
          */
         editSegmentAtIndex: (index: number, updatedSegment: Segment): void =>
             update((state: AppState): AppState => {
-                _saveStateForUndo();
-                // Update the segment
-                state.schedule.segments[index] = updatedSegment;
-
-                return state;
+                _saveScheduleForUndo(state);
+                const newSegments = [...state.schedule.segments];
+                newSegments[index] = updatedSegment;
+                return { ...state, schedule: { ...state.schedule, segments: newSegments } };
             }),
 
         /**
@@ -79,7 +92,7 @@ export function createAppStore(): AppStore {
          */
         changeStartDate: (newDate: ScheduleDate | InputStringDate): void =>
             update((state: AppState): AppState => {
-                _saveStateForUndo();
+                _saveScheduleForUndo(state);
 
                 if (newDate === '') {
                     const updatedDate = new TaperDate().incrementByOneDay();
@@ -98,7 +111,7 @@ export function createAppStore(): AppStore {
          */
         insertPlaceholderSegmentBeforeIndex: (index: number): void =>
             update((state: AppState): AppState => {
-                _saveStateForUndo();
+                _saveScheduleForUndo(state);
 
                 const allSegments = state.schedule.segments;
                 const allButLastSegment = allSegments.slice(0, -1);
@@ -140,7 +153,7 @@ export function createAppStore(): AppStore {
          */
         switchTemplate: (newTemplateKey: string): void =>
             update((state: AppState): AppState => {
-                _saveStateForUndo();
+                _saveScheduleForUndo(state);
                 state.schedule.segments = [...TEMPLATES[newTemplateKey], { ...PLACEHOLDER_SEGMENT }]
                 state.schedule.templateKey = newTemplateKey;
                 return state;
@@ -150,34 +163,29 @@ export function createAppStore(): AppStore {
          */
         deleteSegmentAtIndex: (index: number): void =>
             update((state) => {
-                _saveStateForUndo();
+                _saveScheduleForUndo(state);
                 state.schedule.segments.splice(index, 1);
                 return state;
             }),
         undo: (): void =>
             update((state: AppState): AppState => {
-                // console.log("beforeState", state)
                 if (state.undoStack.length > 0) {
-                    state.redoStack.push(JSON.parse(JSON.stringify(state)));
-                    const poppedState = state.undoStack.pop();
-                    if (poppedState) {
-                        state = poppedState
-                    }
+                    const undoTarget = state.undoStack.pop()! as SerializedSchedule;
+                    state.redoStack.push(serializeSchedule(state.schedule));
+                    const deserializedSchedule = deserializeSchedule(undoTarget);
+                    state.schedule = { ...deserializedSchedule };
                 }
-                // console.log("stateAfterUndo", state)
                 return state;
             }),
         redo: (): void =>
             update((state: AppState): AppState => {
                 if (state.redoStack.length > 0) {
-                    state.undoStack.push(JSON.parse(JSON.stringify(state.schedule)));
-                    const poppedState = state.redoStack.pop();
-                    if (poppedState) {
-                        state = poppedState
-                    }
+                    state.undoStack.push(serializeSchedule(state.schedule));
+                    state.schedule = deserializeSchedule(state.redoStack.pop()!);
                 }
                 return state;
             })
+
     };
 }
 

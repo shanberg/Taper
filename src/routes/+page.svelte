@@ -43,12 +43,15 @@
 		if (key === 'z' && (ctrlKey || metaKey)) {
 			e.preventDefault();
 			if (shiftKey) {
+				console.log("did a redo")
 				appStore.redo();
 			} else {
+				console.log("did a undo")
 				appStore.undo();
 			}
 		} else if (key === 'y' && (ctrlKey || metaKey)) {
 			e.preventDefault();
+			console.log("did a redo")
 			appStore.redo();
 		}
 	}
@@ -109,7 +112,7 @@
 			appStore.switchTemplate(target.value);
 	}
 
-	$: console.log($appStore);
+	$: console.log({...$appStore});
 
 </script>
 

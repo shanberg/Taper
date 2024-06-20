@@ -7,12 +7,16 @@ type Schedule = {
 	segments: Segment[];
 	startDate: ScheduleDate;
 	templateKey: string;
-};
+}
+
+type SerializedSchedule = string & {
+	__brand: "SerializedSchedule"
+}
 
 type AppState = {
 	schedule: Schedule;
-	undoStack: AppState[];
-	redoStack: AppState[];
+	undoStack: SerializedSchedule[];
+	redoStack: SerializedSchedule[];
 	startDateInputValue: InputStringDate;
 };
 
@@ -31,12 +35,12 @@ type Message = {
 	content: string;
 };
 
-type InputStringDate = string & {
-	__brand: "InputStringDate"
-}
-
 type ScheduleDate = Date & {
 	__brand: "ScheduleDate"
+}
+
+type InputStringDate = string & {
+	__brand: "InputStringDate"
 }
 
 type LocaleDate = string & {

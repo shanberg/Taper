@@ -136,3 +136,22 @@ export const sumDays = (schedule: Schedule): number => {
 export const calculateEndDate = (schedule: Schedule): ScheduleDate => {
 	return new TaperDate(new Date(schedule.startDate.getTime() + sumDays(schedule) * 24 * 60 * 60 * 1000)).toScheduleDate();
 };
+
+
+export const serializeSchedule = (schedule: Schedule): SerializedSchedule => {
+	return JSON.stringify(schedule, (key, value) => {
+		if (key === "startDate" || key === "endDate" || key === "startDateInputValue") {
+			return { __brand: 'Date', value: new TaperDate(value).toYYYYMMDD() };
+		}
+		return value;
+	}) as SerializedSchedule
+};
+
+export const deserializeSchedule = (serializedSchedule: SerializedSchedule): Schedule => {
+	return JSON.parse(serializedSchedule, (key, value) => {
+		if (value && value.__brand === 'Date') {
+			return new TaperDate(value.value).toScheduleDate()
+		}
+		return value;
+	}) as Schedule
+};
