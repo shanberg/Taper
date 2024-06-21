@@ -2,8 +2,9 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { appStore } from '../stores';
 	import FormHeader from '../components/FormHeader.svelte';
-	import ScheduleTable from '../components/ScheduleTable.svelte';
-	import Plan from '../components/Plan.svelte';
+	import ScheduleList from '../components/ScheduleList.svelte';
+	import ScheduleRow from '../components/ScheduleRow.svelte';
+	import { getLanguageFromKey, segmentIsOrAfterPlaceholder } from '../utils';
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
@@ -32,14 +33,19 @@
 			window.removeEventListener('keydown', handleKeyDown);
 		}
 	});
+
+	$: selectedLanguage = getLanguageFromKey($appStore.schedule.languageKey);
+	$: segments = $appStore.schedule.segments;
+	$: startDate = $appStore.schedule.startDate;
 </script>
 
 <main>
 	<FormHeader />
 
 	<div class="body">
-		<ScheduleTable />
-		<Plan />
+		{#each $appStore.schedule.segments as segment, index}
+			<ScheduleRow {segment} {index} {segments} {startDate} {selectedLanguage} />
+		{/each}
 	</div>
 </main>
 
@@ -56,9 +62,8 @@
 
 	.body {
 		display: flex;
-		flex-direction: row;
-		gap: 1rem;
+		flex-direction: column;
+		gap: 1px;
 		padding: 1rem;
-		min-width: 38rem;
 	}
 </style>

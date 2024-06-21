@@ -13,9 +13,9 @@
 	$: formattedTotalDays = new Intl.NumberFormat().format(totalDays);
 </script>
 
-<div class="plan" dir={selectedLanguage.dir}>
+<!-- <div class="plan" dir={selectedLanguage.dir}>
 	<h3>Plan</h3>
-	<ul lang={selectedLanguage.lang}>
+	<ul lang={selectedLanguage.lang}> -->
 		{#each $appStore.schedule.segments as segment, index}
 			<ScheduleSegment
 				segments={$appStore.schedule.segments}
@@ -26,14 +26,14 @@
 				on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
 			/>
 		{/each}
-	</ul>
+	<!-- </ul>
 
 	<footer class="summary">
 		<p>
 			{totalDose}mg over {formattedTotalDays} days
 		</p>
 	</footer>
-</div>
+</div> -->
 
 <style>
 	.plan {

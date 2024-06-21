@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
-import ScheduleTable from './ScheduleTable.svelte';
+import ScheduleList from './ScheduleList.svelte';
 import { appStore } from '../stores';
 import { TaperDate } from '../TaperDate';
 import { DEFAULT_LANGUAGE_KEY, DEFAULT_TEMPLATE_KEY } from '../consts';
 
-describe('ScheduleTable component', () => {
+describe('ScheduleList component', () => {
 	it('renders the component with default segments', () => {
 		const segments = [
 			{ dose: 10, daysForDose: 7 },
@@ -24,7 +24,7 @@ describe('ScheduleTable component', () => {
 			redoStack: []
 		});
 
-		render(ScheduleTable);
+		render(ScheduleList);
 
 		const doseInput = screen.getByRole('spinbutton', { name: /dose-1/i });
 		expect(doseInput).toBeInTheDocument();

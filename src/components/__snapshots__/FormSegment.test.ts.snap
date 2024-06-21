@@ -2,19 +2,19 @@
 
 exports[`FormSegment > renders correctly 1`] = `
 <div>
-  <tr
-    class="segment svelte-ac0aco"
+  <div
+    class="row svelte-vxmx1p"
   >
-    <td
-      class="dose"
+    <div
+      class="dose svelte-vxmx1p"
     >
       <label
-        class="svelte-ac0aco"
+        class="svelte-vxmx1p"
         for="dose-0"
       >
         <input
           aria-label="dose-0"
-          class="svelte-ac0aco"
+          class="svelte-vxmx1p"
           id="dose-0"
           inputmode="decimal"
           min="1"
@@ -23,18 +23,18 @@ exports[`FormSegment > renders correctly 1`] = `
           type="number"
         />
       </label>
-    </td>
+    </div>
      
-    <td
-      class="days"
+    <div
+      class="days svelte-vxmx1p"
     >
       <label
-        class="svelte-ac0aco"
+        class="svelte-vxmx1p"
         for="days-0"
       >
         <input
           aria-label="days-0"
-          class="svelte-ac0aco"
+          class="svelte-vxmx1p"
           id="days-0"
           inputmode="decimal"
           min="1"
@@ -42,19 +42,19 @@ exports[`FormSegment > renders correctly 1`] = `
           type="number"
         />
       </label>
-    </td>
+    </div>
      
-    <td
+    <div
       class="delete"
     >
       <button
-        class="remove-btn svelte-ac0aco"
+        class="remove-btn svelte-vxmx1p"
         disabled=""
         title="Remove this step"
       >
         ×
       </button>
-    </td>
-  </tr>
+    </div>
+  </div>
 </div>
 `;

@@ -15,8 +15,8 @@
 	}
 </script>
 
-<tr class="segment" class:isInvalid class:isPlaceholder>
-	<td class="dose">
+<div class="segment" class:isInvalid class:isPlaceholder>
+	<div class="dose">
 		<label for="dose-{index}">
 			<input
 				min={1}
@@ -30,8 +30,8 @@
 				on:change={() => dispatch('change', segment)}
 			/>
 		</label>
-	</td>
-	<td class="days">
+	</div>
+	<div class="days">
 		<label for="days-{index}">
 			<input
 				min={1}
@@ -44,20 +44,29 @@
 				on:change={() => dispatch('change', segment)}
 			/>
 		</label>
-	</td>
-	<td class="delete">
-		<button
-			{...isOnlyRealSegment ? { disabled: true } : {}}
-			title="Remove this step"
-			class="remove-btn"
-			on:click={deleteSegmentAtIndex}>×</button
-		>
-	</td>
-</tr>
+	</div>
+	<button
+		{...isOnlyRealSegment ? { disabled: true } : {}}
+		title="Remove this step"
+		class="remove-btn"
+		on:click={deleteSegmentAtIndex}>×</button
+	>
+</div>
 
 <style>
+
+.segment {
+	display: flex;
+	flex: 0 0 12rem;
+	gap: 1px;
+}
+
 	label {
 		display: contents;
+	}
+
+	.dose, .days {
+		flex: 1 1 100%;
 	}
 
 	input {
@@ -84,10 +93,6 @@
 		background: var(--color-status-error-bg-muted);
 	}
 
-	tr:last-child .remove-btn {
-		display: none;
-	}
-
 	.remove-btn {
 		width: 1.5rem;
 		height: 100%;
@@ -109,15 +114,15 @@
 
 	/* hide remove button on last segment */
 
-	tr:focus-within .remove-btn,
-	tr:hover .remove-btn,
+	.segment:focus-within .remove-btn,
+	.segment:hover .remove-btn,
 	.remove-btn:focus {
 		outline: none;
 		opacity: 1;
 	}
 
-	tr.isPlaceholder .remove-btn,
-	tr.isInvalid .remove-btn,
+	.segment.isPlaceholder .remove-btn,
+	.segment.isInvalid .remove-btn,
 	.remove-btn:hover:not(:disabled),
 	.remove-btn:focus:not(:disabled) {
 		opacity: 1;

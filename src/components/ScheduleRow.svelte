@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { formatSegmentText, isSegmentInvalid } from '../utils';
+	import { appStore } from '../stores';
+	import FormSegment from './FormSegment.svelte';
+	import AddSegmentButton from './AddSegmentButton.svelte';
 	import { TaperDate } from '../TaperDate';
-	export let segments;
-	export let startDate;
-	export let selectedLanguage;
-	export let segment;
-	export let index;
+	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText } from '../utils';
+
+  export let segments;
+  export let segment;
+  export let startDate;
+  export let index;
+  export let selectedLanguage;
 
 	let segmentStartDate: ScheduleDate;
 	let segmentEndDate: ScheduleDate;
@@ -29,15 +33,36 @@
 		segmentStartDate = taperStartDate.toScheduleDate();
 		segmentEndDate = taperEndDate.toScheduleDate();
 	}
+
 </script>
 
-{#if !isLastPlaceholderSegment}
-	<span class:isInvalid class:isSegmentPlaceholder>
-		{formatSegmentText({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage })}
-	</span>
-{/if}
+<div class="row">
+  {#if !segmentIsOrAfterPlaceholder(segment, segments)}
+    <AddSegmentButton
+      on:addSegment={() => appStore.insertPlaceholderSegmentBeforeIndex(index)}
+    />
+  {/if}
+  <FormSegment
+    {segments}
+    {segment}
+    {index}
+    on:removeSegment={() => appStore.deleteSegmentAtIndex(index)}
+    on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
+  />
+  {#if !isLastPlaceholderSegment}
+    <span class:isInvalid class:isSegmentPlaceholder>
+      {formatSegmentText({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage })}
+    </span>
+  {/if}
+</div>
 
 <style>
+	.row {
+		display: flex;
+    position: relative;
+    gap: 1rem;
+	}
+
 	.isInvalid {
 		color: var(--color-fg-error);
 	}
