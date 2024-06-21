@@ -44,7 +44,13 @@ describe('FormHeader component', () => {
 	it('displays unverified badge for unverified languages', () => {
 		const unverifiedLanguage = LANGUAGES.find((l) => !l.verified)!;
 
-		appStore.set({ schedule: { languageKey: unverifiedLanguage.lang } });
+		appStore.set({
+			...get(appStore),
+			schedule: {
+				...get(appStore).schedule,
+				languageKey: unverifiedLanguage.lang,
+			}
+		});
 		render(FormHeader);
 		expect(screen.getByText('Unverified')).toBeInTheDocument();
 	});
