@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { appStore } from '../stores';
+	import layout from '../styles/layout.module.css'
 	import FormHeader from '../components/FormHeader.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
-	import { getLanguageFromKey } from '../utils';
+	import CopyToClipboardButton from '../components/CopyToClipboardButton.svelte';
+	import { getFormattedListForCopyPaste, getLanguageFromKey } from '../utils';
+	import FormToolbar from '../components/FormToolbar.svelte';
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
@@ -33,22 +36,37 @@
 		}
 	});
 
-	$: selectedLanguage = getLanguageFromKey($appStore.schedule.languageKey);
-	$: segments = $appStore.schedule.segments;
-	$: startDate = $appStore.schedule.startDate;
+	$: schedule = $appStore.schedule;
+	$: selectedLanguage = getLanguageFromKey(schedule.languageKey);
+	$: copyableText = getFormattedListForCopyPaste(schedule);
 </script>
 
 <main>
 	<FormHeader />
+	<FormToolbar>
+		<CopyToClipboardButton textToCopy={copyableText} />
+	</FormToolbar>
 
 	<div class="body">
-		{#each $appStore.schedule.segments as segment, index}
-			<ScheduleRow {segment} {index} {segments} {startDate} {selectedLanguage} />
+		<div class={`${layout.hstack} form-schedule-header`}><div class="dose">mg</div><div class="days">days</div><div class="schedule">Schedule</div></div>
+		{#each schedule.segments as _, index}
+			<ScheduleRow {schedule} {index} {selectedLanguage} />
 		{/each}
 	</div>
 </main>
 
 <style>
+	.form-schedule-header {
+		font-weight: bold;
+
+		& .dose {
+			width: 5rem;
+		}
+		& .days {
+			width: 6rem;
+		}
+	}
+
 	main {
 		display: flex;
 		flex-direction: column;

@@ -43,10 +43,7 @@ export const isSegmentPlaceholder = (segment: Segment): boolean => {
 	return segment.dose === 0 && segment.daysForDose === 0;
 };
 
-type FormatSegmentTextParams = {
-	segment: Segment;
-	segmentStartDate: ScheduleDate;
-	segmentEndDate: ScheduleDate;
+type FormatSegmentTextParams = SegmentWithStartEndDate & {
 	index: number;
 	selectedLanguage: Language;
 };
@@ -102,15 +99,14 @@ export function createInitialSchedule(): Schedule {
 	};
 }
 
-export const sumDose = (schedule: Schedule): number => {
-	return schedule.segments.reduce((sum, segment) => sum + segment.dose * segment.daysForDose, 0);
+export const sumScheduleDose = (segments: Segment[]): number => {
+	return segments.reduce((sum, segment) => sum + segment.dose * segment.daysForDose, 0);
 };
 
-export const sumDays = (schedule: Schedule): number => {
+export const sumScheduleDays = (segments: Segment[]): number => {
 	return (
-		schedule.segments.reduce((sum, segment) => sum + segment.daysForDose, 0) +
-		schedule.segments.length -
-		2
+		segments.reduce((sum, segment) => sum + segment.daysForDose, 0) +
+		segments.length - 2
 	);
 };
 
@@ -145,6 +141,10 @@ export function isSegmentAfterPlaceholder(segment: Segment, segments: Segment[])
 	return isSegmentPlaceholder(prevSegment);
 }
 
+export function calculateScheduleSummary(schedule: Schedule): string {
+	return `${sumScheduleDose(schedule.segments)}mg over ${sumScheduleDays(schedule.segments)} days`
+};
+
 export function segmentIsOrAfterPlaceholder(segment: Segment, segments: Segment[]) {
 	if (!segment) return false;
 
@@ -160,3 +160,47 @@ export function segmentIsOrAfterPlaceholder(segment: Segment, segments: Segment[
 export function getLanguageFromKey(languageKey: string): Language {
 	return LANGUAGES.find((l) => l.lang === languageKey) || LANGUAGES[0];
 }
+
+export function calculateSegmentStartAndEndDates(schedule: Schedule, index: number): SegmentWithStartEndDate {
+	const segment = schedule.segments[index];
+	const taperStartDate = new TaperDate(schedule.startDate);
+	const totalDaysForStartDate =
+		schedule.segments
+			.slice(0, index)
+			.reduce((acc: number, curr: { daysForDose: number }) => acc + curr.daysForDose - 1, 0) +
+		index;
+	taperStartDate.incrementByDays(totalDaysForStartDate);
+	const taperEndDate = new TaperDate(taperStartDate.toScheduleDate());
+	taperEndDate.incrementByDays(segment.daysForDose - 1);
+
+	return {
+		segment,
+		segmentStartDate: taperStartDate.toScheduleDate(),
+		segmentEndDate: taperEndDate.toScheduleDate()
+	}
+}
+
+export function getFormattedListForCopyPaste(schedule: Schedule): string {
+	const { segments, languageKey } = schedule;
+	const selectedLanguage = getLanguageFromKey(languageKey);
+
+	// Filter out placeholder segments
+	const validSegments = segments.filter(segment => !isSegmentPlaceholder(segment));
+
+	// Format each segment
+	const formattedSegments = validSegments.map((segment, index) => {
+		const { segmentStartDate, segmentEndDate } = calculateSegmentStartAndEndDates(schedule, index);
+
+		return formatSegmentText({
+			segment,
+			segmentStartDate,
+			segmentEndDate,
+			index,
+			selectedLanguage
+		});
+	});
+
+	// Combine formatted segments into a single string
+	return formattedSegments.join('\n');
+}
+

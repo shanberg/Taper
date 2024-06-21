@@ -3,6 +3,12 @@ type Segment = {
 	daysForDose: number;
 };
 
+type SegmentWithStartEndDate = {
+	segment: Segment;
+	segmentStartDate: ScheduleDate;
+	segmentEndDate: ScheduleDate;
+};
+
 type Schedule = {
 	segments: Segment[];
 	startDate: ScheduleDate;

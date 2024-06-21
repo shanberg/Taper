@@ -3,13 +3,15 @@
 	import FormSegment from './FormSegment.svelte';
 	import AddSegmentButton from './AddSegmentButton.svelte';
 	import { TaperDate } from '../TaperDate';
-	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText } from '../utils';
+	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText, calculateScheduleSummary } from '../utils';
 
-  export let segments;
-  export let segment;
-  export let startDate;
+	export let schedule: Schedule;
   export let index;
   export let selectedLanguage;
+
+	const startDate = schedule.startDate;
+	const segments = schedule.segments;
+	const segment = schedule.segments[index];
 
 	let segmentStartDate: ScheduleDate;
 	let segmentEndDate: ScheduleDate;
@@ -36,7 +38,7 @@
 
 </script>
 
-<div class="row" class:isInvalid class:isSegmentPlaceholder>
+<div class="row" class:isInvalid class:isSegmentPlaceholder class:isLastPlaceholderSegment>
   {#if !segmentIsOrAfterPlaceholder(segment, segments)}
     <AddSegmentButton
       on:addSegment={() => appStore.insertPlaceholderSegmentBeforeIndex(index)}
@@ -49,8 +51,12 @@
     on:removeSegment={() => appStore.deleteSegmentAtIndex(index)}
     on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
   />
-  {#if !isLastPlaceholderSegment}
+  {#if isLastPlaceholderSegment}
     <span class="written-plan">
+      {calculateScheduleSummary(schedule)}
+    </span>
+  {:else}
+    <span class="written-plan summary">
       {formatSegmentText({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage })}
     </span>
   {/if}
@@ -75,8 +81,7 @@
 		color: var(--color-fg-muted);
 	}
 
-	.isInvalid .written-plan,
-	.isSegmentPlaceholder .written-plan{
+	.written-plan:not(.isLastPlaceholderSegment):where(.isInvalid, .isSegmentPlaceholder) {
 		text-decoration: underline;
 		text-decoration-style: wavy;
 		text-decoration-skip-ink: none;
