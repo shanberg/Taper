@@ -189,6 +189,7 @@ export default defineConfig({
     }
   },
 
+  // Weird build issues? Try setting this to 'react' and then back to 'svelte'.
   jsxFramework: 'svelte',
 
   // The output directory for your css system
