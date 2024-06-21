@@ -1,6 +1,5 @@
 // svelte.config.js
 import adapter from '@sveltejs/adapter-auto';
-// import { sveltePreprocess } from 'svelte-preprocess';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 import postcssImport from 'postcss-import';
@@ -22,7 +21,6 @@ const config = {
 			],
 		},
 	}),
-
 	kit: {
 		adapter: adapter(),
 		alias: {

@@ -13,6 +13,11 @@ const config: UserConfig = {
 			allow: ['styled-system'],
 		},
 	},
+	resolve: {
+		alias: {
+			'styled-system': '/styled-system', // Ensure this path is correct
+		},
+	},
 };
 
 export default config;

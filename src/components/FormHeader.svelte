@@ -50,7 +50,7 @@
 </script>
 
 <VStack alignItems="stretch">
-	<HStack>
+	<HStack padding="1rem">
 		<FormControl paddingRight="1.5rem" class="course-begins" id="course-begins">
 			<FormLabel slot="label">Course begins</FormLabel>
 			<DateInput
@@ -86,6 +86,5 @@
 				options={languageOptions}
 			/>
 		</FormControl>
-
 	</HStack>
 </VStack>

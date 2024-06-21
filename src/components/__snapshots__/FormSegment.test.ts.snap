@@ -13,12 +13,14 @@ exports[`FormSegment > renders correctly 1`] = `
         for="dose-0"
       >
         <input
+          aria-disabled="false"
           aria-label="dose-0"
-          class="svelte-8qx0cq"
+          class="font_body fs_md bg_bgControl rounded_control border_none w_100% p_0_0.5rem h_controlHeight max-h_controlHeight min-h_controlHeight leading_controlHeight text_inherit ring_none pos_relative focus:z_1 focus:shadow_controlFocusVisible [&.isWarning]:shadow_controlWarning min_1 id_dose-0 step_0.25 inputmode_decimal pattern_[1-9]\\d* aria-label_dose-0"
           id="dose-0"
           inputmode="decimal"
           min="1"
           pattern="[1-9]\\d*"
+          placeholder=""
           step="0.25"
           type="number"
         />
@@ -33,12 +35,14 @@ exports[`FormSegment > renders correctly 1`] = `
         for="days-0"
       >
         <input
+          aria-disabled="false"
           aria-label="days-0"
-          class="svelte-8qx0cq"
+          class="font_body fs_md bg_bgControl rounded_control border_none w_100% p_0_0.5rem h_controlHeight max-h_controlHeight min-h_controlHeight leading_controlHeight text_inherit ring_none pos_relative focus:z_1 focus:shadow_controlFocusVisible [&.isWarning]:shadow_controlWarning min_1 id_days-0 inputmode_decimal pattern_[1-9]\\d* aria-label_days-0"
           id="days-0"
           inputmode="decimal"
           min="1"
           pattern="[1-9]\\d*"
+          placeholder=""
           type="number"
         />
       </label>

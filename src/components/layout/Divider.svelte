@@ -2,4 +2,4 @@
   import { divider } from 'styled-system/patterns'  
 </script>
 
-<div class={divider($$restProps)}><slot /></div>
+<div class={divider({margin: 0, ...$$restProps})}><slot /></div>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { inputField } from 'styled-system/patterns'
 
-  export let value = '';
+  export let value: number;
   export let disabled = false;
   export let placeholder = '';
 </script>

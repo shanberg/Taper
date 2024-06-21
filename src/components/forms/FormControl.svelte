@@ -44,8 +44,6 @@
 <label
   class={vstack({
     alignItems: "stretch",
-    marginBottom: '1rem',
-    padding: '1rem',
     ...$$restProps
   })}
   for={inputId}

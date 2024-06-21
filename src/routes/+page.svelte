@@ -4,7 +4,7 @@
 	import FormHeader from '../components/FormHeader.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
 	import { getLanguageFromKey } from '../utils';
-	import { Box } from '../components';
+	import { Box, Divider } from '../components';
 	import VStack from '../components/layout/VStack.svelte';
 
 	function handleKeyDown(e: KeyboardEvent) {
@@ -48,9 +48,12 @@
 >
 	<FormHeader />
 
+	<Divider />
+
 	<VStack
 		padding="1rem"
 		gap="1px"
+		alignItems="stretch"
 	>
 		{#each $appStore.schedule.segments as segment, index}
 			<ScheduleRow {segment} {index} {segments} {startDate} {selectedLanguage} />

@@ -3,7 +3,8 @@
 	import FormSegment from './FormSegment.svelte';
 	import AddSegmentButton from './AddSegmentButton.svelte';
 	import { TaperDate } from '../TaperDate';
-	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText, cachedFormatDate } from '../utils';
+	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText, isSegmentPlaceholder } from '../utils';
+	import { Box } from './';
 
   export let segments;
   export let segment;
@@ -15,8 +16,8 @@
 	let segmentEndDate: ScheduleDate;
 	let segmentDates: ScheduleDate[];
 
-	$: isSegmentPlaceholder = segment.dose === 0 && segment.daysForDose === 0;
-	$: isInvalid = !isSegmentPlaceholder && isSegmentInvalid(segment);
+	$: isPlaceholder = isSegmentPlaceholder(segment);
+	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
 	$: isLastPlaceholderSegment = index === segments.length - 1 && isSegmentPlaceholder;
 
 	// Calculate the start and end dates
@@ -43,9 +44,20 @@
     }
 	}
 
+	$: conditionalStyles = (isInvalid || isPlaceholder) ? {
+		textDecoration: "underline",
+		textDecorationStyle: "wavy",
+		textDecorationSkipInk: "none"
+	} : {};
 </script>
 
-<div class="row" class:isInvalid class:isSegmentPlaceholder>
+<Box 
+	display="flex"
+	position="relative"
+	gap="1rem"
+	data-invalid={isInvalid}
+	data-placeholder={isPlaceholder}
+>
   {#if !segmentIsOrAfterPlaceholder(segment, segments)}
     <AddSegmentButton
       on:addSegment={() => appStore.insertPlaceholderSegmentBeforeIndex(index)}
@@ -59,61 +71,11 @@
     on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
   />
   {#if !isLastPlaceholderSegment}
-    <span class="written-plan">
+    <Box paddingBlock="0.25rem"
+		{...conditionalStyles}
+			color={isInvalid ? "status.error" : isPlaceholder ? "fgMuted" : undefined}
+		>
       {formatSegmentText({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage })}
-    </span>
-		<ul class="date-checkboxes">
-		{#each segmentDates as date}
-			<li>
-				<label>
-					<input type="checkbox" />
-					{segment.dose}mg on {cachedFormatDate(date, selectedLanguage.lang)}
-				</label>
-			</li>
-		{/each}
-	</ul>
-
+    </Box>
   {/if}
-</div>
-
-<style>
-	.row {
-		display: flex;
-    position: relative;
-    gap: 1rem;
-	}
-
-	.date-checkboxes {
-		list-style: none;
-		display: block;
-		padding: 0;
-		margin: 0;
-	}
-
-	.date-checkboxes li {
-		display: block;
-	}
-
-	label { 
-		display: contents;
-	}
-
-	.written-plan {
-		padding-block: 0.25rem;
-	}
-
-	.isInvalid .written-plan{
-		color: var(--color-fg-error);
-	}
-	
-	.isSegmentPlaceholder .written-plan{
-		color: var(--color-fg-muted);
-	}
-
-	.isInvalid .written-plan,
-	.isSegmentPlaceholder .written-plan{
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-skip-ink: none;
-	}
-</style>
+</Box>

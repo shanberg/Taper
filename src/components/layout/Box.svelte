@@ -2,4 +2,4 @@
   import { box } from 'styled-system/patterns'
 </script>
 
-<div class={box($$restProps)}><slot /></div>
+<div {...$$restProps} class={box($$restProps)}><slot /></div>

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { isSegmentInvalid, isSegmentPlaceholder } from '../utils';
+	import { NumberInput } from './'
 	export let segments: Segment[];
 	export let segment: Segment;
 	export let index: number;
 
 	const dispatch = createEventDispatcher();
-	$: isOnlyRealSegment = segments.length === 2;
+	$: isOnlyRealSegment = segments?.length === 2;
 	$: isPlaceholder = isSegmentPlaceholder(segment);
 	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
 	$: isLastSegment = index === segments.length - 1
@@ -19,11 +20,10 @@
 <div class="segment" class:isInvalid class:isPlaceholder class:isLastSegment>
 	<div class="dose">
 		<label for="dose-{index}">
-			<input
+			<NumberInput
 				min={1}
 				id="dose-{index}"
 				step={segment.dose > 5 ? 1 : 0.25}
-				type="number"
 				inputmode="decimal"
 				pattern="[1-9]\d*"
 				aria-label="dose-{index}"
@@ -34,10 +34,9 @@
 	</div>
 	<div class="days">
 		<label for="days-{index}">
-			<input
+			<NumberInput
 				min={1}
 				id="days-{index}"
-				type="number"
 				inputmode="decimal"
 				pattern="[1-9]\d*"
 				aria-label="days-{index}"
