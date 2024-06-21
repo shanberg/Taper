@@ -5,7 +5,7 @@
 
 	// Language
 	$: selectedLanguageKey = $appStore.schedule.languageKey;
-	$: selectedLanguage = getLanguageFromKey(selectedLanguageKey)
+	$: selectedLanguage = getLanguageFromKey(selectedLanguageKey);
 
 	// Summary
 	$: totalDose = sumDose($appStore.schedule);

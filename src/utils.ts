@@ -88,7 +88,7 @@ export const formatSegmentText = ({
 		return `${index === 0 ? 'احتياج' : `في ذلك الحين تحتاج`} ${segment.dose}mg كل يوم ${segment.daysForDose} ${segment.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`;
 	}
 
-	return ""
+	return '';
 };
 
 const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };
@@ -158,5 +158,5 @@ export function segmentIsOrAfterPlaceholder(segment: Segment, segments: Segment[
 }
 
 export function getLanguageFromKey(languageKey: string): Language {
-	return LANGUAGES.find(l => (l.lang === languageKey)) || LANGUAGES[0]
+	return LANGUAGES.find((l) => l.lang === languageKey) || LANGUAGES[0];
 }

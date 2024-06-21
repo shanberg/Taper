@@ -57,14 +57,14 @@ export function createAppStore(): AppStore {
 				const newState = _saveScheduleForUndo(state);
 				let newSegments = [...prevSegments];
 
-				updatedSegment.dose = updatedSegment.dose || 0
-				updatedSegment.daysForDose = updatedSegment.daysForDose || 0
+				updatedSegment.dose = updatedSegment.dose || 0;
+				updatedSegment.daysForDose = updatedSegment.daysForDose || 0;
 
 				newSegments[index] = updatedSegment;
 
 				// console.log(newSegments, newSegments.some(s => isSegmentPlaceholder(s)))
 
-				if (!newSegments.some(s => isSegmentPlaceholder(s))) {
+				if (!newSegments.some((s) => isSegmentPlaceholder(s))) {
 					newSegments = [...newSegments, { ...PLACEHOLDER_SEGMENT }];
 				}
 

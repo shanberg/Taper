@@ -85,7 +85,7 @@ describe('appStore', () => {
 			{ dose: 2, daysForDose: 2 }, // 1
 			{ dose: 3, daysForDose: 3 }, // 2
 			{ dose: 4, daysForDose: 4 }, // 3
-			{ dose: 0, daysForDose: 0 }  // 4 - the one to edit
+			{ dose: 0, daysForDose: 0 } // 4 - the one to edit
 		];
 
 		const resultingSegments = [
@@ -94,7 +94,7 @@ describe('appStore', () => {
 			{ dose: 3, daysForDose: 3 }, // 2
 			{ dose: 4, daysForDose: 4 }, // 3
 			{ dose: 1, daysForDose: 0 }, // 4 - edited
-			{ dose: 0, daysForDose: 0 }  // 5 - created automatically
+			{ dose: 0, daysForDose: 0 } // 5 - created automatically
 		];
 
 		// prepare initial state
@@ -526,5 +526,4 @@ describe('appStore', () => {
 		const expectedState: AppState = get(appStore);
 		expect(stateAfterRedo).toEqual(expectedState);
 	});
-
 });

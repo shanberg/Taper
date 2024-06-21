@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { LANGUAGES, TEMPLATES } from '../consts';
 	import Badge from './Badge.svelte';
-	import { getLanguageFromKey } from '../utils'
+	import { getLanguageFromKey } from '../utils';
 	import { appStore } from '../stores';
 
 	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);

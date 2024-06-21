@@ -56,7 +56,6 @@
 </tr>
 
 <style>
-
 	label {
 		display: contents;
 	}

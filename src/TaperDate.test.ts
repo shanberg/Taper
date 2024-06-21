@@ -22,7 +22,9 @@ describe('TaperDate', () => {
 
 	test('constructs with no input', () => {
 		const now = new Date();
-		const expectedDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).setUTCHours(12, 0, 0, 0)
+		const expectedDate = new Date(
+			Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+		).setUTCHours(12, 0, 0, 0);
 
 		const taperDate = new TaperDate();
 		expect(new Date(taperDate.toScheduleDate()).setUTCHours(12, 0, 0, 0)).toEqual(expectedDate);
