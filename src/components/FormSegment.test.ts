@@ -93,13 +93,13 @@ describe('FormSegment', () => {
 		expect(container.querySelector('.segment')).toHaveClass('isPlaceholder');
 	});
 
-	test('applies isInvalid class when segment is invalid', () => {
+	test('applies isInvalid data-attr when segment is invalid', () => {
 		// isSegmentInvalid.mockReturnValue(true);
 		const { container } = render(FormSegment, {
 			segments,
 			segment: { dose: -1, daysForDose: 0 },
 			index
 		});
-		expect(container.querySelector('.segment')).toHaveClass('isInvalid');
+		expect(container.querySelector('.segment')).toHaveAttribute('data-invalid="true"');
 	});
 });

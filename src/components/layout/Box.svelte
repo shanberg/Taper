@@ -1,5 +1,9 @@
 <script lang="ts">
   import { box } from 'styled-system/patterns'
+  import { splitCssProps } from 'styled-system/jsx'
+
+  $: [cssProps, restProps] = splitCssProps($$restProps)
+
 </script>
 
-<div class={box($$restProps)}><slot /></div>
+<div {...restProps} class={box(cssProps)}><slot /></div>

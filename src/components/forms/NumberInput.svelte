@@ -1,5 +1,8 @@
 <script lang="ts">
   import { inputField } from 'styled-system/patterns'
+  import { splitCssProps } from 'styled-system/jsx'
+
+  $: [cssProps, restProps] = splitCssProps($$restProps)
 
   export let value: number;
   export let disabled = false;
@@ -17,9 +20,6 @@
   on:keydown
   on:blur
   on:input
-  {...$$restProps}
-  class={inputField($$restProps)}
+  {...restProps}
+  class={inputField(cssProps)}
 />
-
-<style>
-</style>

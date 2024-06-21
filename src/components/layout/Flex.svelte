@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { flex } from 'styled-system/patterns'  
+  import { flex } from 'styled-system/patterns'
+  import { splitCssProps } from 'styled-system/jsx'
+
+  $: [cssProps, restProps] = splitCssProps($$restProps)
+
 </script>
 
-<div class={flex($$restProps)}><slot /></div>
+<div {...restProps} class={flex(cssProps)}><slot /></div>

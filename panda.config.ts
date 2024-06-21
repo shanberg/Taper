@@ -124,6 +124,38 @@ export default defineConfig({
 
   patterns: {
     extend: {
+      pressable: {
+        description: "Styles for a pressable element",
+        defaultValues: {
+          fontFamily: "body",
+          fontSize: "md",
+          backgroundColor: "bgControl",
+          borderRadius: "control",
+          border: "none",
+          padding: "0.25rem 0.5rem",
+          height: "controlHeight",
+          lineHeight: "controlHeight",
+          color: "inherit",
+          outline: "none",
+          position: "relative",
+          cursor: "pointer",
+          _disabled: {
+            cursor: "not-allowed"
+          },
+          _hover: {
+
+          },
+          _focus: {
+            zIndex: 1,
+            boxShadow: "controlFocusVisible"
+          },
+        },
+        transform(props) {
+          return {
+            ...props,
+          };
+        },
+      },
       inputField: {
         description: 'Styles for input fields',
         properties: {
@@ -190,7 +222,7 @@ export default defineConfig({
   },
 
   // Weird build issues? Try setting this to 'react' and then back to 'svelte'.
-  jsxFramework: 'svelte',
+  jsxFramework: 'react',
 
   // The output directory for your css system
   outdir: "styled-system",

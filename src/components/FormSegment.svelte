@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { isSegmentInvalid, isSegmentPlaceholder } from '../utils';
-	import { NumberInput } from './'
+	import { pressable } from 'styled-system/patterns'
+	import { NumberInput, HStack } from './'
 	export let segments: Segment[];
 	export let segment: Segment;
 	export let index: number;
@@ -17,7 +18,14 @@
 	}
 </script>
 
-<div class="segment" class:isInvalid class:isPlaceholder class:isLastSegment>
+<HStack 
+	gap="1px"
+	flex="0 0 12rem"
+	class="segment"
+	data-invalid={isInvalid}
+	data-placeholder={isPlaceholder}
+	data-last-segment={isLastSegment}
+>
 	<div class="dose">
 		<label for="dose-{index}">
 			<NumberInput
@@ -27,6 +35,8 @@
 				inputmode="decimal"
 				pattern="[1-9]\d*"
 				aria-label="dose-{index}"
+				color={isInvalid ? "status.error" : isPlaceholder ? "fgMuted" : undefined}
+				backgroundColor={isInvalid ? "status.errorBgMuted" : isPlaceholder ? "transparent" : undefined}
 				bind:value={segment.dose}
 				on:change={() => dispatch('change', segment)}
 			/>
@@ -40,6 +50,8 @@
 				inputmode="decimal"
 				pattern="[1-9]\d*"
 				aria-label="days-{index}"
+				color={isInvalid ? "status.error" : isPlaceholder ? "fgMuted" : undefined}
+				backgroundColor={isInvalid ? "status.errorBgMuted" : isPlaceholder ? "transparent" : undefined}
 				bind:value={segment.daysForDose}
 				on:change={() => dispatch('change', segment)}
 			/>
@@ -48,77 +60,20 @@
 	<button
 		{...(isLastSegment || isOnlyRealSegment) ? { disabled: true } : {}}
 		title="Remove this step"
-		class="remove-btn"
+		class={`${pressable({
+			visibility: isLastSegment ? "hidden" : undefined,
+			flex: "0 0 1.5rem",
+			height: "100%",
+			opacity: 0.25,
+			padding: 0,
+			background: "none",
+			_hover: {
+				opacity: 1,
+			},
+			_focus: {
+				opacity: 1,
+			}
+		})} remove-btn`}
 		on:click={handleClickDelete}>×</button
 	>
-</div>
-
-<style>
-
-.segment {
-	display: flex;
-	flex: 0 0 12rem;
-	gap: 1px;
-}
-
-	label {
-		display: contents;
-	}
-
-	.dose, .days {
-		flex: 1 1 100%;
-	}
-
-	input {
-		width: 100%;
-		height: 100%;
-		border: none;
-		outline: none;
-	}
-
-	.isPlaceholder {
-		color: var(--color-fg-muted);
-		user-select: none;
-
-		& input {
-			background: transparent;
-		}
-	}
-
-	.isInvalid td input {
-		background: var(--color-status-error-bg);
-	}
-
-	.isInvalid:focus-within td input {
-		background: var(--color-status-error-bg-muted);
-	}
-
-	.remove-btn {
-		flex: 0 0 1.5rem;
-		height: 100%;
-		border: 0;
-		margin-left: 1px;
-		color: var(--color-fg-muted);
-		border-radius: var(--control-radius);
-		transition: all var(--control-transition-duration) ease-in-out;
-		background: transparent;
-		cursor: pointer;
-		opacity: 0.25;
-		padding: 0;
-		text-align: center;
-	}
-
-	.remove-btn:disabled {
-		cursor: not-allowed;
-	}
-
-	.remove-btn:not(:disabled):where(:hover, :active) {
-		opacity: 1;
-		background: var(--color-status-error-bg-muted);
-	}
-
-	.isLastSegment .remove-btn {
-		visibility: hidden;
-	}
-
-</style>
+</HStack>

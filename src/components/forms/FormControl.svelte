@@ -2,6 +2,9 @@
   import { onMount } from 'svelte';
   import { vstack } from 'styled-system/patterns'
   import { css } from 'styled-system/css'
+  import { splitCssProps } from 'styled-system/jsx'
+
+  $: [cssProps, restProps] = splitCssProps($$restProps)
 
   export let id = '';
   export let isInvalid = false;
@@ -42,10 +45,10 @@
 </script>
 
 <label
+  {...restProps}
   class={vstack({
     alignItems: "stretch",
-    ...$$restProps
-  })}
+    ...cssProps})}
   for={inputId}
 >
   <slot name="label"></slot>

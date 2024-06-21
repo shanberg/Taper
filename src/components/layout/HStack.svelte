@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { hstack } from 'styled-system/patterns'  
+  import { hstack } from 'styled-system/patterns'
+  import { splitCssProps } from 'styled-system/jsx'
+
+  $: [cssProps, restProps] = splitCssProps($$restProps)
+
 </script>
 
-<div class={hstack($$restProps)}><slot /></div>
+<div {...restProps} class={hstack(cssProps)}><slot /></div>

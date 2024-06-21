@@ -40,7 +40,7 @@ export const isSegmentInvalid = (segment: Segment): boolean => {
 
 /** Returns true if dose and daysForDose are both 0 */
 export const isSegmentPlaceholder = (segment: Segment): boolean => {
-	return segment.dose === 0 && segment.daysForDose === 0;
+	return segment?.dose === 0 && segment?.daysForDose === 0;
 };
 
 type FormatSegmentTextParams = {
