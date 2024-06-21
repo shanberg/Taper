@@ -1,7 +1,7 @@
 <script lang="ts">
   import { box } from 'styled-system/patterns'
 
-const styles = {
+  const styles = {
     display: "inline-block",
     verticalAlign: "middle",
     lineHeight: "normal",
@@ -15,7 +15,7 @@ const styles = {
     background: "status.warning",
     borderRadius: "2px",
     padding: "0 4px"
-};
+  };
 </script>
 
-<span class={box(styles)}><slot /></span>
+<div {...$$restProps} class={box({...styles, ...$$restProps})}><slot /></div>

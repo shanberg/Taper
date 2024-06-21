@@ -1,5 +1,5 @@
 <script lang="ts">
-  import styles from './forms.module.css';
+  import { inputField } from 'styled-system/patterns'
 
   type InputType = 'color' | 'date' | 'datetime-local' | 'email' | 'file' | 'hidden' | 'image' | 'month' | 'number' | 'password' | 'reset' | 'submit' | 'tel' | 'text' | 'time' | 'url' | 'week' | 'search';
 
@@ -17,17 +17,16 @@
 <input
   id={id}
   bind:value
-  placeholder={placeholder}
-  disabled={disabled}
-  required={required}
-  readonly={readonly}
-  name={name}
-  autocomplete={autocomplete}
+  {placeholder}
+  {disabled}
+  {required}
+  {readonly}
+  {name}
+  {autocomplete}
   aria-label={placeholder}
   aria-disabled={disabled}
   aria-required={required}
   aria-readonly={readonly}
-  class={styles['form-input']}
   on:blur
   on:change
   on:click

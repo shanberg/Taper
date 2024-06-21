@@ -15,7 +15,7 @@ const config: UserConfig = {
 	},
 	resolve: {
 		alias: {
-			'styled-system': '/styled-system', // Ensure this path is correct
+			'styled-system': '/styled-system',
 		},
 	},
 };

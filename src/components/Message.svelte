@@ -1,43 +1,48 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	let currentMessage: string | null = null;
+	import { Box, Badge } from './'
 
-	const formatNew = (feature: string): string => `<b class="badge new">NEW</b>${feature}`;
+	type Message =  {endDate?: string, startDate?: string, type?: string, content: string}
 
-	const messages = [
+	let currentMessage: Message | null = null;
+
+	const messages: Message[] = [
 		{
 			endDate: '2024-06-07',
-			content: formatNew('Undo and redo with <kbd>ctrl z</kbd>, <kbd>ctrl y</kbd>, etc.')
+			type: "new",
+			content: 'Undo and redo with <kbd>ctrl z</kbd>, <kbd>ctrl y</kbd>, etc.'
 		},
 		{
 			endDate: '2024-06-18',
-			content: formatNew('Get a schedule in Spanish, Mandarin, or Haitian Creole.')
+			type: "new",
+			content: 'Get a schedule in Spanish, Mandarin, or Haitian Creole.'
 		},
 		{
 			endDate: '2024-06-27',
-			content: formatNew('Swahili and Arabic (both unverified!) now available.')
+			type: "new",
+			content: 'Swahili and Arabic (both unverified!) now available.'
 		},
 		{
 			content: "I hope you're having good day"
 		}
-	] as Message[];
+	];
 
 	function getCurrentMessage() {
 		const now = new Date();
 		const datelessMessages = [];
 
 		for (const message of messages) {
-			const { startDate, endDate, content } = message;
+			const { startDate, endDate } = message;
 
 			const start = startDate ? new Date(startDate) : null;
 			const end = endDate ? new Date(endDate) : null;
 
 			if ((!start || now >= start) && (!end || now <= end)) {
-				return content;
+				return message;
 			}
 
 			if (!start && !end) {
-				datelessMessages.push(content);
+				datelessMessages.push(message);
 			}
 		}
 
@@ -59,44 +64,47 @@
 		},
 		1000 * 60 * 60
 	);
+
+	$: conditionalStyles = (currentMessage) ? {
+		opacity: 1,
+		transform: "translateY(0) scale(1)" 
+	} : {};
+
+	const baseStyles = {
+	padding: "1rem 0",
+	color: "fgMuted",
+	minHeight: "2em",
+	transition: "all 3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+	transitionDelay: "1s",
+	position: "relative",
+	display: "flex",
+	alignItems: "baseline",
+	gap: "0.5em",
+	opacity: "0",
+	marginBottom: "1rem",
+	transform: "translateY(0) scale(0.96)",
+	_before: {
+		content: "''",
+		background: "fgMuted",
+		position: "absolute",
+		opacity: 0.1,
+		inset: "0.5rem -1rem",
+		borderRadius: "100rem",
+		zindex: -1,
+		pointerEvents: "none"
+	},
+}
+	
 </script>
 
-<p class={currentMessage ? 'message loaded' : 'message'}>{@html currentMessage}&nbsp;</p>
+<Box 
+	{...baseStyles}
+	{...conditionalStyles}
+	class="message"
+>
+{#if (currentMessage?.type) === "new"}
+	<Badge marginTop="-1em">New</Badge>
+{/if}
+	{@html currentMessage?.content}
+</Box>
 
-<style>
-	.message {
-		padding: 1rem 0;
-		color: var(--color-fg-muted);
-		min-height: 2em;
-		transition: all 3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-		transition-delay: 1s;
-		position: relative;
-		opacity: 0;
-		margin-bottom: 1rem;
-		transform: translateY(0) scale(0.985);
-
-		& .badge {
-			font-size: 0.8em;
-			margin-right: 1rem;
-			padding: 0.5rem 0;
-			opacity: 0.75;
-		}
-	}
-
-	.message.loaded {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
-
-	.message:before {
-		content: '';
-		background: var(--color-fg-muted);
-		border: 1px solid var(--color-fg-muted);
-		position: absolute;
-		opacity: 0.1;
-		inset: 0.5rem -1rem;
-		border-radius: 100rem;
-		z-index: -1;
-		pointer-events: none;
-	}
-</style>
