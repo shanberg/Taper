@@ -9,13 +9,14 @@
 	$: isOnlyRealSegment = segments.length === 2;
 	$: isPlaceholder = isSegmentPlaceholder(segment);
 	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
+	$: isLastSegment = index === segments.length - 1
 
-	function deleteSegmentAtIndex() {
+	function handleClickDelete() {
 		dispatch('removeSegment', index);
 	}
 </script>
 
-<div class="segment" class:isInvalid class:isPlaceholder>
+<div class="segment" class:isInvalid class:isPlaceholder class:isLastSegment>
 	<div class="dose">
 		<label for="dose-{index}">
 			<input
@@ -46,10 +47,10 @@
 		</label>
 	</div>
 	<button
-		{...isOnlyRealSegment ? { disabled: true } : {}}
+		{...(isLastSegment || isOnlyRealSegment) ? { disabled: true } : {}}
 		title="Remove this step"
 		class="remove-btn"
-		on:click={deleteSegmentAtIndex}>×</button
+		on:click={handleClickDelete}>×</button
 	>
 </div>
 
@@ -94,13 +95,13 @@
 	}
 
 	.remove-btn {
-		width: 1.5rem;
+		flex: 0 0 1.5rem;
 		height: 100%;
 		border: 0;
 		margin-left: 1px;
+		color: var(--color-fg-muted);
 		border-radius: var(--control-radius);
 		transition: all var(--control-transition-duration) ease-in-out;
-		color: inherit;
 		background: transparent;
 		cursor: pointer;
 		opacity: 0.25;
@@ -112,21 +113,13 @@
 		cursor: not-allowed;
 	}
 
-	/* hide remove button on last segment */
-
-	.segment:focus-within .remove-btn,
-	.segment:hover .remove-btn,
-	.remove-btn:focus {
-		outline: none;
+	.remove-btn:not(:disabled):where(:hover, :active) {
 		opacity: 1;
-	}
-
-	.segment.isPlaceholder .remove-btn,
-	.segment.isInvalid .remove-btn,
-	.remove-btn:hover:not(:disabled),
-	.remove-btn:focus:not(:disabled) {
-		opacity: 1;
-		color: var(--color-fg-error);
 		background: var(--color-status-error-bg-muted);
 	}
+
+	.isLastSegment .remove-btn {
+		visibility: hidden;
+	}
+
 </style>

@@ -56,7 +56,7 @@
 		overflow: clip;
 		background: var(--color-bg-form);
 		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.025);
-		width: 720px;
+		width: 820px;
 	}
 
 	.body {

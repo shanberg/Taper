@@ -36,7 +36,7 @@
 
 </script>
 
-<div class="row">
+<div class="row" class:isInvalid class:isSegmentPlaceholder>
   {#if !segmentIsOrAfterPlaceholder(segment, segments)}
     <AddSegmentButton
       on:addSegment={() => appStore.insertPlaceholderSegmentBeforeIndex(index)}
@@ -50,7 +50,7 @@
     on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
   />
   {#if !isLastPlaceholderSegment}
-    <span class:isInvalid class:isSegmentPlaceholder>
+    <span class="written-plan">
       {formatSegmentText({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage })}
     </span>
   {/if}
@@ -63,14 +63,20 @@
     gap: 1rem;
 	}
 
-	.isInvalid {
+	.written-plan {
+		padding-block: 0.25rem;
+	}
+
+	.isInvalid .written-plan{
 		color: var(--color-fg-error);
 	}
-	.isSegmentPlaceholder {
+	
+	.isSegmentPlaceholder .written-plan{
 		color: var(--color-fg-muted);
 	}
-	.isInvalid,
-	.isSegmentPlaceholder {
+
+	.isInvalid .written-plan,
+	.isSegmentPlaceholder .written-plan{
 		text-decoration: underline;
 		text-decoration-style: wavy;
 		text-decoration-skip-ink: none;
