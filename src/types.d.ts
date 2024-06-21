@@ -47,3 +47,19 @@ type InputStringDate = string & {
 type LocaleDate = string & {
 	__brand: 'LocaleDate';
 };
+
+type UnitType = "solid" | "liquid" | "inhalation" | "injection" & {
+	__brand: "UnitType"
+}
+
+type Unit = "mg" | "ml" & {
+	__brand: "Unit"
+}
+
+type Medication = {
+	name: string;
+	unitSizes: number[];
+	unitType: UnitType;
+	unit: "mg" | "ml";
+	__brand: "Medication"
+};
