@@ -2,9 +2,8 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { appStore } from '../stores';
 	import FormHeader from '../components/FormHeader.svelte';
-	import ScheduleList from '../components/ScheduleList.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
-	import { getLanguageFromKey, segmentIsOrAfterPlaceholder } from '../utils';
+	import { getLanguageFromKey } from '../utils';
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
