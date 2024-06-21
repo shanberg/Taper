@@ -61,5 +61,4 @@ type Medication = {
 	unitSizes: number[];
 	unitType: UnitType;
 	unit: "mg" | "ml";
-	__brand: "Medication"
 };
