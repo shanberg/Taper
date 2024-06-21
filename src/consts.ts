@@ -64,7 +64,7 @@ export const TEMPLATES: Record<string, Template[]> = {
 	]
 };
 
-export const PLACEHOLDER_ROW: Row = { dose: 0, daysForDose: 0 };
+export const DEFAULT_TEMPLATE_KEY: string = Object.keys(TEMPLATES)[0];
 
 export const LANGUAGES: Language[] = [
 	{ labelEn: 'English', lang: 'en-US', verified: true, dir: 'ltr' },
@@ -73,4 +73,8 @@ export const LANGUAGES: Language[] = [
 	{ labelEn: 'Haitian Creole', lang: 'ht', verified: false, dir: 'ltr' },
 	{ labelEn: 'Swahili', lang: 'sw', verified: false, dir: 'ltr' },
 	{ labelEn: 'Arabic', lang: 'ar', verified: false, dir: 'rtl' }
-]
+];
+
+export const DEFAULT_LANGUAGE_KEY: string = LANGUAGES[0].lang;
+
+export const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };

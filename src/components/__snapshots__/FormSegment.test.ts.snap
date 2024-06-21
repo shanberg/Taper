@@ -1,0 +1,60 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FormSegment > renders correctly 1`] = `
+<div>
+  <tr
+    class="segment svelte-ac0aco"
+  >
+    <td
+      class="dose"
+    >
+      <label
+        class="svelte-ac0aco"
+        for="dose-0"
+      >
+        <input
+          aria-label="dose-0"
+          class="svelte-ac0aco"
+          id="dose-0"
+          inputmode="decimal"
+          min="1"
+          pattern="[1-9]\\d*"
+          step="0.25"
+          type="number"
+        />
+      </label>
+    </td>
+     
+    <td
+      class="days"
+    >
+      <label
+        class="svelte-ac0aco"
+        for="days-0"
+      >
+        <input
+          aria-label="days-0"
+          class="svelte-ac0aco"
+          id="days-0"
+          inputmode="decimal"
+          min="1"
+          pattern="[1-9]\\d*"
+          type="number"
+        />
+      </label>
+    </td>
+     
+    <td
+      class="delete"
+    >
+      <button
+        class="remove-btn svelte-ac0aco"
+        disabled=""
+        title="Remove this step"
+      >
+        ×
+      </button>
+    </td>
+  </tr>
+</div>
+`;

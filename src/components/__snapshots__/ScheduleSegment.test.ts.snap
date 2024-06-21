@@ -3,9 +3,9 @@
 exports[`ScheduleSegment > renders correctly 1`] = `
 <div>
   <li
-    class="svelte-1hlpwdm"
+    class="svelte-1eqebjg"
   >
-    Segment 1: 1 dose(s) from Sat Jun 01 2024 to Wed Jun 05 2024
+    Segment 1: 1 dose(s) from 6/1/2024 to 6/5/2024
   </li>
   
 </div>
