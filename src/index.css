@@ -1,0 +1,10 @@
+@layer reset, base, tokens, recipes, utilities;
+
+@layer reset {
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+}

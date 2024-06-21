@@ -3,7 +3,7 @@
 	import FormSegment from './FormSegment.svelte';
 	import AddSegmentButton from './AddSegmentButton.svelte';
 	import { TaperDate } from '../TaperDate';
-	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText } from '../utils';
+	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText, cachedFormatDate } from '../utils';
 
   export let segments;
   export let segment;
@@ -13,6 +13,7 @@
 
 	let segmentStartDate: ScheduleDate;
 	let segmentEndDate: ScheduleDate;
+	let segmentDates: ScheduleDate[];
 
 	$: isSegmentPlaceholder = segment.dose === 0 && segment.daysForDose === 0;
 	$: isInvalid = !isSegmentPlaceholder && isSegmentInvalid(segment);
@@ -32,6 +33,14 @@
 
 		segmentStartDate = taperStartDate.toScheduleDate();
 		segmentEndDate = taperEndDate.toScheduleDate();
+
+    // Generate the array of dates for the checkboxes
+    segmentDates = [];
+    let currentDate = new TaperDate(segmentStartDate);
+    for (let i = 0; i < segment.daysForDose; i++) {
+        segmentDates.push(currentDate.toScheduleDate());
+        currentDate.incrementByDays(1);
+    }
 	}
 
 </script>
@@ -53,6 +62,17 @@
     <span class="written-plan">
       {formatSegmentText({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage })}
     </span>
+		<ul class="date-checkboxes">
+		{#each segmentDates as date}
+			<li>
+				<label>
+					<input type="checkbox" />
+					{segment.dose}mg on {cachedFormatDate(date, selectedLanguage.lang)}
+				</label>
+			</li>
+		{/each}
+	</ul>
+
   {/if}
 </div>
 
@@ -61,6 +81,21 @@
 		display: flex;
     position: relative;
     gap: 1rem;
+	}
+
+	.date-checkboxes {
+		list-style: none;
+		display: block;
+		padding: 0;
+		margin: 0;
+	}
+
+	.date-checkboxes li {
+		display: block;
+	}
+
+	label { 
+		display: contents;
 	}
 
 	.written-plan {

@@ -61,5 +61,8 @@ type Medication = {
 	unitSizes: number[];
 	unitType: UnitType;
 	unit: "mg" | "ml";
-	__brand: "Medication"
 };
+
+type InputType = 'color' | 'date' | 'datetime-local' | 'email' | 'file' | 'hidden' | 'image' | 'month' | 'number' | 'password' | 'reset' | 'submit' | 'tel' | 'text' | 'time' | 'url' | 'week' | 'search';
+type SelectOption = { disabled?: boolean; value: string; label: string } | { divider: true };
+

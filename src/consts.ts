@@ -85,69 +85,59 @@ export const MEDICATIONS: Medication[] = [
 		unitSizes: [1, 2.5, 5, 10, 20, 50],
 		unitType: "solid",
 		unit: "mg",
-		__brand: "Medication"
 	},
 	{
 		name: "Gabapentin",
 		unitSizes: [100, 300, 400, 600, 800],
 		unitType: "solid",
 		unit: "mg",
-		__brand: "Medication"
 	},
 	{
 		name: "Clonazepam",
 		unitSizes: [0.5, 1, 2],
 		unitType: "solid",
 		unit: "mg",
-		__brand: "Medication"
 	},
 	{
 		name: "Amitriptyline",
 		unitSizes: [10, 25, 50, 75, 100, 150],
 		unitType: "solid",
 		unit: "mg",
-		__brand: "Medication"
 	},
 	{
 		name: "Sertraline",
 		unitSizes: [25, 50, 100],
 		unitType: "solid",
 		unit: "mg",
-		__brand: "Medication"
 	},
 	{
 		name: "Venlafaxine",
 		unitSizes: [37.5, 75, 150, 225],
 		unitType: "solid",
 		unit: "mg",
-		__brand: "Medication"
 	},
 	{
 		name: "Hydrocortisone",
 		unitSizes: [5, 10, 20],
 		unitType: "solid",
 		unit: "mg",
-		__brand: "Medication"
 	},
 	{
 		name: "Diazepam",
 		unitSizes: [2, 5, 10],
 		unitType: "solid",
 		unit: "mg",
-		__brand: "Medication"
 	},
 	{
 		name: "Methadone",
 		unitSizes: [5, 10],
 		unitType: "liquid",
 		unit: "ml",
-		__brand: "Medication"
 	},
 	{
 		name: "Morphine",
 		unitSizes: [15, 30, 60, 100, 200],
 		unitType: "liquid",
 		unit: "mg",
-		__brand: "Medication"
 	}
 ]

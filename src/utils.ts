@@ -91,6 +91,7 @@ export const formatSegmentText = ({
 	return '';
 };
 
+
 const PLACEHOLDER_SEGMENT: Segment = { dose: 0, daysForDose: 0 };
 
 export function createInitialSchedule(): Schedule {

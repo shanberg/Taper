@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { LANGUAGES, TEMPLATES } from '../consts';
-	import Badge from './Badge.svelte';
 	import { getLanguageFromKey } from '../utils';
 	import { appStore } from '../stores';
+	import { HStack, VStack, Badge, DateInput, Select, FormControl, FormLabel } from './';
 
 	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);
 	const UNVERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => !language.verified);
@@ -40,73 +40,52 @@
 		const target = e.target as HTMLSelectElement;
 		appStore.changeLanguageKey(target.value);
 	};
+
+	const languageOptions: SelectOption[] = [
+		...VERIFIED_LANGUAGES.map(l => ({value: l.lang, label: l.labelEn})),
+		{divider: true},
+		{label: "Unverified languages", value: "Unverified languages", disabled: true}
+		, ...UNVERIFIED_LANGUAGES.map(l => ({value: l.lang, label: l.labelEn}))];
+
 </script>
 
-<header class="vstack">
-	<div class="hstack">
-		<label class="course-begins">
-			<span>Course begins</span>
-			<input
-				type="date"
+<VStack alignItems="stretch">
+	<HStack>
+		<FormControl paddingRight="1.5rem" class="course-begins" id="course-begins">
+			<FormLabel slot="label">Course begins</FormLabel>
+			<DateInput
+				id="course-begins"
 				value={startDateInputValue}
 				on:keydown={handleDateInputKeyDown}
 				on:change={handleChangeDate}
 			/>
-		</label>
+		</FormControl>
 
-		<label class="template">
-			<span>Template</span>
-			<select class="custom-select" value={selectedTemplateKey} on:change={handleChangeTemplateKey}>
-				{#each Object.keys(TEMPLATES) as template}
-					<option value={template}>{template}</option>
-				{/each}
-			</select>
-		</label>
+		<FormControl flex="1 1 100%" class="template" id="template">
+			<FormLabel slot="label">Template</FormLabel>
+			<Select
+				id="template"
+				value={selectedTemplateKey} 
+				on:change={handleChangeTemplateKey}
+				options={Object.keys(TEMPLATES).map(key => ({label: key, value: key}))}
+			/>
+		</FormControl>
 
-		<label class="language">
-			<span>
+		<FormControl flex="1 1 100%" class="language" id="language">
+			<FormLabel slot="label">
 				Language
 				{#if !selectedLanguageIsVerified}
 					<Badge>Unverified</Badge>
 				{/if}
-			</span>
-			<select
-				class="custom-select"
+			</FormLabel>
+			<Select
+				id="language"
+				isWarning={!selectedLanguageIsVerified}
 				value={selectedLanguage.lang}
-				class:warn={!selectedLanguageIsVerified}
 				on:change={handleChangeLanguage}
-			>
-				{#each VERIFIED_LANGUAGES as language}
-					<option value={language.lang}>{language.labelEn}</option>
-				{/each}
-				{#if UNVERIFIED_LANGUAGES.length > 0}
-					<hr />
-					<option disabled value="unverified">Unverified Languages</option>
-					{#each UNVERIFIED_LANGUAGES as language}
-						<option value={language.lang}>{language.labelEn}</option>
-					{/each}
-				{/if}
-			</select>
-		</label>
-	</div>
-</header>
+				options={languageOptions}
+			/>
+		</FormControl>
 
-<style>
-	header {
-		border-bottom: 1px solid var(--color-border);
-		padding: 1rem;
-	}
-
-	label.course-begins {
-		flex: 0 0 11.5rem;
-	}
-
-	label.course-begins {
-		padding-right: 1.5rem;
-	}
-
-	.template,
-	.language {
-		flex: 1 0 auto;
-	}
-</style>
+	</HStack>
+</VStack>

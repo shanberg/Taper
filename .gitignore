@@ -9,3 +9,7 @@ node_modules
 .vercel
 .output
 coverage/
+
+## Panda
+styled-system
+styled-system-studio

@@ -4,6 +4,8 @@
 	import FormHeader from '../components/FormHeader.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
 	import { getLanguageFromKey } from '../utils';
+	import { Box } from '../components';
+	import VStack from '../components/layout/VStack.svelte';
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
@@ -36,33 +38,22 @@
 	$: selectedLanguage = getLanguageFromKey($appStore.schedule.languageKey);
 	$: segments = $appStore.schedule.segments;
 	$: startDate = $appStore.schedule.startDate;
+
 </script>
 
-<main>
+<Box
+	background="bgForm"
+	borderRadius="page"
+	boxShadow="page"
+>
 	<FormHeader />
 
-	<div class="body">
+	<VStack
+		padding="1rem"
+		gap="1px"
+	>
 		{#each $appStore.schedule.segments as segment, index}
 			<ScheduleRow {segment} {index} {segments} {startDate} {selectedLanguage} />
 		{/each}
-	</div>
-</main>
-
-<style>
-	main {
-		display: flex;
-		flex-direction: column;
-		border-radius: calc(2 * var(--control-radius));
-		overflow: clip;
-		background: var(--color-bg-form);
-		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.025);
-		width: 820px;
-	}
-
-	.body {
-		display: flex;
-		flex-direction: column;
-		gap: 1px;
-		padding: 1rem;
-	}
-</style>
+	</VStack>
+</Box>

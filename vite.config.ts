@@ -7,7 +7,12 @@ const config: UserConfig = {
 		globals: true,
 		environment: 'jsdom',
 		setupFiles: './src/setupTests.js'
-	}
+	},
+	server: {
+		fs: {
+			allow: ['styled-system'],
+		},
+	},
 };
 
 export default config;
