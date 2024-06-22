@@ -114,15 +114,15 @@
 	}
 
 	label.course-begins {
-		padding-right: 1.5rem;
+		padding-right: 1rem;
 	}
 
 	.hstack {
 		align-items: flex-end;
 	}
 
-	.template,
-	.language {
-		flex: 1 0 auto;
+	.template {
+		flex: 1 1 auto;
 	}
+
 </style>
