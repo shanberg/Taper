@@ -62,13 +62,9 @@ export function createAppStore(): AppStore {
 
 				newSegments[index] = updatedSegment;
 
-				// console.log(newSegments, newSegments.some(s => isSegmentPlaceholder(s)))
-
 				if (!newSegments.some((s) => isSegmentPlaceholder(s))) {
 					newSegments = [...newSegments, { ...PLACEHOLDER_SEGMENT }];
 				}
-
-				// console.log(newSegments, newSegments.some(s => isSegmentPlaceholder(s)))
 
 				return { ...newState, schedule: { ...newState.schedule, segments: newSegments } };
 			}),
