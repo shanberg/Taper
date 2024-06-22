@@ -4,40 +4,41 @@ export const isSegmentInvalid = (segment: Segment): boolean => {
 
 /** Returns true if dose and daysForDose are both 0 */
 export const isSegmentPlaceholder = (segment: Segment): boolean => {
+  if (!segment) return false;
   return segment.dose === 0 && segment.daysForDose === 0;
 };
 
-export const sumScheduleDose = (segments: Segment[]): number => {
+export const sumSegmentsDose = (segments: Segment[]): number => {
   return segments.reduce((sum, segment) => sum + segment.dose * segment.daysForDose, 0);
 };
 
-export const sumScheduleDays = (segments: Segment[]): number => {
+export const sumSegmentsDays = (segments: Segment[]): number => {
   return (
-    segments.reduce((sum, segment) => sum + segment.daysForDose, 0) +
-    segments.length - 2
+    segments.reduce((sum, segment) => sum + segment.daysForDose, 0)
   );
 };
 
-export function isSegmentAfterPlaceholder(segment: Segment, segments: Segment[]) {
+export function isSegmentDirectlyAfterPlaceholder(segments: Segment[], index: number) {
+  const segment = segments[index]
   if (!segment) return false;
-  const thisSegmentIndex: number = segments.findIndex((s) => s === segment);
 
-  if (thisSegmentIndex === -1) {
+  if (index === -1) {
     return false;
   }
 
-  const prevSegment = segments[segments.indexOf(segment) - 1];
+  const prevSegment = segments[index - 1];
   if (!prevSegment) return false;
   return isSegmentPlaceholder(prevSegment);
 }
 
-export function segmentIsOrAfterPlaceholder(segment: Segment, segments: Segment[]) {
-  if (!segment) return false;
+export function segmentIsOrDirectlyAfterPlaceholder(segments: Segment[], index: number) {
+  const segment = segments[index]
 
+  if (!segment) return false;
   if (isSegmentPlaceholder(segment)) {
     return true;
   }
-  if (isSegmentAfterPlaceholder(segment, segments)) {
+  if (isSegmentDirectlyAfterPlaceholder(segments, index)) {
     return true;
   }
   return false;

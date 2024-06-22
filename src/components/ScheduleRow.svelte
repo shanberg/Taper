@@ -3,19 +3,18 @@
 	import FormSegment from './FormSegment.svelte';
 	import AddSegmentButton from './AddSegmentButton.svelte';
 	import { TaperDate } from '../TaperDate';
-	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText, calculateScheduleSummary } from '../utils';
+	import { segmentIsOrDirectlyAfterPlaceholder, isSegmentInvalid, formatSegmentText, calculateScheduleSummary } from '../utils';
 
 	export let schedule: Schedule;
-  export let index;
-  export let selectedLanguage;
-
-	const startDate = schedule.startDate;
-	const segments = schedule.segments;
-	const segment = schedule.segments[index];
-
+  export let index: number;
+  export let selectedLanguage: Language;
+	
 	let segmentStartDate: ScheduleDate;
 	let segmentEndDate: ScheduleDate;
-
+	
+	$: startDate = schedule.startDate;
+	$: segments = schedule.segments;
+	$: segment = schedule.segments[index];
 	$: isSegmentPlaceholder = segment.dose === 0 && segment.daysForDose === 0;
 	$: isInvalid = !isSegmentPlaceholder && isSegmentInvalid(segment);
 	$: isLastPlaceholderSegment = index === segments.length - 1 && isSegmentPlaceholder;
@@ -39,7 +38,7 @@
 </script>
 
 <div class="row" class:isInvalid class:isSegmentPlaceholder class:isLastPlaceholderSegment>
-  {#if !segmentIsOrAfterPlaceholder(segment, segments)}
+  {#if !segmentIsOrDirectlyAfterPlaceholder(segments, index)}
     <AddSegmentButton
       on:addSegment={() => appStore.insertPlaceholderSegmentBeforeIndex(index)}
     />
@@ -52,11 +51,11 @@
     on:change={(event) => appStore.editSegmentAtIndex(index, event.detail)}
   />
   {#if isLastPlaceholderSegment}
-    <span class="written-plan">
+    <span class="written-plan summary">
       {calculateScheduleSummary(schedule)}
     </span>
   {:else}
-    <span class="written-plan summary">
+    <span class="written-plan">
       {formatSegmentText({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage })}
     </span>
   {/if}

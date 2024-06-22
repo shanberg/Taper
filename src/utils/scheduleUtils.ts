@@ -1,6 +1,6 @@
 import { TaperDate } from '../TaperDate';
 import { TEMPLATES, DEFAULT_LANGUAGE_KEY, DEFAULT_TEMPLATE_KEY } from '../consts';
-import { sumScheduleDays, sumScheduleDose, isSegmentPlaceholder } from './segmentUtils';
+import { sumSegmentsDays, sumSegmentsDose, isSegmentPlaceholder } from './segmentUtils';
 import { formatSegmentText } from './textUtils';
 import { getLanguageFromKey } from './languageUtils';
 
@@ -16,7 +16,7 @@ export function createInitialSchedule(): Schedule {
 }
 
 export function calculateScheduleSummary(schedule: Schedule): string {
-  return `${sumScheduleDose(schedule.segments)}mg over ${sumScheduleDays(schedule.segments)} days`
+  return `${sumSegmentsDose(schedule.segments)}mg over ${sumSegmentsDays(schedule.segments)} days`
 };
 
 export function calculateSegmentStartAndEndDates(schedule: Schedule, index: number): SegmentWithStartEndDate {

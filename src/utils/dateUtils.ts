@@ -1,3 +1,5 @@
+import { TaperDate } from '../TaperDate';
+
 export const isDateThisYear = (date: ScheduleDate): boolean => {
   return date.getFullYear() === new Date().getFullYear();
 };
@@ -29,3 +31,23 @@ function createCachedFormatter() {
 
 // Create a cached version of formatDate
 export const cachedFormatDate = createCachedFormatter();
+
+
+export function calculateSegmentStartAndEndDates(schedule: Schedule, index: number): SegmentWithStartEndDate {
+  const segment = schedule.segments[index];
+  const taperStartDate = new TaperDate(schedule.startDate);
+  const totalDaysForStartDate =
+    schedule.segments
+      .slice(0, index)
+      .reduce((acc: number, curr: { daysForDose: number }) => acc + curr.daysForDose - 1, 0) +
+    index;
+  taperStartDate.incrementByDays(totalDaysForStartDate);
+  const taperEndDate = new TaperDate(taperStartDate.toScheduleDate());
+  taperEndDate.incrementByDays(segment.daysForDose - 1);
+
+  return {
+    segment,
+    segmentStartDate: taperStartDate.toScheduleDate(),
+    segmentEndDate: taperEndDate.toScheduleDate()
+  }
+}
