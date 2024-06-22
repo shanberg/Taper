@@ -19,7 +19,7 @@
 
 <style>
 h1, h2, h3, h4, h5 {
-  color: var(--color-text-primary);
+  color: var(--color-text-muted);
   font-size: var(--font-size-large);
 }
 </style>

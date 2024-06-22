@@ -9,5 +9,7 @@
 <style>
 a {
   color: var(--color-interaction-primary);
+  font-weight: var(--font-weight-interactive);
+  text-decoration: none;
 }
 </style>

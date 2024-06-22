@@ -8,7 +8,6 @@
     states: { open }
   } = createDialog({
     forceVisible: true,
-    defaultOpen: true
   });
 
   export const showDialog = () => open.set(true);
@@ -16,6 +15,7 @@
   export const toggleDialog = () => open.update(o => !o);
 </script>
 
+{#if open}
 <div use:melt={$portalled} class="container">
   <div use:melt={$overlay} class="overlay" 
     in:fade={{ duration: 500, easing: quintOut }}
@@ -33,6 +33,7 @@
     </main>
   </div>
 </div>
+{/if}
 
 <style>
 .container {
@@ -58,18 +59,14 @@
 .content {
   height: max-content;
   width: 32rem;
-  background: var(--color-bg-form);
+  background: var(--color-background-form);
   box-shadow: 0 0 1.5rem #00000011;
   border-radius: 1rem;
 }
 
 header {
   padding: 1rem;
-  border-bottom: 1px solid var(--color-border)
-}
-
-header h2 {
-  margin: 0;
+  border-bottom: 1px solid var(--color-separator-border)
 }
 
 main {

@@ -23,17 +23,33 @@
   }
 
   .button:not(:disabled) {
-    & :hover {
+    &:hover {
       background-color: var(--color-background-control-hover);
     }
 
-    & :active {
+    &:active {
       background-color: var(--color-background-control-active);
     }
 
-    & :focus-visible {
+    &:focus-visible {
       background-color: var(--color-background-control-focus);
     }
+  }
+
+  .buttonPrimary {
+    background: var(--color-interaction-primary);
+    color: #fff;
+  }
+
+  .buttonText {
+    padding: 0;
+    color: var(--color-text-muted);
+  }
+
+  .buttonText:not(:disabled),
+  .buttonText:not(:disabled):hover,
+  .buttonText:not(:disabled):active {
+    background: none;
   }
 
 
