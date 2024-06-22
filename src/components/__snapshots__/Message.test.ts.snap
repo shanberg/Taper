@@ -3,7 +3,7 @@
 exports[`Message > renders correctly 1`] = `
 <div>
   <p
-    class="message loaded svelte-qkthna"
+    class="message loaded svelte-kjmv12"
   >
     <b
       class="badge new"

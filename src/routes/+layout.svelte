@@ -1,7 +1,5 @@
 <script>
 	import { inject } from '@vercel/analytics';
-	import Message from '../components/Message.svelte';
-	import AboutAppButton from '../components/AboutAppButton.svelte';
 	import './styles.css';
 
 	const dev = process.env.NODE_ENV === 'development';
@@ -13,8 +11,7 @@
 </svelte:head>
 
 <div class="app">
-	<AboutAppButton />
-	<Message />
+	
 	<slot />
 </div>
 

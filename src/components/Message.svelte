@@ -72,7 +72,6 @@
 		transition-delay: 1s;
 		position: relative;
 		opacity: 0;
-		margin-bottom: 1rem;
 		transform: translateY(0) scale(0.985);
 
 		& .badge {
@@ -90,7 +89,7 @@
 
 	.message:before {
 		content: '';
-		background: var(--color-text-muted);
+		border: 1px solid var(--color-text-muted);
 		position: absolute;
 		opacity: 0.1;
 		inset: 0.5rem -1rem;
