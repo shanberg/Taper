@@ -22,6 +22,9 @@
 	--control-height: 32px;
 	--control-transition-duration: 0.15s;
 
+	/* interaction colors */
+	--color-interaction-main: blue;
+
 	/* status colors */
 	--color-status-warning: #f0ad4e;
 	--color-status-warning-contrast: #fff;
@@ -34,6 +37,12 @@
 
 /* Reset styles */
 @layer reset {
+
+	html,
+	body {
+		padding: 0;
+		margin: 0;
+	}
 
 	*,
 	*:before,
