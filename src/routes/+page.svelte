@@ -3,8 +3,11 @@
 	import { appStore } from '../stores';
 	import layout from '../styles/layout.module.css'
 	import FormHeader from '../components/FormHeader.svelte';
+	import Heading from '../components/Heading.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
+	import Message from '../components/Message.svelte';
 	import { getLanguageFromKey } from '../utils';
+	import AboutAppButton from '../components/AboutAppButton.svelte';
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
@@ -39,6 +42,11 @@
 </script>
 
 <main>
+	<header class="hstack">
+		<Heading level={1}>Taper</Heading>
+		<Message />
+		<AboutAppButton />
+	</header>
 	<FormHeader />
 	<div class="body">
 		<div class={`${layout.hstack} form-schedule-header`}><div class="dose">mg</div><div class="days">days</div><div class="schedule">Schedule</div></div>
@@ -65,12 +73,20 @@
 		}
 	}
 
+	.hstack {
+		align-self: stretch;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.25rem 1rem;
+		border-bottom: 1px solid var(--color-separator-border);
+	}
+
 	main {
 		display: flex;
 		flex-direction: column;
-		border-radius: calc(2 * var(--control-radius));
+		border-radius: calc(2 * var(--control-border-radius));
 		overflow: clip;
-		background: var(--color-bg-form);
+		background: var(--color-background-form);
 		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.025);
 		width: 820px;
 	}

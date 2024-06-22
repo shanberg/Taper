@@ -12,7 +12,7 @@
 
 <style>
 	:root {
-		--add-segment-button-height: calc((1 / 3) * var(--control-height));
+		--add-segment-button-height: calc((1 / 3) * var(--control-height-default));
 	}
 
 	button {
@@ -49,7 +49,7 @@
 			left: 0;
 			right: 0;
 			height: calc(var(--add-segment-button-height) * 0.25);
-			background-color: var(--color-fg-muted);
+			background-color: var(--color-text-muted);
 			transition: inherit;
 			transform: translateY(-50%) scaleY(0);
 			border-radius: 10px;

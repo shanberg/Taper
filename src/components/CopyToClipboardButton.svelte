@@ -34,7 +34,7 @@
   });
 </script>
 
-<button 
+<button
   class={styles.button}
   {disabled}
   bind:this={buttonElement}

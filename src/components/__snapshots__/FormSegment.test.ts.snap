@@ -3,18 +3,18 @@
 exports[`FormSegment > renders correctly 1`] = `
 <div>
   <div
-    class="segment svelte-fy0jdt"
+    class="segment svelte-1cu1d0k"
   >
     <div
-      class="dose svelte-fy0jdt"
+      class="dose svelte-1cu1d0k"
     >
       <label
-        class="svelte-fy0jdt"
+        class="svelte-1cu1d0k"
         for="dose-0"
       >
         <input
           aria-label="dose-0"
-          class="svelte-fy0jdt"
+          class="svelte-1cu1d0k"
           id="dose-0"
           inputmode="decimal"
           min="1"
@@ -26,15 +26,15 @@ exports[`FormSegment > renders correctly 1`] = `
     </div>
      
     <div
-      class="days svelte-fy0jdt"
+      class="days svelte-1cu1d0k"
     >
       <label
-        class="svelte-fy0jdt"
+        class="svelte-1cu1d0k"
         for="days-0"
       >
         <input
           aria-label="days-0"
-          class="svelte-fy0jdt"
+          class="svelte-1cu1d0k"
           id="days-0"
           inputmode="decimal"
           min="1"
@@ -45,7 +45,7 @@ exports[`FormSegment > renders correctly 1`] = `
     </div>
      
     <button
-      class="remove-btn svelte-fy0jdt"
+      class="remove-btn svelte-1cu1d0k"
       disabled=""
       title="Remove this step"
     >
