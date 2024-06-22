@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { LANGUAGES, TEMPLATES } from '../consts';
 	import Badge from './Badge.svelte';
-	import { getLanguageFromKey } from '../utils';
+	import CopyToClipboardButton from './CopyToClipboardButton.svelte';
+	import { getLanguageFromKey, getFormattedListForCopyPaste } from '../utils';
+	import forms from './forms.module.css'
 	import { appStore } from '../stores';
+	import FormSegment from './FormSegment.svelte';
 
 	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);
 	const UNVERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => !language.verified);
+	
+	$: schedule = $appStore.schedule;
 
 	// Date
 	$: startDateInputValue = $appStore.startDateInputValue;
@@ -17,6 +22,8 @@
 	$: selectedLanguageKey = $appStore.schedule.languageKey;
 	$: selectedLanguage = getLanguageFromKey(selectedLanguageKey);
 	$: selectedLanguageIsVerified = selectedLanguage.verified;
+	$: copyableText = getFormattedListForCopyPaste(schedule);
+
 
 	// event handlers
 	const handleChangeDate = (e: Event) => {
@@ -56,7 +63,7 @@
 
 		<label class="template">
 			<span>Template</span>
-			<select class="custom-select" value={selectedTemplateKey} on:change={handleChangeTemplateKey}>
+			<select class={forms.input} value={selectedTemplateKey} on:change={handleChangeTemplateKey}>
 				{#each Object.keys(TEMPLATES) as template}
 					<option value={template}>{template}</option>
 				{/each}
@@ -88,6 +95,8 @@
 				{/if}
 			</select>
 		</label>
+
+		<CopyToClipboardButton textToCopy={copyableText} />
 	</div>
 </header>
 
@@ -103,6 +112,10 @@
 
 	label.course-begins {
 		padding-right: 1.5rem;
+	}
+
+	.hstack {
+		align-items: flex-end;
 	}
 
 	.template,

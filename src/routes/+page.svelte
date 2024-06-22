@@ -4,9 +4,7 @@
 	import layout from '../styles/layout.module.css'
 	import FormHeader from '../components/FormHeader.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
-	import CopyToClipboardButton from '../components/CopyToClipboardButton.svelte';
-	import { getFormattedListForCopyPaste, getLanguageFromKey } from '../utils';
-	import FormToolbar from '../components/FormToolbar.svelte';
+	import { getLanguageFromKey } from '../utils';
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
@@ -38,15 +36,10 @@
 
 	$: schedule = $appStore.schedule;
 	$: selectedLanguage = getLanguageFromKey(schedule.languageKey);
-	$: copyableText = getFormattedListForCopyPaste(schedule);
 </script>
 
 <main>
 	<FormHeader />
-	<FormToolbar>
-		<CopyToClipboardButton textToCopy={copyableText} />
-	</FormToolbar>
-
 	<div class="body">
 		<div class={`${layout.hstack} form-schedule-header`}><div class="dose">mg</div><div class="days">days</div><div class="schedule">Schedule</div></div>
 		{#each schedule.segments as _, index}
@@ -58,12 +51,17 @@
 <style>
 	.form-schedule-header {
 		font-weight: bold;
+		gap: 0;
+		padding-block-end: 0.25rem;
 
 		& .dose {
-			width: 5rem;
+			width: 5.5rem;
 		}
 		& .days {
-			width: 6rem;
+			width: 5.5rem;
+		}
+		& .schedule {
+			margin-left: 2rem;
 		}
 	}
 
