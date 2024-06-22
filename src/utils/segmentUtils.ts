@@ -31,7 +31,7 @@ export function isSegmentDirectlyAfterPlaceholder(segments: Segment[], index: nu
   return isSegmentPlaceholder(prevSegment);
 }
 
-export function segmentIsOrDirectlyAfterPlaceholder(segments: Segment[], index: number) {
+export function segmentIsOrAfterPlaceholder(segments: Segment[], index: number) {
   const segment = segments[index]
 
   if (!segment) return false;

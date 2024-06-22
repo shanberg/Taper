@@ -3,7 +3,7 @@
 	import FormSegment from './FormSegment.svelte';
 	import AddSegmentButton from './AddSegmentButton.svelte';
 	import { TaperDate } from '../TaperDate';
-	import { segmentIsOrDirectlyAfterPlaceholder, isSegmentInvalid, formatSegmentText, calculateScheduleSummary } from '../utils';
+	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText, calculateScheduleSummary } from '../utils';
 
 	export let schedule: Schedule;
   export let index: number;
@@ -38,7 +38,7 @@
 </script>
 
 <div class="row" class:isInvalid class:isSegmentPlaceholder class:isLastPlaceholderSegment>
-  {#if !segmentIsOrDirectlyAfterPlaceholder(segments, index)}
+  {#if !segmentIsOrAfterPlaceholder(segments, index)}
     <AddSegmentButton
       on:addSegment={() => appStore.insertPlaceholderSegmentBeforeIndex(index)}
     />
@@ -65,7 +65,7 @@
 	.row {
 		display: flex;
     position: relative;
-    gap: 1rem;
+    gap: 0.5rem;
 	}
 
 	.written-plan {

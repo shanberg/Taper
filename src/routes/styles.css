@@ -20,7 +20,7 @@
 	--color-bg-control: #e0e8ef;
 	--control-radius: 0.35rem;
 	--control-height: 32px;
-	--control-transition-duration: 0.1s;
+	--control-transition-duration: 0.15s;
 
 	/* status colors */
 	--color-status-warning: #f0ad4e;

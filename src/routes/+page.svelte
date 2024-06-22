@@ -51,14 +51,14 @@
 <style>
 	.form-schedule-header {
 		font-weight: bold;
-		gap: 0;
+		gap: 1px;
 		padding-block-end: 0.25rem;
 
 		& .dose {
-			width: 5.5rem;
+			width: 5.25rem;
 		}
 		& .days {
-			width: 5.5rem;
+			width: 5.25rem;
 		}
 		& .schedule {
 			margin-left: 2rem;

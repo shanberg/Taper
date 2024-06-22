@@ -12,7 +12,7 @@
 
 <style>
 	:root {
-		--add-segment-button-height: calc((1 / 5) * var(--control-height));
+		--add-segment-button-height: calc((1 / 3) * var(--control-height));
 	}
 
 	button {
@@ -20,7 +20,7 @@
 		cursor: cell;
 		appearance: none;
 		border: 0;
-		width: calc(12rem - 1.5rem);
+		width: calc(12rem - 1.5rem - 2px);
 		height: 0;
 		z-index: 10;
 		left: 0;
@@ -48,8 +48,8 @@
 			top: 50%;
 			left: 0;
 			right: 0;
-			height: var(--add-segment-button-height);
-			background-color: var(--color-fg);
+			height: calc(var(--add-segment-button-height) * 0.25);
+			background-color: var(--color-fg-muted);
 			transition: inherit;
 			transform: translateY(-50%) scaleY(0);
 			border-radius: 10px;
@@ -62,7 +62,6 @@
 		outline: none;
 
 		&:after {
-			background-color: var(--color-fg);
 			opacity: 1;
 			transform: translateY(-50%) scaleY(1);
 		}
