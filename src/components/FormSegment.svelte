@@ -86,11 +86,12 @@
 		}
 	}
 
-	.isInvalid td input {
+	.isInvalid input {
 		background: var(--color-status-error-bg);
+		color: var(--color-status-error);
 	}
 
-	.isInvalid:focus-within td input {
+	.isInvalid:focus-within input {
 		background: var(--color-status-error-bg-muted);
 	}
 

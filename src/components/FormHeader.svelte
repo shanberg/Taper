@@ -2,24 +2,25 @@
 	import { LANGUAGES, TEMPLATES } from '../consts';
 	import Badge from './Badge.svelte';
 	import CopyToClipboardButton from './CopyToClipboardButton.svelte';
-	import { getLanguageFromKey, getFormattedListForCopyPaste } from '../utils';
+	import { getLanguageFromKey, getFormattedListForCopyPaste, isValidSchedule } from '../utils';
 	import forms from './forms.module.css'
 	import { appStore } from '../stores';
-	import FormSegment from './FormSegment.svelte';
 
 	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);
 	const UNVERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => !language.verified);
 	
 	$: schedule = $appStore.schedule;
+	$: isScheduleValid = isValidSchedule(schedule);
 
 	// Date
 	$: startDateInputValue = $appStore.startDateInputValue;
 
 	// Template
-	$: selectedTemplateKey = $appStore.schedule.templateKey;
+	$: selectedTemplateKey = schedule.templateKey;
 
 	// Language
-	$: selectedLanguageKey = $appStore.schedule.languageKey;
+	// $: selectedLanguageKey = $appStore.schedule.languageKey;
+	$: selectedLanguageKey = schedule.languageKey;
 	$: selectedLanguage = getLanguageFromKey(selectedLanguageKey);
 	$: selectedLanguageIsVerified = selectedLanguage.verified;
 	$: copyableText = getFormattedListForCopyPaste(schedule);
@@ -96,7 +97,9 @@
 			</select>
 		</label>
 
-		<CopyToClipboardButton textToCopy={copyableText} />
+		<CopyToClipboardButton 
+			disabled={!isScheduleValid}
+		textToCopy={copyableText} />
 	</div>
 </header>
 

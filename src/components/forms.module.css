@@ -22,17 +22,20 @@
     --color-bg-control-active: hsl(from var(--color-bg-control) h s l / 50%);
   }
 
-  .button:hover {
-    background-color: var(--color-bg-control-hover);
+  .button:not(:disabled) {
+    & :hover {
+      background-color: var(--color-bg-control-hover);
+    }
+
+    & :active {
+      background-color: var(--color-bg-control-active);
+    }
+
+    & :focus-visible {
+      background-color: var(--color-bg-control-focus);
+    }
   }
 
-  .button:active {
-    background-color: var(--color-bg-control-active);
-  }
-
-  .button:focus-visible {
-    background-color: var(--color-bg-control-focus);
-  }
 
   :where(.button):focus-visible {
     z-index: 1;

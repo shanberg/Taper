@@ -73,16 +73,20 @@
 	}
 
 	.isInvalid .written-plan{
-		color: var(--color-fg-error);
+		color: var(--color-status-error);
 	}
 	
 	.isSegmentPlaceholder .written-plan{
 		color: var(--color-fg-muted);
 	}
 
-	.written-plan:not(.isLastPlaceholderSegment):where(.isInvalid, .isSegmentPlaceholder) {
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-skip-ink: none;
+	:where(.isInvalid, .isSegmentPlaceholder):not(.isLastPlaceholderSegment) {
+		& .written-plan {
+			text-decoration: underline;
+			text-decoration-style: wavy;
+			text-decoration-skip-ink: none;
+			text-decoration-thickness: 1px;
+			text-underline-offset: 4px;
+		}
 	}
 </style>

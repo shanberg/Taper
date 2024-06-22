@@ -1,6 +1,6 @@
 import { TaperDate } from '../TaperDate';
 import { TEMPLATES, DEFAULT_LANGUAGE_KEY, DEFAULT_TEMPLATE_KEY } from '../consts';
-import { sumSegmentsDays, sumSegmentsDose, isSegmentPlaceholder } from './segmentUtils';
+import { isSegmentInvalid, sumSegmentsDays, sumSegmentsDose, isSegmentPlaceholder } from './segmentUtils';
 import { formatSegmentText } from './textUtils';
 import { getLanguageFromKey } from './languageUtils';
 
@@ -13,6 +13,13 @@ export function createInitialSchedule(): Schedule {
     templateKey: DEFAULT_TEMPLATE_KEY,
     languageKey: DEFAULT_LANGUAGE_KEY
   };
+}
+
+export function isValidSchedule(schedule: Schedule): boolean {
+  if (!schedule) {
+    throw new Error("No schedule provided");
+  }
+  return !schedule.segments.slice(0, schedule.segments.length - 1).some(s => isSegmentInvalid(s));
 }
 
 export function calculateScheduleSummary(schedule: Schedule): string {
