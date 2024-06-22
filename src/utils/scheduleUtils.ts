@@ -11,7 +11,8 @@ export function createInitialSchedule(): Schedule {
     segments: [...TEMPLATES.Default, PLACEHOLDER_SEGMENT],
     startDate: new TaperDate().toScheduleDate(),
     templateKey: DEFAULT_TEMPLATE_KEY,
-    languageKey: DEFAULT_LANGUAGE_KEY
+    languageKey: DEFAULT_LANGUAGE_KEY,
+    displayMode: "segments"
   };
 }
 

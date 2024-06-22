@@ -1,3 +1,5 @@
+import { TaperDate } from '../TaperDate';
+
 export const isSegmentInvalid = (segment: Segment): boolean => {
   return segment.dose <= 0 || segment.daysForDose <= 0;
 };
@@ -42,4 +44,20 @@ export function segmentIsOrAfterPlaceholder(segments: Segment[], index: number) 
     return true;
   }
   return false;
+}
+
+export function getDaysWithDosesForSegment(segment: Segment, startDate: Date): DayWithDose[] {
+  const daysWithDoses: DayWithDose[] = [];
+  let currentDate = new Date(startDate);
+
+  for (let i = 0; i < segment.daysForDose; i++) {
+    daysWithDoses.push({
+      date: new TaperDate(currentDate).toScheduleDate(),
+      dose: segment.dose,
+    });
+    // Move to the next day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return daysWithDoses;
 }

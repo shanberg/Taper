@@ -16,7 +16,7 @@
   })
 </script>
  
-<Button variant="text" use={trigger}>About <FilledSymbolsInfo class="icon" /></Button>
+<Button variant="text" {...$trigger} action={trigger}>About <FilledSymbolsInfo class="icon" /></Button>
 
 {#if $open}
   <div use:melt={$portalled} class="container">

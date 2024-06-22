@@ -22,6 +22,7 @@ export type AppStore = Writable<AppState> & {
 	editSegmentAtIndex: (index: number, updatedSegment: Segment) => void;
 	changeStartDate: (newDate: ScheduleDate | InputStringDate) => void;
 	changeLanguageKey: (newLanguageKey: string) => void;
+	changeDisplayMode: (newDisplayMode: DisplayMode) => void;
 	insertPlaceholderSegmentBeforeIndex: (index: number) => void;
 	switchTemplate: (newTemplateKey: string) => void;
 	deleteSegmentAtIndex: (index: number) => void;
@@ -85,6 +86,15 @@ export function createAppStore(): AppStore {
 				return {
 					...newState,
 					schedule: { ...newState.schedule, languageKey: newLanguageKey }
+				};
+			});
+		},
+		changeDisplayMode: (newDisplayMode: DisplayMode): void => {
+			update((state) => {
+				const newState = _saveScheduleForUndo(state);
+				return {
+					...newState,
+					schedule: { ...newState.schedule, displayMode: newDisplayMode }
 				};
 			});
 		},

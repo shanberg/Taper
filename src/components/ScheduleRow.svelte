@@ -3,21 +3,27 @@
 	import FormSegment from './FormSegment.svelte';
 	import AddSegmentButton from './AddSegmentButton.svelte';
 	import { TaperDate } from '../TaperDate';
-	import { segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText, calculateScheduleSummary } from '../utils';
+	import { getDaysWithDosesForSegment, segmentIsOrAfterPlaceholder, isSegmentInvalid, formatSegmentText, calculateScheduleSummary } from '../utils';
+	import List from './List.svelte';
+	import ListItem from './ListItem.svelte';
 
 	export let schedule: Schedule;
   export let index: number;
+  export let showDaysForDose: boolean = true;
   export let selectedLanguage: Language;
 	
 	let segmentStartDate: ScheduleDate;
 	let segmentEndDate: ScheduleDate;
 	
+	$: displayMode = schedule.displayMode;
 	$: startDate = schedule.startDate;
 	$: segments = schedule.segments;
 	$: segment = schedule.segments[index];
 	$: isSegmentPlaceholder = segment.dose === 0 && segment.daysForDose === 0;
 	$: isInvalid = !isSegmentPlaceholder && isSegmentInvalid(segment);
 	$: isLastPlaceholderSegment = index === segments.length - 1 && isSegmentPlaceholder;
+
+	$: daysForDose = getDaysWithDosesForSegment(segment, startDate);
 
 	// Calculate the start and end dates
 	$: {
@@ -61,11 +67,26 @@
   {/if}
 </div>
 
+{#if displayMode === "doses"}
+<div class="spacer">
+<List>
+{#each daysForDose as day, index}
+	<ListItem>Take {day.dose}mg on {new TaperDate(day.date).toYYYYMMDD()}</ListItem>	
+{/each}
+</List>
+</div>
+{/if}
+
 <style>
 	.row {
 		display: flex;
     position: relative;
     gap: 0.5rem;
+	}
+
+	.spacer {
+		padding-left: 13rem;
+		color: var(--color-text-muted);
 	}
 
 	.written-plan {

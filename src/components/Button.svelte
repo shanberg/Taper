@@ -1,20 +1,21 @@
 <script lang="ts">
+  import type { Action } from 'svelte/action';
+  export let action: Action
   import styles from "./forms.module.css";
-  export let use: Function = () => {}
   export let thisElement = null
   export let variant = 'secondary'
 </script>
 
 <button 
-{...$$restProps} 
+use:action
 class={[
-(variant === "primary") && styles.buttonPrimary,
-(variant === "text") && styles.buttonText,
-styles.button
+  (variant === "primary") && styles.buttonPrimary,
+  (variant === "text") && styles.buttonText,
+  styles.button
 ].filter(Boolean).join(" ")}
-use:use
 on:click
 bind:this={thisElement}
+{...$$restProps} 
 >
   <slot />
 </button>

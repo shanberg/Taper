@@ -18,6 +18,9 @@
 	// Template
 	$: selectedTemplateKey = schedule.templateKey;
 
+	// Template
+	$: selectedDisplayMode = schedule.displayMode;
+
 	// Language
 	// $: selectedLanguageKey = $appStore.schedule.languageKey;
 	$: selectedLanguageKey = schedule.languageKey;
@@ -35,6 +38,11 @@
 	const handleChangeTemplateKey = (e: Event) => {
 		const target = e.target as HTMLInputElement;
 		appStore.switchTemplate(target.value);
+	};
+
+	const handleChangeDisplayMode = (e: Event) => {
+		const target = e.target as HTMLInputElement;
+		appStore.changeDisplayMode(target.value as DisplayMode);
 	};
 
 	const handleDateInputKeyDown = (e: KeyboardEvent) => {
@@ -68,6 +76,15 @@
 				{#each Object.keys(TEMPLATES) as template}
 					<option value={template}>{template}</option>
 				{/each}
+			</select>
+		</label>
+
+		<label class="displaymode">
+			<span>Display Mode</span>
+			<select class={forms.input} value={selectedDisplayMode} on:change={handleChangeDisplayMode}>
+					<option value="segments">Segments</option>
+					<option value="calendar">Calendar</option>
+					<option value="doses">Doss</option>
 			</select>
 		</label>
 

@@ -3,17 +3,25 @@ type Segment = {
 	daysForDose: number;
 };
 
+type DayWithDose = {
+	date: ScheduleDate;
+	dose: number;
+};
+
 type SegmentWithStartEndDate = {
 	segment: Segment;
 	segmentStartDate: ScheduleDate;
 	segmentEndDate: ScheduleDate;
 };
 
+type DisplayMode = "calendar" | "doses" | "segments"
+
 type Schedule = {
 	segments: Segment[];
 	startDate: ScheduleDate;
 	templateKey: string;
 	languageKey: string;
+	displayMode: DisplayMode;
 };
 
 type SerializedSchedule = string & {
