@@ -1,37 +1,40 @@
-@layer reset, base, utilities, components;
-
 :root {
-	/* typography */
-	--font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-		'Open Sans', 'Helvetica Neue', sans-serif;
-	--font-size-lg: 32px;
-	--font-size-md: 16px;
+	/* Typography */
+	--font-family-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	--font-size-large: 32px;
+	--font-size-medium: 16px;
 	--font-weight-heading: 600;
 	--font-weight-interactive: 500;
 
-	/* color */
-	--color-fg: #2b3a42;
-	--color-fg-muted: #7a8a99;
-	--color-border: #d1dde6;
-	--color-bg: #e6eef4;
+	/* / Text Colors / */
+	--color-text-primary: oklch(34% 0.03 230);
+	--color-text-muted: oklch(62% 0.03 230);
 
-	/* form colors */
-	--color-bg-form: #f9f9fb;
-	--color-bg-control: #e0e8ef;
-	--control-radius: 0.35rem;
-	--control-height: 32px;
+	/* / Border Colors / */
+	--color-separator-border: oklch(90% 0.02 240);
+
+	/* / Background Colors / */
+	--color-background-default: oklch(95% 0.01 240);
+	--color-background-form: oklch(98% 0.003 290);
+	--color-background-control: oklch(93% 0.01 240);
+
+	/* / Control Styles / */
+	--control-border-radius: 0.35rem;
+	--control-height-default: 32px;
 	--control-transition-duration: 0.15s;
 
-	/* interaction colors */
-	--color-interaction-main: blue;
+	/* / Interaction Colors / */
+	--color-interaction-primary: oklch(60.48% 0.216 257.213);
+	--color-interaction-hover: oklch(46.75% 0.163 256.695);
+	--color-interaction-active: oklch(38.03% 0.129 255.92);
+	--color-interaction-disabled: oklch(82.9% 0.014 248);
 
-	/* status colors */
-	--color-status-warning: #f0ad4e;
-	--color-status-warning-contrast: #fff;
-
-	--color-status-error: #d9534f;
-	--color-status-error-contrast: #f2dede;
-	--color-status-error-bg-muted: rgba(210, 83, 79, 0.05);
+	/* / Status Colors / */
+	--color-status-warning: oklch(79.39% 0.135 72.97);
+	--color-status-warning-contrast: oklch(100% 0 0);
+	--color-status-error: oklch(61.92% 0.169 25.05);
+	--color-status-error-contrast: oklch(91.68% 0.022 17.56);
+	--color-status-error-background-muted: oklch(91.68% 0.022 17.56 / 0.05);
 }
 
 
@@ -54,6 +57,16 @@
 		line-height: 1.5;
 		margin: unset;
 	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-size: var(--font-size-medium);
+		margin: 0;
+	}
 }
 
 /* Base styles */
@@ -65,12 +78,12 @@
 		display: flex;
 		align-items: flex-start;
 		justify-content: center;
-		font-size: var(--font-size-md);
+		font-size: var(--font-size-medium);
 		unicode-bidi: embed;
-		font-family: var(--font-body);
+		font-family: var(--font-family-body);
 		line-height: 1.5;
-		color: var(--color-fg);
-		background-color: var(--color-bg);
+		color: var(--color-text-primary);
+		background-color: var(--color-background-default);
 	}
 }
 
@@ -95,17 +108,17 @@
 
 	select,
 	input {
-		font-family: var(--font-body);
-		font-size: var(--font-size-md);
-		background: var(--color-bg-control);
-		border-radius: var(--control-radius);
+		font-family: var(--font-family-body);
+		font-size: var(--font-size-medium);
+		background: var(--color-background-control);
+		border-radius: var(--control-border-radius);
 		border: none;
 		width: 100%;
 		padding: 0 0.5rem;
-		height: var(--control-height);
-		max-height: var(--control-height);
-		min-height: var(--control-height);
-		line-height: var(--control-height);
+		height: var(--control-height-default);
+		max-height: var(--control-height-default);
+		min-height: var(--control-height-default);
+		line-height: var(--control-height-default);
 		color: inherit;
 		outline: none;
 		position: relative;
@@ -114,8 +127,8 @@
 	:where(select, input):focus-visible {
 		z-index: 1;
 		box-shadow:
-			inset 0 0 0 1px var(--color-fg),
-			0 0 0 1px var(--color-fg);
+			inset 0 0 0 1px var(--color-text-primary),
+			0 0 0 1px var(--color-text-primary);
 	}
 
 	:where(select, input).warn {
@@ -145,14 +158,14 @@
 
 		& input {
 			width: 100%;
-			border-radius: var(--control-radius);
+			border-radius: var(--control-border-radius);
 		}
 	}
 
 
 	kbd {
 		color: inherit;
-		border-radius: var(--control-radius);
+		border-radius: var(--control-border-radius);
 		position: relative;
 		text-transform: uppercase;
 		letter-spacing: 0.1ch;
