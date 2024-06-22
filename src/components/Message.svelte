@@ -66,7 +66,7 @@
 <style>
 	.message {
 		padding: 1rem 0;
-		color: var(--color-fg-muted);
+		color: var(--color-text-muted);
 		min-height: 2em;
 		transition: all 3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		transition-delay: 1s;
@@ -90,8 +90,7 @@
 
 	.message:before {
 		content: '';
-		background: var(--color-fg-muted);
-		border: 1px solid var(--color-fg-muted);
+		background: var(--color-text-muted);
 		position: absolute;
 		opacity: 0.1;
 		inset: 0.5rem -1rem;

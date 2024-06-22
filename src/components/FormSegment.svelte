@@ -78,7 +78,7 @@
 	}
 
 	.isPlaceholder {
-		color: var(--color-fg-muted);
+		color: var(--color-text-muted);
 		user-select: none;
 
 		& input {
@@ -92,7 +92,7 @@
 	}
 
 	.isInvalid:focus-within input {
-		background: var(--color-status-error-bg-muted);
+		background: var(--color-status-error-background-muted);
 	}
 
 	.remove-btn {
@@ -100,8 +100,8 @@
 		height: 100%;
 		border: 0;
 		margin-left: 1px;
-		color: var(--color-fg-muted);
-		border-radius: var(--control-radius);
+		color: var(--color-text-muted);
+		border-radius: var(--control-border-radius);
 		transition: all var(--control-transition-duration) ease-in-out;
 		background: transparent;
 		cursor: pointer;
@@ -116,7 +116,7 @@
 
 	.remove-btn:not(:disabled):where(:hover, :active) {
 		opacity: 1;
-		background: var(--color-status-error-bg-muted);
+		background: var(--color-status-error-background-muted);
 	}
 
 	.isLastSegment .remove-btn {

@@ -77,7 +77,7 @@
 	}
 	
 	.isSegmentPlaceholder .written-plan{
-		color: var(--color-fg-muted);
+		color: var(--color-text-muted);
 	}
 
 	:where(.isInvalid, .isSegmentPlaceholder):not(.isLastPlaceholderSegment) {

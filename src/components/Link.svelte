@@ -8,6 +8,6 @@
 
 <style>
 a {
-  color: var(--color-interaction-main);
+  color: var(--color-interaction-primary);
 }
 </style>

@@ -7,6 +7,6 @@
 
 <style>
   li::marker {
-    color: var(--color-fg-muted);
+    color: var(--color-text-muted);
   }
 </style>
