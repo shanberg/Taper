@@ -12,20 +12,34 @@
 
 <style>
 	:root {
-		--add-segment-button-height: calc((1 / 7) * var(--control-height));
+		--add-segment-button-height: calc((1 / 3) * var(--control-height));
 	}
 
 	button {
-		height: 100%;
-		width: 100%;
 		background-color: transparent;
 		cursor: cell;
+		appearance: none;
 		border: 0;
+		width: calc(12rem - 1.5rem - 2px);
 		height: 0;
-		margin: calc((1 / 2) * var(--control-height) * -1) 0;
 		z-index: 10;
-		position: relative;
+		left: 0;
+		top: -1.5px;
+		z-index: 10;
+		position: absolute;
 		transition: all var(--control-transition-duration) cubic-bezier(0.165, 0.84, 0.44, 1);
+
+		&:before {
+			content: '';
+			display: block;
+			position: absolute;
+			top: 50%;
+			left: 0;
+			right: 0;
+			height: var(--add-segment-button-height);
+			transform: translateY(-50%);
+			opacity: 0;
+		}
 
 		&:after {
 			content: '';
@@ -34,8 +48,8 @@
 			top: 50%;
 			left: 0;
 			right: 0;
-			height: var(--add-segment-button-height);
-			background-color: var(--color-fg);
+			height: calc(var(--add-segment-button-height) * 0.25);
+			background-color: var(--color-fg-muted);
 			transition: inherit;
 			transform: translateY(-50%) scaleY(0);
 			border-radius: 10px;
@@ -48,7 +62,6 @@
 		outline: none;
 
 		&:after {
-			background-color: var(--color-fg);
 			opacity: 1;
 			transform: translateY(-50%) scaleY(1);
 		}

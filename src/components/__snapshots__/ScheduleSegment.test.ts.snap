@@ -2,11 +2,11 @@
 
 exports[`ScheduleSegment > renders correctly 1`] = `
 <div>
-  <li
+  <span
     class="svelte-1eqebjg"
   >
     Segment 1: 1 dose(s) from 6/1/2024 to 6/5/2024
-  </li>
+  </span>
   
 </div>
 `;

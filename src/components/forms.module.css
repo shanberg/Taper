@@ -1,0 +1,67 @@
+@layer component {
+  .button {
+    font-family: var(--font-body);
+    font-size: var(--font-size-md);
+    background-color: var(--color-bg-control);
+    border-radius: var(--control-radius);
+    font-weight: var(--font-weight-interactive);
+    border: none;
+    width: max-content;
+    flex-basis: max-content;
+    flex-grow: 0;
+    padding: 0 0.5rem;
+    height: var(--control-height);
+    max-height: var(--control-height);
+    min-height: var(--control-height);
+    line-height: var(--control-height);
+    color: inherit;
+    outline: none;
+    position: relative;
+    --color-bg-control-hover: hsl(from var(--color-bg-control) h s l / 90%);
+    --color-bg-control-focus: hsl(from var(--color-bg-control) h s l / 40%);
+    --color-bg-control-active: hsl(from var(--color-bg-control) h s l / 50%);
+  }
+
+  .button:not(:disabled) {
+    & :hover {
+      background-color: var(--color-bg-control-hover);
+    }
+
+    & :active {
+      background-color: var(--color-bg-control-active);
+    }
+
+    & :focus-visible {
+      background-color: var(--color-bg-control-focus);
+    }
+  }
+
+
+  :where(.button):focus-visible {
+    z-index: 1;
+    box-shadow:
+      inset 0 0 0 1px var(--color-fg),
+      0 0 0 1px var(--color-fg);
+  }
+
+  .input {
+    font-family: var(--font-body);
+    font-size: var(--font-size-md);
+    background-color: var(--color-bg-control);
+    border-radius: var(--control-radius);
+    font-weight: var(--font-weight-interactive);
+    border: none;
+    width: 100%;
+    padding: 0 0.5rem;
+    height: var(--control-height);
+    max-height: var(--control-height);
+    min-height: var(--control-height);
+    line-height: var(--control-height);
+    color: inherit;
+    outline: none;
+    position: relative;
+    --color-bg-control-hover: hsl(from var(--color-bg-control) h s l / 90%);
+    --color-bg-control-focus: hsl(from var(--color-bg-control) h s l / 40%);
+    --color-bg-control-active: hsl(from var(--color-bg-control) h s l / 50%);
+  }
+}

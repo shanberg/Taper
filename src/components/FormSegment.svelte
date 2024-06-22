@@ -9,14 +9,15 @@
 	$: isOnlyRealSegment = segments.length === 2;
 	$: isPlaceholder = isSegmentPlaceholder(segment);
 	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
+	$: isLastSegment = index === segments.length - 1
 
-	function deleteSegmentAtIndex() {
+	function handleClickDelete() {
 		dispatch('removeSegment', index);
 	}
 </script>
 
-<tr class="segment" class:isInvalid class:isPlaceholder>
-	<td class="dose">
+<div class="segment" class:isInvalid class:isPlaceholder class:isLastSegment>
+	<div class="dose">
 		<label for="dose-{index}">
 			<input
 				min={1}
@@ -30,8 +31,8 @@
 				on:change={() => dispatch('change', segment)}
 			/>
 		</label>
-	</td>
-	<td class="days">
+	</div>
+	<div class="days">
 		<label for="days-{index}">
 			<input
 				min={1}
@@ -44,20 +45,29 @@
 				on:change={() => dispatch('change', segment)}
 			/>
 		</label>
-	</td>
-	<td class="delete">
-		<button
-			{...isOnlyRealSegment ? { disabled: true } : {}}
-			title="Remove this step"
-			class="remove-btn"
-			on:click={deleteSegmentAtIndex}>×</button
-		>
-	</td>
-</tr>
+	</div>
+	<button
+		{...(isLastSegment || isOnlyRealSegment) ? { disabled: true } : {}}
+		title="Remove this step"
+		class="remove-btn"
+		on:click={handleClickDelete}>×</button
+	>
+</div>
 
 <style>
+
+.segment {
+	display: flex;
+	flex: 0 0 12rem;
+	gap: 1px;
+}
+
 	label {
 		display: contents;
+	}
+
+	.dose, .days {
+		flex: 1 1 100%;
 	}
 
 	input {
@@ -76,26 +86,23 @@
 		}
 	}
 
-	.isInvalid td input {
+	.isInvalid input {
 		background: var(--color-status-error-bg);
+		color: var(--color-status-error);
 	}
 
-	.isInvalid:focus-within td input {
+	.isInvalid:focus-within input {
 		background: var(--color-status-error-bg-muted);
 	}
 
-	tr:last-child .remove-btn {
-		display: none;
-	}
-
 	.remove-btn {
-		width: 1.5rem;
+		flex: 0 0 1.5rem;
 		height: 100%;
 		border: 0;
 		margin-left: 1px;
+		color: var(--color-fg-muted);
 		border-radius: var(--control-radius);
 		transition: all var(--control-transition-duration) ease-in-out;
-		color: inherit;
 		background: transparent;
 		cursor: pointer;
 		opacity: 0.25;
@@ -107,21 +114,13 @@
 		cursor: not-allowed;
 	}
 
-	/* hide remove button on last segment */
-
-	tr:focus-within .remove-btn,
-	tr:hover .remove-btn,
-	.remove-btn:focus {
-		outline: none;
+	.remove-btn:not(:disabled):where(:hover, :active) {
 		opacity: 1;
-	}
-
-	tr.isPlaceholder .remove-btn,
-	tr.isInvalid .remove-btn,
-	.remove-btn:hover:not(:disabled),
-	.remove-btn:focus:not(:disabled) {
-		opacity: 1;
-		color: var(--color-fg-error);
 		background: var(--color-status-error-bg-muted);
 	}
+
+	.isLastSegment .remove-btn {
+		visibility: hidden;
+	}
+
 </style>

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { appStore } from '../stores';
+	import layout from '../styles/layout.module.css'
 	import FormHeader from '../components/FormHeader.svelte';
-	import ScheduleTable from '../components/ScheduleTable.svelte';
-	import Plan from '../components/Plan.svelte';
+	import ScheduleRow from '../components/ScheduleRow.svelte';
+	import { getLanguageFromKey } from '../utils';
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
@@ -32,18 +33,38 @@
 			window.removeEventListener('keydown', handleKeyDown);
 		}
 	});
+
+	$: schedule = $appStore.schedule;
+	$: selectedLanguage = getLanguageFromKey(schedule.languageKey);
 </script>
 
 <main>
 	<FormHeader />
-
 	<div class="body">
-		<ScheduleTable />
-		<Plan />
+		<div class={`${layout.hstack} form-schedule-header`}><div class="dose">mg</div><div class="days">days</div><div class="schedule">Schedule</div></div>
+		{#each schedule.segments as _, index}
+			<ScheduleRow {schedule} {index} {selectedLanguage} />
+		{/each}
 	</div>
 </main>
 
 <style>
+	.form-schedule-header {
+		font-weight: bold;
+		gap: 1px;
+		padding-block-end: 0.25rem;
+
+		& .dose {
+			width: 5.25rem;
+		}
+		& .days {
+			width: 5.25rem;
+		}
+		& .schedule {
+			margin-left: 2rem;
+		}
+	}
+
 	main {
 		display: flex;
 		flex-direction: column;
@@ -51,14 +72,13 @@
 		overflow: clip;
 		background: var(--color-bg-form);
 		box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.025);
-		width: 720px;
+		width: 820px;
 	}
 
 	.body {
 		display: flex;
-		flex-direction: row;
-		gap: 1rem;
+		flex-direction: column;
+		gap: 1px;
 		padding: 1rem;
-		min-width: 38rem;
 	}
 </style>
