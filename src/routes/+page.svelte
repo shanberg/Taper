@@ -4,6 +4,7 @@
 	import layout from '@styles/layout.module.css'
 	import { getLanguageFromKey } from '../utils';
 	import { FormHeader } from '../components/FormHeader';
+	import { Output } from '../components/Output';
 	import Heading from '../components/Heading.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
 	import Message from '../components/Message.svelte';
@@ -49,17 +50,17 @@
 	</header>
 	<FormHeader />
 	<div class="body">
-		<div class={`${layout.hstack} form-schedule-header`}><div class="dose">mg</div><div class="days">days</div><div class="schedule">Schedule</div></div>
+		<div class={`${layout.hstack} form-schedule-header`}>
+			<div class="dose">mg</div>
+			<div class="days">days</div>
+			<div class="schedule">Schedule</div>
+		</div>
 		{#each schedule.segments as _, index}
 			<ScheduleRow {schedule} {index} {selectedLanguage} />
 		{/each}
 	</div>
 
-	<output>
-		{#each schedule.segments as _, index}
-			<ScheduleRow {schedule} {index} {selectedLanguage} />
-		{/each}
-	</output>
+	<Output />
 </main>
 
 <style>
@@ -77,11 +78,6 @@
 		& .schedule {
 			margin-left: 2rem;
 		}
-	}
-
-	output {
-		border-top: 1px solid var(--color-separator-border);
-		background:hsl(from white h s 90%);
 	}
 
 	header {

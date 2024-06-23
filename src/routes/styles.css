@@ -6,17 +6,20 @@
 	--font-weight-heading: 600;
 	--font-weight-interactive: 500;
 
+	--base-h: 240;
+
 	/* / Text Colors / */
-	--color-text-primary: oklch(34% 0.03 230);
-	--color-text-muted: oklch(62% 0.03 230);
+	--color-text-primary: oklch(40% 0.05 var(--base-h));
+	--color-text-primary-contrast: oklch(100% 0.05 var(--base-h));
+	--color-text-muted: oklch(60% 0.05 var(--base-h));
 
 	/* / Border Colors / */
-	--color-separator-border: oklch(90% 0.02 240);
+	--color-separator-border: oklch(90% 0.02 var(--base-h));
 
 	/* / Background Colors / */
-	--color-background-default: oklch(95% 0.01 240);
-	--color-background-form: oklch(98% 0.003 290);
-	--color-background-control: oklch(93% 0.01 240);
+	--color-background-default: oklch(96% 0.015 var(--base-h));
+	--color-background-form: oklch(100% 0 var(--base-h));
+	--color-background-control: oklch(96% 0.015 var(--base-h));
 
 	/* / Control Styles / */
 	--control-border-radius: 0.35rem;
@@ -24,10 +27,10 @@
 	--control-transition-duration: 0.15s;
 
 	/* / Interaction Colors / */
-	--color-interaction-primary: oklch(60.48% 0.216 257.213);
-	--color-interaction-hover: oklch(46.75% 0.163 256.695);
-	--color-interaction-active: oklch(38.03% 0.129 255.92);
-	--color-interaction-disabled: oklch(82.9% 0.014 248);
+	--color-interaction-primary: oklch(60.48% 0.2 var(--base-h));
+	--color-interaction-hover: oklch(46.75% 0.15 var(--base-h));
+	--color-interaction-active: oklch(38.03% 0.129 var(--base-h));
+	--color-interaction-disabled: oklch(82.9% 0.014 var(--base-h));
 
 	/* / Status Colors / */
 	--color-status-warning: oklch(79.39% 0.135 72.97);
