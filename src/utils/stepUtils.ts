@@ -1,23 +1,48 @@
 import { TaperDate } from '../TaperDate';
 
+/**
+ * Determines if a step is invalid based on its dose and daysForDose values.
+ * @param {Step} step - The step to validate.
+ * @returns {boolean} - True if the step is invalid, false otherwise.
+ */
 export const isStepInvalid = (step: Step): boolean => {
   return step.dose <= 0 || step.daysForDose <= 0;
 };
 
-/** Returns true if dose and daysForDose are both 0 */
+/**
+ * Checks if a step is a placeholder (both dose and daysForDose are 0).
+ * @param {Step} step - The step to check.
+ * @returns {boolean} - True if the step is a placeholder, false otherwise.
+ */
 export const isStepPlaceholder = (step: Step): boolean => {
   if (!step) return false;
   return step.dose === 0 && step.daysForDose === 0;
 };
 
+/**
+ * Sums the total dose across all steps in a schedule.
+ * @param {Step[]} steps - The steps of the schedule.
+ * @returns {number} - The total dose.
+ */
 export const sumStepsDose = (steps: Step[]): number => {
   return steps.reduce((sum, step) => sum + step.dose * step.daysForDose, 0);
 };
 
+/**
+ * Sums the total number of days across all steps in a schedule.
+ * @param {Step[]} steps - The steps of the schedule.
+ * @returns {number} - The total number of days.
+ */
 export const sumStepsDays = (steps: Step[]): number => {
   return steps.reduce((sum, step) => sum + step.daysForDose, 0);
 };
 
+/**
+ * Determines if a step is directly after a placeholder step.
+ * @param {Step[]} steps - The steps of the schedule.
+ * @param {number} index - The index of the current step.
+ * @returns {boolean} - True if the step is directly after a placeholder, false otherwise.
+ */
 export function isStepDirectlyAfterPlaceholder(steps: Step[], index: number) {
   const step = steps[index];
   if (!step) return false;
@@ -31,6 +56,12 @@ export function isStepDirectlyAfterPlaceholder(steps: Step[], index: number) {
   return isStepPlaceholder(prevStep);
 }
 
+/**
+ * Determines if a step is or is directly after a placeholder step.
+ * @param {Step[]} steps - The steps of the schedule.
+ * @param {number} index - The index of the current step.
+ * @returns {boolean} - True if the step is or is directly after a placeholder, false otherwise.
+ */
 export function stepIsOrAfterPlaceholder(steps: Step[], index: number) {
   const step = steps[index];
 

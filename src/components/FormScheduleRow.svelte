@@ -9,7 +9,7 @@
 	export let schedule: Schedule;
   export let index: number;
 	
-	const selectedLanguage = LANGUAGES[0];
+	const selectedLanguage = LANGUAGES.find(lang => lang.lang === schedule.languageKey) || LANGUAGES[0];
 	let stepStartDate: ScheduleDate;
 	let stepEndDate: ScheduleDate;
 	

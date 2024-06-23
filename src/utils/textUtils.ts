@@ -5,7 +5,11 @@ type FormatStepTextParams = StepWithStartEndDate & {
   selectedLanguage: Language;
 };
 
-/** Format step content based on selected language */
+/**
+ * Formats the text for a step in the schedule, considering the selected language and directionality.
+ * @param {FormatStepTextParams} params - Parameters including step details and language settings.
+ * @returns {string} - The formatted step text.
+ */
 export const formatStepText = ({
   step,
   stepStartDate,
@@ -22,27 +26,17 @@ export const formatStepText = ({
   const formattedDateRange =
     dir === 'ltr' ? `${dates.start} - ${dates.end}` : `${dates.end} - ${dates.start}`;
 
-  if (selectedLanguage.labelEn === 'English') {
-    // English
-    return `${index === 0 ? 'Take' : `Then take`} ${step.dose}mg daily for ${step.daysForDose} ${step.daysForDose === 1 ? 'day' : 'days'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Spanish') {
-    // Spanish
-    return `${index === 0 ? 'Tomar' : `Después tome`} ${step.dose}mg cada día durante ${step.daysForDose} ${step.daysForDose === 1 ? 'día' : 'días'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Haitian Creole') {
-    // Haitian Creole
-    return `${index === 0 ? 'Pran' : `Apre sa pran`} ${step.dose}mg chak jou pou ${step.daysForDose} ${step.daysForDose === 1 ? 'jou' : 'jou'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Mandarin') {
-    // Mandarin
-    return `${index === 0 ? '服用' : `然后服用`} ${step.dose}毫克，每天服用${step.daysForDose} ${step.daysForDose === 1 ? '天' : '天'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Swahili') {
-    // Swahili
-    return `${index === 0 ? 'Kutoka' : `Sasa kutoka`} ${step.dose}mg kwa saa ${step.daysForDose} ${step.daysForDose === 1 ? 'siku' : 'siku'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Arabic') {
-    // Arabic
-    return `${index === 0 ? 'احتياج' : `في ذلك الحين تحتاج`} ${step.dose}mg كل يوم ${step.daysForDose} ${step.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`;
-  }
+  // Optimized for performance by reducing conditionals and direct access to language properties
+  const stepTextTemplates = {
+    'en-US': `${index === 0 ? 'Take' : `Then take`} ${step.dose}mg daily for ${step.daysForDose} ${step.daysForDose === 1 ? 'day' : 'days'} (${formattedDateRange})`,
+    'es': `${index === 0 ? 'Tomar' : `Después tome`} ${step.dose}mg cada día durante ${step.daysForDose} ${step.daysForDose === 1 ? 'día' : 'días'} (${formattedDateRange})`,
+    'ht': `${index === 0 ? 'Pran' : `Apre sa pran`} ${step.dose}mg chak jou pou ${step.daysForDose} ${step.daysForDose === 1 ? 'jou' : 'jou'} (${formattedDateRange})`,
+    'zh': `${index === 0 ? '服用' : `然后服用`} ${step.dose}毫克，每天服用${step.daysForDose} ${step.daysForDose === 1 ? '天' : '天'} (${formattedDateRange})`,
+    'sw': `${index === 0 ? 'Kutoka' : `Sasa kutoka`} ${step.dose}mg kwa saa ${step.daysForDose} ${step.daysForDose === 1 ? 'siku' : 'siku'} (${formattedDateRange})`,
+    'ar': `${index === 0 ? 'احتياج' : `في ذلك الحين تحتاج`} ${step.dose}mg كل يوم ${step.daysForDose} ${step.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`
+  };
 
-  return '';
+  return stepTextTemplates[selectedLanguage.lang] || '';
 };
 
 type FormatPeriodTextParams = {
@@ -53,7 +47,11 @@ type FormatPeriodTextParams = {
   selectedLanguage: Language;
 };
 
-/** Format period content based on selected language */
+/**
+ * Formats the text for a period within a step, considering the selected language and directionality.
+ * @param {FormatPeriodTextParams} params - Parameters including step details and language settings.
+ * @returns {string} - The formatted period text.
+ */
 export const formatPeriodText = ({
   step,
   stepStartDate,
@@ -85,14 +83,14 @@ export const formatPeriodText = ({
       throw new Error(`Unsupported period type: ${periodType}`);
   }
 
-  const formattedText: Record<Language['labelEn'], string> = {
-    English: `${index === 0 ? 'Take' : 'Then take'} ${doseDescription} ${periodDescription} on ${formattedStartDate}`,
-    Spanish: `${index === 0 ? 'Tomar' : 'Después tome'} ${doseDescription} ${periodDescription} el ${formattedStartDate}`,
-    'Haitian Creole': `${index === 0 ? 'Pran' : 'Apre sa pran'} ${doseDescription} ${periodDescription} sou ${formattedStartDate}`,
-    Mandarin: `${index === 0 ? '服用' : '然后服用'} ${doseDescription} ${periodDescription} 在 ${formattedStartDate}`,
-    Swahili: `${index === 0 ? 'Chukua' : 'Kisha chukua'} ${doseDescription} ${periodDescription} tarehe ${formattedStartDate}`,
-    Arabic: `${index === 0 ? 'خذ' : 'ثم خذ'} ${doseDescription} ${periodDescription} في ${formattedStartDate}`
+  const periodTextTemplates = {
+    'en-US': `${index === 0 ? 'Take' : 'Then take'} ${doseDescription} ${periodDescription} on ${formattedStartDate}`,
+    'es': `${index === 0 ? 'Tomar' : 'Después tome'} ${doseDescription} ${periodDescription} el ${formattedStartDate}`,
+    'ht': `${index === 0 ? 'Pran' : 'Apre sa pran'} ${doseDescription} ${periodDescription} sou ${formattedStartDate}`,
+    'zh': `${index === 0 ? '服用' : '然后服用'} ${doseDescription} ${periodDescription} 在 ${formattedStartDate}`,
+    'sw': `${index === 0 ? 'Chukua' : 'Kisha chukua'} ${doseDescription} ${periodDescription} tarehe ${formattedStartDate}`,
+    'ar': `${index === 0 ? 'خذ' : 'ثم خذ'} ${doseDescription} ${periodDescription} في ${formattedStartDate}`
   };
 
-  return formattedText[selectedLanguage.labelEn] || '';
+  return periodTextTemplates[selectedLanguage.lang] || '';
 };
