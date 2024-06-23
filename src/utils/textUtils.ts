@@ -27,7 +27,7 @@ export const formatStepText = ({
     dir === 'ltr' ? `${dates.start} - ${dates.end}` : `${dates.end} - ${dates.start}`;
 
   // Optimized for performance by reducing conditionals and direct access to language properties
-  const stepTextTemplates = {
+  const stepTextTemplates: Record<Language['lang'], string> = {
     'en-US': `${index === 0 ? 'Take' : `Then take`} ${step.dose}mg daily for ${step.daysForDose} ${step.daysForDose === 1 ? 'day' : 'days'} (${formattedDateRange})`,
     'es': `${index === 0 ? 'Tomar' : `Después tome`} ${step.dose}mg cada día durante ${step.daysForDose} ${step.daysForDose === 1 ? 'día' : 'días'} (${formattedDateRange})`,
     'ht': `${index === 0 ? 'Pran' : `Apre sa pran`} ${step.dose}mg chak jou pou ${step.daysForDose} ${step.daysForDose === 1 ? 'jou' : 'jou'} (${formattedDateRange})`,
@@ -83,7 +83,7 @@ export const formatPeriodText = ({
       throw new Error(`Unsupported period type: ${periodType}`);
   }
 
-  const periodTextTemplates = {
+  const periodTextTemplates: Record<Language['lang'], string> = {
     'en-US': `${index === 0 ? 'Take' : 'Then take'} ${doseDescription} ${periodDescription} on ${formattedStartDate}`,
     'es': `${index === 0 ? 'Tomar' : 'Después tome'} ${doseDescription} ${periodDescription} el ${formattedStartDate}`,
     'ht': `${index === 0 ? 'Pran' : 'Apre sa pran'} ${doseDescription} ${periodDescription} sou ${formattedStartDate}`,

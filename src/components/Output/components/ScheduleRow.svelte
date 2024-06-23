@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { appStore } from '../../../stores';
 	import { TaperDate } from '../../../TaperDate';
-	import { calculateStepStartAndEndDates, formatStepText } from '../../../utils';
+	import { calculateStepStartAndEndDates, formatStepText, isStepInvalid } from '../../../utils';
 
 	export let schedule: Schedule;
 	export let index: number;
