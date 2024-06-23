@@ -42,7 +42,7 @@ export const formatStepText = ({
 type FormatPeriodTextParams = {
   step: Step;
   stepStartDate: ScheduleDate;
-  periodType: 'half-day' | 'day' | 'week';
+  periodSize: PeriodSize;
   index: number;
   selectedLanguage: Language;
 };
@@ -55,7 +55,7 @@ type FormatPeriodTextParams = {
 export const formatPeriodText = ({
   step,
   stepStartDate,
-  periodType,
+  periodSize,
   index,
   selectedLanguage
 }: FormatPeriodTextParams): string => {
@@ -66,7 +66,7 @@ export const formatPeriodText = ({
   let periodDescription = '';
   let doseDescription = '';
 
-  switch (periodType) {
+  switch (periodSize) {
     case 'half-day':
       periodDescription = selectedLanguage.labelEn === 'English' ? 'every 12 hours' : 'cada 12 horas';
       doseDescription = `${step.dose / 2}mg`;
@@ -80,7 +80,7 @@ export const formatPeriodText = ({
       doseDescription = `${step.dose * 7}mg`;
       break;
     default:
-      throw new Error(`Unsupported period type: ${periodType}`);
+      throw new Error(`Unsupported period type: ${periodSize}`);
   }
 
   const periodTextTemplates: Record<Language['lang'], string> = {

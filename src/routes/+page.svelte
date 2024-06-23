@@ -5,7 +5,7 @@
 	import { getLanguageFromKey } from '../utils';
 	import { FormHeader } from '../components/FormHeader';
 	import { Output } from '../components/Output';
-	import Heading from '../components/Heading.svelte';
+	import { Heading } from '../components';
 	import FormScheduleRow from '../components/FormScheduleRow.svelte';
 	import Message from '../components/Message.svelte';
 	import AboutAppButton from '../components/AboutAppButton.svelte';
@@ -49,6 +49,7 @@
 	</header>
 	<FormHeader />
 	<div class="body">
+		<Heading level={2}>Steps</Heading>
 		<div class={`${layout.hstack} form-schedule-header`}>
 			<div class="dose">mg</div>
 			<div class="days">days</div>

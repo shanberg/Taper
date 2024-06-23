@@ -78,14 +78,14 @@ export function stepIsOrAfterPlaceholder(steps: Step[], index: number) {
 type GetPeriodsWithDosesForStepParams = {
   step: Step,
   stepStartDate: ScheduleDate,
-  periodType: "half-day" | "day" | "week"
+  periodSize: "half-day" | "day" | "week"
 }
 
-export function getPeriodsWithDosesForStep({ step, stepStartDate, periodType }: GetPeriodsWithDosesForStepParams): DayWithDose[] {
+export function getPeriodsWithDosesForStep({ step, stepStartDate, periodSize }: GetPeriodsWithDosesForStepParams): DayWithDose[] {
   const periodsWithDoses: DayWithDose[] = [];
   let currentDate = new Date(stepStartDate);
 
-  switch (periodType) {
+  switch (periodSize) {
     case 'half-day':
       for (let i = 0; i < step.daysForDose; i++) {
         // Two half-day doses for each day
@@ -117,7 +117,7 @@ export function getPeriodsWithDosesForStep({ step, stepStartDate, periodType }: 
       }
       break;
     default:
-      throw new Error(`Unsupported period type: ${periodType}`);
+      throw new Error(`Unsupported period type: ${periodSize}`);
   }
 
   return periodsWithDoses;

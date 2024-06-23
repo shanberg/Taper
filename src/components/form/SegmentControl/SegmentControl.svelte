@@ -1,7 +1,6 @@
 <script lang="ts">
   import { createRadioGroup, melt, createSync } from '@melt-ui/svelte';
-  import layout from '@styles/layout.module.css';
-  import forms from '@styles/forms.module.css';
+  import { buttonStyles, hStackStyles } from '../../';
   import { derived } from 'svelte/store';
 
   export let options;
@@ -31,13 +30,10 @@
       <button
         use:melt={$item(option)}
         id={option}
-        class={`${layout.hstack} ${forms.button} option`}
+        class={[hStackStyles.base, $isChecked(option) && buttonStyles.isActive, buttonStyles.base, "option"].filter(Boolean).join(" ")}
         aria-labelledby="{option}-label"
-        class:checked={$isChecked(option)}
       >
-        <label for={option} id="{option}-label"> 
-{option}
-        </label>
+        <label for={option} id="{option}-label">{option}</label>
       </button>
     {/each}
     <input name={name} use:melt={$hiddenInput} />
@@ -59,13 +55,6 @@
       width: auto;
       display: flex;
       place-content: center;
-    }
-
-    .checked,
-    .checked:active,
-    .checked:hover {
-      background: var(--color-text-primary);
-      color: var(--color-text-primary-contrast);
     }
   }
 </style>

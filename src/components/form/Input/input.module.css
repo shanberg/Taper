@@ -1,0 +1,32 @@
+.input {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-medium);
+  background-color: var(--color-background-control);
+  border-radius: var(--control-border-radius);
+  border: none;
+  text-overflow: ellipsis;
+  overflow: clip;
+  font-weight: var(--font-weight-interactive);
+  width: 100%;
+  padding: 0 0.5rem;
+  height: var(--control-height-default);
+  max-height: var(--control-height-default);
+  min-height: var(--control-height-default);
+  line-height: var(--control-height-default);
+  color: inherit;
+  outline: none;
+  position: relative;
+  --color-background-control-hover: hsl(from var(--color-background-control) h s l / 90%);
+  --color-background-control-focus: hsl(from var(--color-background-control) h s l / 40%);
+  --color-background-control-active: hsl(from var(--color-background-control) h s l / 50%);
+}
+
+
+select.input {
+  padding-right: 1.4rem;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20"><path d="M5,8 L10,13 L15,8" fill="none" stroke-width="2" stroke-linecap="round" stroke="black"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.5rem top 47.5%;
+  background-size: 1.25rem;
+}

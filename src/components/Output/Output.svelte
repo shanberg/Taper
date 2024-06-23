@@ -1,11 +1,16 @@
 <script lang="ts">
-  import Heading from '../Heading.svelte';
-  import SegmentControl from '../SegmentControl.svelte';
+  
   import Steps from './components/Steps.svelte';
-  import Dose from './components/Dose.svelte';
+  import DosesDisplay from './components/DosesDisplay.svelte';
+  import { Heading, SegmentControl } from '../';
   import { derived } from 'svelte/store';
-
+  import { formControlStyles, formLabelStyles, inputStyles } from '../'
   import { appStore } from '../../stores';
+
+	const handleChangePeriodSize = (e: Event) => {
+		const target = e.target as HTMLSelectElement;
+		appStore.changePeriodSize(target.value as PeriodSize);
+	};
 
   const displayModeStore = derived(appStore, ($store) => $store.schedule.displayMode);
   const updateDisplayMode = (newDisplayMode: string) => {
@@ -13,6 +18,7 @@
   };
   
   $: selectedOption = $appStore.schedule.displayMode;
+  $: periodSize = $appStore.schedule.periodSize;
 </script>
 
 <div class="container">
@@ -24,12 +30,25 @@
     name="display-mode"
   />
 
+  <label class={`${formControlStyles.base}`}>
+    <span class={formLabelStyles.base}>Period Size</span>
+    <select 
+      class={inputStyles}
+      value={periodSize}
+        on:change={handleChangePeriodSize}
+      >
+      <option value="half-day">Half-day</option>
+      <option value="day">Days</option>
+      <option value="week">Week</option>
+    </select>
+  </label>
+
   <output>
     {#if selectedOption === "steps"}
       <Steps />
     {/if}
     {#if selectedOption === "doses"}
-      <Dose />
+      <DosesDisplay />
     {/if}
   </output>
 

@@ -1,12 +1,12 @@
 <script lang="ts">
   import DoseRow from "./DoseRow.svelte";
-  import List from '../../List.svelte'
+  import List from '../../dataDisplay/List/List.svelte'
   import { appStore } from "../../../stores";
   import { getLanguageFromKey } from "../../../utils";
 
   $: schedule = $appStore.schedule;
   $: selectedLanguage = getLanguageFromKey(schedule.languageKey);
-  $: steps = $appStore.schedule.steps
+  $: steps = schedule.steps
 </script>
 
 <div>

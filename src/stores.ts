@@ -20,6 +20,7 @@ export const INITIAL_STORE_STATE: AppState = {
 
 export type AppStore = Writable<AppState> & {
 	editStepAtIndex: (index: number, updatedStep: Step) => void;
+	changePeriodSize: (newPeriodSize: PeriodSize) => void;
 	changeStartDate: (newDate: ScheduleDate | InputStringDate) => void;
 	changeLanguageKey: (newLanguageKey: string) => void;
 	changeDisplayMode: (newDisplayMode: DisplayMode) => void;
@@ -95,6 +96,15 @@ export function createAppStore(): AppStore {
 				return {
 					...newState,
 					schedule: { ...newState.schedule, displayMode: newDisplayMode }
+				};
+			});
+		},
+		changePeriodSize: (newPeriodSize: PeriodSize): void => {
+			update((state) => {
+				const newState = _saveScheduleForUndo(state);
+				return {
+					...newState,
+					schedule: { ...newState.schedule, periodSize: newPeriodSize }
 				};
 			});
 		},

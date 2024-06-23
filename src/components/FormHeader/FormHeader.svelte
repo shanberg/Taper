@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { LANGUAGES, TEMPLATES } from '../../consts';
-	import Badge from '../Badge.svelte';
-	import forms from "@styles/forms.module.css"
+	import { Badge, formControlStyles, formLabelStyles, inputStyles } from '../'
 	import { CopyToClipboardButton } from './';
 	import { getLanguageFromKey, getFormattedListForCopyPaste, isValidSchedule } from '../../utils';
 	import { appStore } from '../../stores';
@@ -59,10 +58,10 @@
 
 <header class="vstack">
 	<div class="hstack">
-		<label class={`${forms.formControl} course-begins`}>
-			<span class={forms.formLabel}>Course begins</span>
+		<label class={`${formControlStyles.base} course-begins`}>
+			<span class={formLabelStyles.base}>Course begins</span>
 			<input
-				class={forms.input}
+				class={inputStyles}
 				type="date"
 				value={startDateInputValue}
 				on:keydown={handleDateInputKeyDown}
@@ -70,17 +69,17 @@
 			/>
 		</label>
 
-		<label class={`${forms.formControl} template`}>
-			<span class={forms.formLabel}>Template</span>
-			<select class={forms.input} value={selectedTemplateKey} on:change={handleChangeTemplateKey}>
+		<label class={`${formControlStyles.base} template`}>
+			<span class={formLabelStyles.base}>Template</span>
+			<select class={inputStyles} value={selectedTemplateKey} on:change={handleChangeTemplateKey}>
 				{#each Object.keys(TEMPLATES) as template}
 					<option value={template}>{template}</option>
 				{/each}
 			</select>
 		</label>
 
-		<label class={`${forms.formControl} language`}>
-			<span class={forms.formLabel}>
+		<label class={`${formControlStyles.base} language`}>
+			<span class={formLabelStyles.base}>
 				Language
 				{#if !selectedLanguageIsVerified}
 					<Badge>Unverified</Badge>
@@ -89,7 +88,7 @@
 
 			<select
 				value={selectedLanguage.lang}
-				class={forms.input}
+				class={inputStyles}
 				class:warn={!selectedLanguageIsVerified}
 				on:change={handleChangeLanguage}
 			>

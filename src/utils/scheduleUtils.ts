@@ -16,7 +16,8 @@ export function createInitialSchedule(): Schedule {
     startDate: new TaperDate().toScheduleDate(),
     templateKey: DEFAULT_TEMPLATE_KEY,
     languageKey: DEFAULT_LANGUAGE_KEY,
-    displayMode: "steps"
+    displayMode: "steps",
+    periodSize: "day"
   };
 }
 

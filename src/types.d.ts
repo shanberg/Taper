@@ -20,12 +20,15 @@ type StepWithStartEndDate = {
 
 type DisplayMode = "calendar" | "doses" | "steps"
 
+type PeriodSize = "half-day" | "day" | "week"
+
 type Schedule = {
 	steps: Step[];
 	startDate: ScheduleDate;
 	templateKey: string;
 	languageKey: string;
 	displayMode: DisplayMode;
+	periodSize: PeriodSize;
 };
 
 type SerializedSchedule = string & {

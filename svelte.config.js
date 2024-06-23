@@ -1,6 +1,8 @@
 import { preprocessMeltUI, sequence } from '@melt-ui/pp';
 import adapter from '@sveltejs/adapter-auto';
 import preprocess from 'svelte-preprocess';
+import { cssModules } from 'svelte-preprocess-cssmodules';
+
 /** @type {import('@sveltejs/kit').Config}*/
 const config = {
 	// Consult https://github.com/sveltejs/svelte-preprocess
@@ -9,7 +11,8 @@ const config = {
 		preprocess({
 			typescript: true
 		}),
-		preprocessMeltUI()
+		preprocessMeltUI(),
+		cssModules(),
 	]),
 	kit: {
 		adapter: adapter()

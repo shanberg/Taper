@@ -3,10 +3,7 @@
   import { quintOut } from 'svelte/easing';
   import { createDialog, melt } from '@melt-ui/svelte'
   import FilledSymbolsInfo from "svelte-healthicons/lib/FilledSymbolsInfo.svelte";
-	import Link from './Link.svelte';
-	import List from './List.svelte';
-  import Button from './Button.svelte'
-	import ListItem from './ListItem.svelte';
+	import { Link, List, ListItem, Button } from './';
   const {
     elements: { trigger, portalled, overlay, content, description },
     states: { open }
