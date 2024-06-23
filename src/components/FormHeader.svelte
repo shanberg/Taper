@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { LANGUAGES, TEMPLATES } from '../consts';
 	import Badge from './Badge.svelte';
+	import forms from "./forms.module.css"
 	import CopyToClipboardButton from './CopyToClipboardButton.svelte';
 	import { getLanguageFromKey, getFormattedListForCopyPaste, isValidSchedule } from '../utils';
-	import forms from './forms.module.css'
 	import { appStore } from '../stores';
 
 	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);
@@ -22,7 +22,6 @@
 	$: selectedDisplayMode = schedule.displayMode;
 
 	// Language
-	// $: selectedLanguageKey = $appStore.schedule.languageKey;
 	$: selectedLanguageKey = schedule.languageKey;
 	$: selectedLanguage = getLanguageFromKey(selectedLanguageKey);
 	$: selectedLanguageIsVerified = selectedLanguage.verified;
@@ -60,9 +59,10 @@
 
 <header class="vstack">
 	<div class="hstack">
-		<label class="course-begins">
-			<span>Course begins</span>
+		<label class={`${forms.formControl} course-begins`}>
+			<span class={forms.formLabel}>Course begins</span>
 			<input
+				class={forms.input}
 				type="date"
 				value={startDateInputValue}
 				on:keydown={handleDateInputKeyDown}
@@ -70,8 +70,8 @@
 			/>
 		</label>
 
-		<label class="template">
-			<span>Template</span>
+		<label class={`${forms.formControl} template`}>
+			<span class={forms.formLabel}>Template</span>
 			<select class={forms.input} value={selectedTemplateKey} on:change={handleChangeTemplateKey}>
 				{#each Object.keys(TEMPLATES) as template}
 					<option value={template}>{template}</option>
@@ -79,25 +79,17 @@
 			</select>
 		</label>
 
-		<label class="displaymode">
-			<span>Display Mode</span>
-			<select class={forms.input} value={selectedDisplayMode} on:change={handleChangeDisplayMode}>
-					<option value="segments">Segments</option>
-					<option value="calendar">Calendar</option>
-					<option value="doses">Doss</option>
-			</select>
-		</label>
-
-		<label class="language">
-			<span>
+		<label class={`${forms.formControl} language`}>
+			<span class={forms.formLabel}>
 				Language
 				{#if !selectedLanguageIsVerified}
 					<Badge>Unverified</Badge>
 				{/if}
 			</span>
+
 			<select
-				class="custom-select"
 				value={selectedLanguage.lang}
+				class={forms.input}
 				class:warn={!selectedLanguageIsVerified}
 				on:change={handleChangeLanguage}
 			>
@@ -114,6 +106,16 @@
 			</select>
 		</label>
 
+		<label class={`${forms.formControl} displaymode`}>
+			<span class={forms.label}>Show</span>
+			<select class={forms.input} value={selectedDisplayMode} on:change={handleChangeDisplayMode}>
+					<option value="segments">Segments</option>
+					<option value="calendar">Calendar</option>
+					<option value="doses">Dose</option>
+			</select>
+		</label>
+
+
 		<CopyToClipboardButton 
 			disabled={!isScheduleValid}
 		textToCopy={copyableText} />
@@ -123,7 +125,11 @@
 <style>
 	header {
 		border-bottom: 1px solid var(--color-separator-border);
+		background: inherit;
+		z-index: 2;
 		padding: 1rem;
+		position: sticky;
+		top: 0;
 	}
 
 	label.course-begins {

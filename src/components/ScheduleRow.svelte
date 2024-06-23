@@ -9,7 +9,6 @@
 
 	export let schedule: Schedule;
   export let index: number;
-  export let showDaysForDose: boolean = true;
   export let selectedLanguage: Language;
 	
 	let segmentStartDate: ScheduleDate;

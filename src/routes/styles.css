@@ -35,6 +35,9 @@
 	--color-status-error: oklch(61.92% 0.169 25.05);
 	--color-status-error-contrast: oklch(91.68% 0.022 17.56);
 	--color-status-error-background-muted: oklch(91.68% 0.022 17.56 / 0.05);
+
+	/* Zindices */
+	--zIndex-modal: 99999;
 }
 
 
@@ -135,15 +138,6 @@
 		box-shadow:
 			inset 0 0 0 1px var(--color-status-warning),
 			0 0 0 1px var(--color-status-warning);
-	}
-
-	select {
-		padding-right: 2rem;
-		appearance: none;
-		background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20"><path d="M5,8 L10,13 L15,8" fill="none" stroke-width="2" stroke-linecap="round" stroke="black"/></svg>');
-		background-repeat: no-repeat;
-		background-position: right 0.5rem top 47.5%;
-		background-size: 1.25rem;
 	}
 
 	label {

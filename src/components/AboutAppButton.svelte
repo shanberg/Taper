@@ -11,8 +11,7 @@
     elements: { trigger, portalled, overlay, content, description },
     states: { open }
   } = createDialog({
-    forceVisible: true,
-    defaultOpen: false
+    forceVisible: true
   })
 </script>
  
@@ -44,6 +43,7 @@
 
 .container {
   position: fixed;
+  z-index: var(--zIndex-modal);
   top: 0;
   left: 0;
   height: 100vh;
