@@ -11,7 +11,6 @@ exports[`Message > renders correctly 1`] = `
       NEW
     </b>
     Swahili and Arabic (both unverified!) now available.
-     
   </p>
 </div>
 `;

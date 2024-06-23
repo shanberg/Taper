@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { LANGUAGES, TEMPLATES } from '../consts';
-	import Badge from './Badge.svelte';
-	import forms from "./forms.module.css"
-	import CopyToClipboardButton from './CopyToClipboardButton.svelte';
-	import { getLanguageFromKey, getFormattedListForCopyPaste, isValidSchedule } from '../utils';
-	import { appStore } from '../stores';
+	import { LANGUAGES, TEMPLATES } from '../../consts';
+	import Badge from '../Badge.svelte';
+	import forms from "@styles/forms.module.css"
+	import { CopyToClipboardButton } from './';
+	import { getLanguageFromKey, getFormattedListForCopyPaste, isValidSchedule } from '../../utils';
+	import { appStore } from '../../stores';
 
 	const VERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => language.verified);
 	const UNVERIFIED_LANGUAGES: Language[] = LANGUAGES.filter((language) => !language.verified);
@@ -105,16 +105,6 @@
 				{/if}
 			</select>
 		</label>
-
-		<label class={`${forms.formControl} displaymode`}>
-			<span class={forms.label}>Show</span>
-			<select class={forms.input} value={selectedDisplayMode} on:change={handleChangeDisplayMode}>
-					<option value="segments">Segments</option>
-					<option value="calendar">Calendar</option>
-					<option value="doses">Dose</option>
-			</select>
-		</label>
-
 
 		<CopyToClipboardButton 
 			disabled={!isScheduleValid}

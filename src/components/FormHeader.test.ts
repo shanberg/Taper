@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/svelte';
-import FormHeader from './FormHeader.svelte';
+import FormHeader from './FormHeader/FormHeader.svelte';
 import { appStore } from '../stores';
 import { get } from 'svelte/store';
 import { TaperDate } from '../TaperDate';
-import { DEFAULT_LANGUAGE_KEY, DEFAULT_TEMPLATE_KEY, LANGUAGES, TEMPLATES } from '../consts';
+import { DEFAULT_LANGUAGE_KEY, DEFAULT_TEMPLATE_KEY, LANGUAGES, TEMPLATES } from "../consts"
 
 describe('FormHeader component', () => {
 	it('renders the component with default values', () => {

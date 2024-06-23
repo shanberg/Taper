@@ -61,7 +61,7 @@
 	);
 </script>
 
-<p class={currentMessage ? 'message loaded' : 'message'}>{@html currentMessage}&nbsp;</p>
+<p class={currentMessage ? 'message loaded' : 'message'}>{@html currentMessage}</p>
 
 <style>
 	.message {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Action } from 'svelte/action';  
-  import styles from "./forms.module.css";
+  import styles from "@styles/forms.module.css";
   export let action: Action;
   export let thisElement = null
   export let variant = 'secondary'

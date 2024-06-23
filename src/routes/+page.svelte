@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { appStore } from '../stores';
-	import layout from '../styles/layout.module.css'
-	import FormHeader from '../components/FormHeader.svelte';
+	import layout from '@styles/layout.module.css'
+	import { getLanguageFromKey } from '../utils';
+	import { FormHeader } from '../components/FormHeader';
 	import Heading from '../components/Heading.svelte';
 	import ScheduleRow from '../components/ScheduleRow.svelte';
 	import Message from '../components/Message.svelte';
-	import { getLanguageFromKey } from '../utils';
 	import AboutAppButton from '../components/AboutAppButton.svelte';
 
 	function handleKeyDown(e: KeyboardEvent) {
@@ -42,7 +42,7 @@
 </script>
 
 <main>
-	<header class="hstack">
+	<header class={layout.hstack}>
 		<Heading level={1}>Taper</Heading>
 		<Message />
 		<AboutAppButton />
@@ -54,6 +54,12 @@
 			<ScheduleRow {schedule} {index} {selectedLanguage} />
 		{/each}
 	</div>
+
+	<output>
+		{#each schedule.segments as _, index}
+			<ScheduleRow {schedule} {index} {selectedLanguage} />
+		{/each}
+	</output>
 </main>
 
 <style>
@@ -73,7 +79,12 @@
 		}
 	}
 
-	.hstack {
+	output {
+		border-top: 1px solid var(--color-separator-border);
+		background:hsl(from white h s 90%);
+	}
+
+	header {
 		align-self: stretch;
 		justify-content: space-between;
 		align-items: center;

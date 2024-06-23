@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import styles from "./forms.module.css";
+  import styles from "@styles/forms.module.css";
   export let textToCopy: string = "";
   export let disabled: boolean = false;
   let copySuccess = false;
