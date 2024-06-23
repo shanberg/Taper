@@ -1,11 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ScheduleSegment > renders correctly 1`] = `
+exports[`ScheduleStep > renders correctly 1`] = `
 <div>
   <li
     class="svelte-1hlpwdm"
   >
-    Segment 1: 1 dose(s) from Sat Jun 01 2024 to Wed Jun 05 2024
+    Step 1: 1 dose(s) from Sat Jun 01 2024 to Wed Jun 05 2024
   </li>
   
 </div>

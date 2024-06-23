@@ -1,8 +1,8 @@
 import { test, expect } from 'vitest';
-import { sumSegmentsDays } from '../src/utils';
+import { sumStepsDays } from '../src/utils';
 
-test('sumSegmentsDays', () => {
-  const segments = [{
+test('sumStepsDays', () => {
+  const steps = [{
     dose: 1,
     daysForDose: 2
   }, {
@@ -13,9 +13,9 @@ test('sumSegmentsDays', () => {
     daysForDose: 2
   }]
 
-  expect(sumSegmentsDays(segments)).toBe(6);
-  expect(sumSegmentsDays([segments[0]])).toBe(2);
-  expect(sumSegmentsDays([...segments, { dose: 12, daysForDose: 1 }])).toBe(7);
-  expect(sumSegmentsDays([{ dose: 100, daysForDose: 1 }])).toBe(1);
-  expect(sumSegmentsDays([{ dose: 1, daysForDose: 100 }])).toBe(100);
+  expect(sumStepsDays(steps)).toBe(6);
+  expect(sumStepsDays([steps[0]])).toBe(2);
+  expect(sumStepsDays([...steps, { dose: 12, daysForDose: 1 }])).toBe(7);
+  expect(sumStepsDays([{ dose: 100, daysForDose: 1 }])).toBe(1);
+  expect(sumStepsDays([{ dose: 1, daysForDose: 100 }])).toBe(100);
 });

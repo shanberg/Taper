@@ -3,18 +3,18 @@
 exports[`FormStep > renders correctly 1`] = `
 <div>
   <div
-    class="step svelte-1cu1d0k"
+    class="step svelte-1prhtlg"
   >
     <div
-      class="dose svelte-1cu1d0k"
+      class="dose svelte-1prhtlg"
     >
       <label
-        class="svelte-1cu1d0k"
+        class="svelte-1prhtlg"
         for="dose-0"
       >
         <input
           aria-label="dose-0"
-          class="svelte-1cu1d0k"
+          class="svelte-1prhtlg"
           id="dose-0"
           inputmode="decimal"
           min="1"
@@ -26,15 +26,15 @@ exports[`FormStep > renders correctly 1`] = `
     </div>
      
     <div
-      class="days svelte-1cu1d0k"
+      class="days svelte-1prhtlg"
     >
       <label
-        class="svelte-1cu1d0k"
+        class="svelte-1prhtlg"
         for="days-0"
       >
         <input
           aria-label="days-0"
-          class="svelte-1cu1d0k"
+          class="svelte-1prhtlg"
           id="days-0"
           inputmode="decimal"
           min="1"
@@ -45,7 +45,7 @@ exports[`FormStep > renders correctly 1`] = `
     </div>
      
     <button
-      class="remove-btn svelte-1cu1d0k"
+      class="remove-btn svelte-1prhtlg"
       disabled=""
       title="Remove this step"
     >

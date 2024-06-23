@@ -1,5 +1,5 @@
 export * from './dateUtils';
-export * from './segmentUtils';
+export * from './stepUtils';
 export * from './scheduleUtils';
 export * from './serializationUtils';
 export * from './textUtils';

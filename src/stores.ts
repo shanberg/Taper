@@ -1,7 +1,7 @@
 import { writable, type Writable } from 'svelte/store';
 import {
 	createInitialSchedule,
-	isSegmentPlaceholder,
+	isStepPlaceholder,
 	serializeSchedule,
 	deserializeSchedule
 } from './utils';
@@ -19,13 +19,13 @@ export const INITIAL_STORE_STATE: AppState = {
 };
 
 export type AppStore = Writable<AppState> & {
-	editSegmentAtIndex: (index: number, updatedSegment: Segment) => void;
+	editStepAtIndex: (index: number, updatedStep: Step) => void;
 	changeStartDate: (newDate: ScheduleDate | InputStringDate) => void;
 	changeLanguageKey: (newLanguageKey: string) => void;
 	changeDisplayMode: (newDisplayMode: DisplayMode) => void;
-	insertPlaceholderSegmentBeforeIndex: (index: number) => void;
+	insertPlaceholderStepBeforeIndex: (index: number) => void;
 	switchTemplate: (newTemplateKey: string) => void;
-	deleteSegmentAtIndex: (index: number) => void;
+	deleteStepAtIndex: (index: number) => void;
 	reset: () => void;
 	undo: () => void;
 	redo: () => void;
@@ -52,22 +52,22 @@ export function createAppStore(): AppStore {
 				redoStack: [],
 				startDateInputValue: INITIAL_STORE_STATE.startDateInputValue
 			})),
-		editSegmentAtIndex: (index: number, updatedSegment: Segment): void =>
+		editStepAtIndex: (index: number, updatedStep: Step): void =>
 			update((state) => {
-				const prevSegments = [...state.schedule.segments];
+				const prevSteps = [...state.schedule.steps];
 				const newState = _saveScheduleForUndo(state);
-				let newSegments = [...prevSegments];
+				let newSteps = [...prevSteps];
 
-				updatedSegment.dose = updatedSegment.dose || 0;
-				updatedSegment.daysForDose = updatedSegment.daysForDose || 0;
+				updatedStep.dose = updatedStep.dose || 0;
+				updatedStep.daysForDose = updatedStep.daysForDose || 0;
 
-				newSegments[index] = updatedSegment;
+				newSteps[index] = updatedStep;
 
-				if (!newSegments.some((s) => isSegmentPlaceholder(s))) {
-					newSegments = [...newSegments, { ...PLACEHOLDER_SEGMENT }];
+				if (!newSteps.some((s) => isStepPlaceholder(s))) {
+					newSteps = [...newSteps, { ...PLACEHOLDER_SEGMENT }];
 				}
 
-				return { ...newState, schedule: { ...newState.schedule, segments: newSegments } };
+				return { ...newState, schedule: { ...newState.schedule, steps: newSteps } };
 			}),
 		changeStartDate: (newDate: ScheduleDate | InputStringDate): void =>
 			update((state) => {
@@ -98,35 +98,35 @@ export function createAppStore(): AppStore {
 				};
 			});
 		},
-		insertPlaceholderSegmentBeforeIndex: (index: number): void =>
+		insertPlaceholderStepBeforeIndex: (index: number): void =>
 			update((state) => {
 				const newState = _saveScheduleForUndo(state);
-				const allSegments = newState.schedule.segments;
-				const allButLastSegment = allSegments.slice(0, -1);
-				const scheduleContainsInnerPlaceholders = allButLastSegment.some((s) =>
-					isSegmentPlaceholder(s)
+				const allSteps = newState.schedule.steps;
+				const allButLastStep = allSteps.slice(0, -1);
+				const scheduleContainsInnerPlaceholders = allButLastStep.some((s) =>
+					isStepPlaceholder(s)
 				);
 
 				if (!scheduleContainsInnerPlaceholders) {
-					const newSegments = [...allSegments];
-					newSegments.splice(index, 0, { ...PLACEHOLDER_SEGMENT });
-					return { ...newState, schedule: { ...newState.schedule, segments: newSegments } };
+					const newSteps = [...allSteps];
+					newSteps.splice(index, 0, { ...PLACEHOLDER_SEGMENT });
+					return { ...newState, schedule: { ...newState.schedule, steps: newSteps } };
 				}
 
-				const currentInnerPlaceholderIndex = allButLastSegment.findIndex(isSegmentPlaceholder);
+				const currentInnerPlaceholderIndex = allButLastStep.findIndex(isStepPlaceholder);
 				const isIndexBeforeCurrentInnerPlaceholder = index < currentInnerPlaceholderIndex;
 
-				const newSegments = allSegments.filter((segment) => !isSegmentPlaceholder(segment));
-				if (!newSegments.some(isSegmentPlaceholder)) {
-					newSegments.push({ ...PLACEHOLDER_SEGMENT });
+				const newSteps = allSteps.filter((step) => !isStepPlaceholder(step));
+				if (!newSteps.some(isStepPlaceholder)) {
+					newSteps.push({ ...PLACEHOLDER_SEGMENT });
 				}
 
 				if (isIndexBeforeCurrentInnerPlaceholder) {
-					newSegments.splice(Math.max(0, index), 0, { ...PLACEHOLDER_SEGMENT });
+					newSteps.splice(Math.max(0, index), 0, { ...PLACEHOLDER_SEGMENT });
 				} else {
-					newSegments.splice(index - 1, 0, { ...PLACEHOLDER_SEGMENT });
+					newSteps.splice(index - 1, 0, { ...PLACEHOLDER_SEGMENT });
 				}
-				return { ...newState, schedule: { ...newState.schedule, segments: newSegments } };
+				return { ...newState, schedule: { ...newState.schedule, steps: newSteps } };
 			}),
 		switchTemplate: (newTemplateKey: string): void =>
 			update((state) => {
@@ -135,17 +135,17 @@ export function createAppStore(): AppStore {
 					...newState,
 					schedule: {
 						...newState.schedule,
-						segments: [...TEMPLATES[newTemplateKey], { ...PLACEHOLDER_SEGMENT }],
+						steps: [...TEMPLATES[newTemplateKey], { ...PLACEHOLDER_SEGMENT }],
 						templateKey: newTemplateKey
 					}
 				};
 			}),
-		deleteSegmentAtIndex: (index: number): void =>
+		deleteStepAtIndex: (index: number): void =>
 			update((state) => {
 				const newState = _saveScheduleForUndo(state);
-				const newSegments = [...newState.schedule.segments];
-				newSegments.splice(index, 1);
-				return { ...newState, schedule: { ...newState.schedule, segments: newSegments } };
+				const newSteps = [...newState.schedule.steps];
+				newSteps.splice(index, 1);
+				return { ...newState, schedule: { ...newState.schedule, steps: newSteps } };
 			}),
 		undo: (): void =>
 			update((state) => {

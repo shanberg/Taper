@@ -3,7 +3,7 @@ import { appStore, createAppStore, INITIAL_STORE_STATE } from './stores';
 import { get } from 'svelte/store';
 import { PLACEHOLDER_SEGMENT, TEMPLATES } from './consts';
 import { TaperDate } from './TaperDate';
-import { isSegmentPlaceholder, serializeSchedule } from './utils';
+import { isStepPlaceholder, serializeSchedule } from './utils';
 
 describe('appStore', () => {
 	beforeEach(() => {
@@ -23,10 +23,10 @@ describe('appStore', () => {
 		expect(initialState).toEqual(INITIAL_STORE_STATE);
 
 		// Verify that the store methods are defined
-		expect(typeof store.editSegmentAtIndex).toBe('function');
+		expect(typeof store.editStepAtIndex).toBe('function');
 		expect(typeof store.changeStartDate).toBe('function');
-		expect(typeof store.insertPlaceholderSegmentBeforeIndex).toBe('function');
-		expect(typeof store.deleteSegmentAtIndex).toBe('function');
+		expect(typeof store.insertPlaceholderStepBeforeIndex).toBe('function');
+		expect(typeof store.deleteStepAtIndex).toBe('function');
 		expect(typeof store.switchTemplate).toBe('function');
 		expect(typeof store.undo).toBe('function');
 		expect(typeof store.redo).toBe('function');
@@ -39,8 +39,8 @@ describe('appStore', () => {
 		// verify initial state
 		const afterState: AppState = get(appStore);
 
-		// segments are from the template
-		expect(afterState.schedule.segments).toEqual([
+		// steps are from the template
+		expect(afterState.schedule.steps).toEqual([
 			...TEMPLATES[Object.keys(TEMPLATES)[0]],
 			PLACEHOLDER_SEGMENT
 		]);
@@ -54,21 +54,21 @@ describe('appStore', () => {
 		expect(afterState.redoStack).toEqual([]);
 	});
 
-	test('editSegmentAtIndex 0', () => {
+	test('editStepAtIndex 0', () => {
 		const initialSchedule = serializeSchedule(get(appStore).schedule);
 		const indexToUpdate = 0;
 
-		// Create a new segment
-		const updatedSegment = { dose: 99, daysForDose: 99 };
+		// Create a new step
+		const updatedStep = { dose: 99, daysForDose: 99 };
 
-		// edit the segment
-		appStore.editSegmentAtIndex(indexToUpdate, { ...updatedSegment });
+		// edit the step
+		appStore.editStepAtIndex(indexToUpdate, { ...updatedStep });
 
 		// verify changes
 		const afterState = get(appStore);
 
-		// verify segment has been updated
-		expect(afterState.schedule.segments[indexToUpdate]).toEqual(updatedSegment);
+		// verify step has been updated
+		expect(afterState.schedule.steps[indexToUpdate]).toEqual(updatedStep);
 
 		// verify undo stack has previous state
 		expect(afterState.undoStack.length).toBe(1);
@@ -78,9 +78,9 @@ describe('appStore', () => {
 		expect(afterState.redoStack).toEqual([]);
 	});
 
-	test('editSegmentAtIndex last index when it was a placeholder', () => {
+	test('editStepAtIndex last index when it was a placeholder', () => {
 		// prepare test data
-		const startingSegments = [
+		const startingSteps = [
 			{ dose: 1, daysForDose: 1 }, // 0
 			{ dose: 2, daysForDose: 2 }, // 1
 			{ dose: 3, daysForDose: 3 }, // 2
@@ -88,7 +88,7 @@ describe('appStore', () => {
 			{ dose: 0, daysForDose: 0 } // 4 - the one to edit
 		];
 
-		const resultingSegments = [
+		const resultingSteps = [
 			{ dose: 1, daysForDose: 1 }, // 0
 			{ dose: 2, daysForDose: 2 }, // 1
 			{ dose: 3, daysForDose: 3 }, // 2
@@ -100,15 +100,15 @@ describe('appStore', () => {
 		// prepare initial state
 		const beforeState = get(appStore);
 		let preparedAppState = beforeState;
-		preparedAppState.schedule.segments = startingSegments;
+		preparedAppState.schedule.steps = startingSteps;
 		appStore.set(preparedAppState);
 
 		// insert the placeholder
-		appStore.editSegmentAtIndex(4, { dose: 1, daysForDose: 0 });
+		appStore.editStepAtIndex(4, { dose: 1, daysForDose: 0 });
 
 		// verify changes
 		const afterState = get(appStore);
-		expect(afterState.schedule.segments).toEqual(resultingSegments);
+		expect(afterState.schedule.steps).toEqual(resultingSteps);
 	});
 
 	test('changeStartDate', () => {
@@ -125,22 +125,22 @@ describe('appStore', () => {
 		expect(afterState.undoStack.length).toBe(1);
 	});
 
-	test('insertPlaceholderSegmentBeforeIndex at zero', () => {
+	test('insertPlaceholderStepBeforeIndex at zero', () => {
 		const indexToInsert = 0;
 
-		// Insert a placeholder segment before index 0
-		appStore.insertPlaceholderSegmentBeforeIndex(indexToInsert);
+		// Insert a placeholder step before index 0
+		appStore.insertPlaceholderStepBeforeIndex(indexToInsert);
 
 		// verify changes
 		const afterState = get(appStore);
-		expect(afterState.schedule.segments[indexToInsert]).toEqual(PLACEHOLDER_SEGMENT);
+		expect(afterState.schedule.steps[indexToInsert]).toEqual(PLACEHOLDER_SEGMENT);
 		expect(afterState.undoStack.length).toBe(1);
 		expect(afterState.redoStack).toEqual([]);
 	});
 
-	test('insertPlaceholderSegmentBeforeIndex before existing placeholder', () => {
+	test('insertPlaceholderStepBeforeIndex before existing placeholder', () => {
 		// prepare test data
-		const startingSegments = [
+		const startingSteps = [
 			{ dose: 1, daysForDose: 1 }, // 0
 			{ dose: 2, daysForDose: 2 }, // 1
 			{ dose: 3, daysForDose: 3 }, // 2
@@ -148,7 +148,7 @@ describe('appStore', () => {
 			{ dose: 0, daysForDose: 0 } // 4 - end placeholder
 		];
 
-		const resultingSegments = [
+		const resultingSteps = [
 			{ dose: 1, daysForDose: 1 }, // 0
 			{ dose: 2, daysForDose: 2 }, // 1
 			{ dose: 3, daysForDose: 3 }, // 2
@@ -160,20 +160,20 @@ describe('appStore', () => {
 		// prepare initial state
 		const beforeState = get(appStore);
 		let preparedAppState = beforeState;
-		preparedAppState.schedule.segments = startingSegments;
+		preparedAppState.schedule.steps = startingSteps;
 		appStore.set(preparedAppState);
 
 		// insert the placeholder
-		appStore.insertPlaceholderSegmentBeforeIndex(3);
+		appStore.insertPlaceholderStepBeforeIndex(3);
 
 		// verify changes
 		const afterState = get(appStore);
-		expect(afterState.schedule.segments).toEqual(resultingSegments);
+		expect(afterState.schedule.steps).toEqual(resultingSteps);
 	});
 
-	test('insertPlaceholderSegmentBeforeIndex after existing placeholder', () => {
+	test('insertPlaceholderStepBeforeIndex after existing placeholder', () => {
 		// prepare test data
-		const startingSegments = [
+		const startingSteps = [
 			{ dose: 1, daysForDose: 1 }, // 0
 			{ dose: 0, daysForDose: 0 }, // 1 - inner placeholder
 			{ dose: 2, daysForDose: 2 }, // 2
@@ -181,7 +181,7 @@ describe('appStore', () => {
 			{ dose: 0, daysForDose: 0 } // 4 - end placeholder
 		];
 
-		const resultingSegments = [
+		const resultingSteps = [
 			{ dose: 1, daysForDose: 1 }, // 0
 			// placeholder removed
 			{ dose: 2, daysForDose: 2 }, // 1
@@ -193,20 +193,20 @@ describe('appStore', () => {
 		// prepare initial state
 		const beforeState = get(appStore);
 		let preparedAppState = beforeState;
-		preparedAppState.schedule.segments = startingSegments;
+		preparedAppState.schedule.steps = startingSteps;
 		appStore.set(preparedAppState);
 
 		// insert the placeholder
-		appStore.insertPlaceholderSegmentBeforeIndex(3);
+		appStore.insertPlaceholderStepBeforeIndex(3);
 
 		// verify changes
 		const afterState = get(appStore);
-		expect(afterState.schedule.segments).toEqual(resultingSegments);
+		expect(afterState.schedule.steps).toEqual(resultingSteps);
 	});
 
-	test('insertPlaceholderSegmentBeforeIndex then delete placeholder', () => {
+	test('insertPlaceholderStepBeforeIndex then delete placeholder', () => {
 		// prepare test data
-		const startingSegments = [
+		const startingSteps = [
 			{ dose: 1, daysForDose: 1 }, // 0
 			{ dose: 2, daysForDose: 2 }, // 1
 			{ dose: 3, daysForDose: 3 }, // 2
@@ -235,22 +235,22 @@ describe('appStore', () => {
 		// prepare initial state
 		const beforeState = get(appStore);
 		let preparedAppState = beforeState;
-		preparedAppState.schedule.segments = startingSegments;
+		preparedAppState.schedule.steps = startingSteps;
 		appStore.set(preparedAppState);
 
 		// insert the placeholder
-		appStore.insertPlaceholderSegmentBeforeIndex(3);
+		appStore.insertPlaceholderStepBeforeIndex(3);
 
 		// verify changes 1
 		const afterAdding = get(appStore);
-		expect(afterAdding.schedule.segments).toEqual(afterAddingPlaceholder);
+		expect(afterAdding.schedule.steps).toEqual(afterAddingPlaceholder);
 
 		// insert the placeholder
-		appStore.deleteSegmentAtIndex(3);
+		appStore.deleteStepAtIndex(3);
 
 		// verify changes 2
 		const afterDeleting = get(appStore);
-		expect(afterDeleting.schedule.segments).toEqual(afterDeletingPlaceholder);
+		expect(afterDeleting.schedule.steps).toEqual(afterDeletingPlaceholder);
 	});
 
 	test('switchTemplate', () => {
@@ -262,36 +262,36 @@ describe('appStore', () => {
 
 		// verify changes
 		const afterState = get(appStore);
-		expect(afterState.schedule.segments).toEqual(expect.arrayContaining(TEMPLATES[newTemplateKey]));
+		expect(afterState.schedule.steps).toEqual(expect.arrayContaining(TEMPLATES[newTemplateKey]));
 		expect(afterState.undoStack.length).toBe(1);
 		expect(afterState.redoStack).toEqual([]);
 	});
 
-	test('deleteSegmentAtIndex', () => {
+	test('deleteStepAtIndex', () => {
 		const beforeState = get(appStore);
-		// pick a segment to delete
-		const segmentIndex = 0;
+		// pick a step to delete
+		const stepIndex = 0;
 
 		// set its content to something unique
-		const testSegment = { dose: 99, daysForDose: 99 };
+		const testStep = { dose: 99, daysForDose: 99 };
 
-		// edit the segment
-		appStore.editSegmentAtIndex(segmentIndex, testSegment);
+		// edit the step
+		appStore.editStepAtIndex(stepIndex, testStep);
 
-		// verify that segment was edited
+		// verify that step was edited
 		const afterState1 = get(appStore);
-		expect(afterState1.schedule.segments[segmentIndex]).toEqual(testSegment);
+		expect(afterState1.schedule.steps[stepIndex]).toEqual(testStep);
 		expect(afterState1.undoStack.length).toBe(1);
 		expect(afterState1.redoStack).toEqual([]);
 
-		// then delete the segment
-		appStore.deleteSegmentAtIndex(segmentIndex);
+		// then delete the step
+		appStore.deleteStepAtIndex(stepIndex);
 
 		// and verify it's deleted
 		const afterState2 = get(appStore);
 		expect(
-			afterState2.schedule.segments.find(
-				(s: Segment) => s.dose === testSegment.dose && s.daysForDose === testSegment.daysForDose
+			afterState2.schedule.steps.find(
+				(s: Step) => s.dose === testStep.dose && s.daysForDose === testStep.daysForDose
 			)
 		).toBeUndefined();
 		expect(afterState2.undoStack.length).toBe(2);
@@ -301,32 +301,32 @@ describe('appStore', () => {
 	test('undo', () => {
 		const initialState = get(appStore);
 
-		// increment a segment a few times
-		appStore.editSegmentAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
+		// increment a step a few times
+		appStore.editStepAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
 		const after1 = get(appStore);
 		expect(after1.undoStack.length).toEqual(1);
-		appStore.editSegmentAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
+		appStore.editStepAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
 		const after2 = get(appStore);
 		expect(after2.undoStack.length).toEqual(2);
-		appStore.editSegmentAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
+		appStore.editStepAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
 		const after3 = get(appStore);
 		expect(after3.undoStack.length).toEqual(3);
 
 		const editedAppStore = get(appStore);
-		expect(editedAppStore.schedule.segments[1]).toEqual({ dose: 3, daysForDose: 1 });
+		expect(editedAppStore.schedule.steps[1]).toEqual({ dose: 3, daysForDose: 1 });
 
 		appStore.undo(); // first undo
 		const afterUndo1 = get(appStore);
-		expect(afterUndo1.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
+		expect(afterUndo1.schedule.steps[1]).toEqual({ dose: 2, daysForDose: 1 });
 
 		appStore.undo(); // second undo
 		const afterUndo2 = get(appStore);
-		expect(afterUndo2.schedule.segments[1]).toEqual({ dose: 1, daysForDose: 1 });
+		expect(afterUndo2.schedule.steps[1]).toEqual({ dose: 1, daysForDose: 1 });
 	});
 
 	test('undo', () => {
 		// prepare test data
-		const startingSegments = [
+		const startingSteps = [
 			{ dose: 1, daysForDose: 1 }, // 0
 			{ dose: 2, daysForDose: 2 }, // 2
 			{ dose: 3, daysForDose: 3 }, // 3 - insert before here
@@ -335,53 +335,53 @@ describe('appStore', () => {
 
 		// prepare initial state
 		let preparedAppState = INITIAL_STORE_STATE;
-		preparedAppState.schedule.segments = startingSegments;
+		preparedAppState.schedule.steps = startingSteps;
 		appStore.set(preparedAppState);
 
 		const initialState = get(appStore);
-		expect(initialState.schedule.segments).toEqual(startingSegments);
+		expect(initialState.schedule.steps).toEqual(startingSteps);
 
 		// make a bunch of changes
-		appStore.insertPlaceholderSegmentBeforeIndex(3); // 1
+		appStore.insertPlaceholderStepBeforeIndex(3); // 1
 		const afterInsertPlaceholder = get(appStore);
 		expect(
-			afterInsertPlaceholder.schedule.segments.filter((s) => isSegmentPlaceholder(s)).length
+			afterInsertPlaceholder.schedule.steps.filter((s) => isStepPlaceholder(s)).length
 		).toEqual(2);
 
-		appStore.deleteSegmentAtIndex(2); // 2
-		const afterDeleteSegment = get(appStore);
+		appStore.deleteStepAtIndex(2); // 2
+		const afterDeleteStep = get(appStore);
 		expect(
-			afterDeleteSegment.schedule.segments.filter((s) => isSegmentPlaceholder(s)).length
+			afterDeleteStep.schedule.steps.filter((s) => isStepPlaceholder(s)).length
 		).toEqual(2);
 
-		appStore.editSegmentAtIndex(3, { dose: 33, daysForDose: 12 }); // 3
-		const afterEditSegment = get(appStore);
+		appStore.editStepAtIndex(3, { dose: 33, daysForDose: 12 }); // 3
+		const afterEditStep = get(appStore);
 		expect(
-			afterEditSegment.schedule.segments.filter((s) => isSegmentPlaceholder(s)).length
+			afterEditStep.schedule.steps.filter((s) => isStepPlaceholder(s)).length
 		).toEqual(1);
 
-		appStore.insertPlaceholderSegmentBeforeIndex(4); // 4
+		appStore.insertPlaceholderStepBeforeIndex(4); // 4
 		const afterInsertPlaceholder2 = get(appStore);
 		expect(
-			afterInsertPlaceholder2.schedule.segments.filter((s) => isSegmentPlaceholder(s)).length
+			afterInsertPlaceholder2.schedule.steps.filter((s) => isStepPlaceholder(s)).length
 		).toEqual(2);
 
-		appStore.editSegmentAtIndex(4, { dose: 33, daysForDose: 10 }); // 5
-		const afterEditSegment2 = get(appStore);
+		appStore.editStepAtIndex(4, { dose: 33, daysForDose: 10 }); // 5
+		const afterEditStep2 = get(appStore);
 		expect(
-			afterEditSegment2.schedule.segments.filter((s) => isSegmentPlaceholder(s)).length
+			afterEditStep2.schedule.steps.filter((s) => isStepPlaceholder(s)).length
 		).toEqual(1);
 
-		appStore.editSegmentAtIndex(4, { dose: 33, daysForDose: 19 }); // 6
-		const afterEditSegment3 = get(appStore);
+		appStore.editStepAtIndex(4, { dose: 33, daysForDose: 19 }); // 6
+		const afterEditStep3 = get(appStore);
 		expect(
-			afterEditSegment3.schedule.segments.filter((s) => isSegmentPlaceholder(s)).length
+			afterEditStep3.schedule.steps.filter((s) => isStepPlaceholder(s)).length
 		).toEqual(1);
 
-		appStore.insertPlaceholderSegmentBeforeIndex(1); // 7
+		appStore.insertPlaceholderStepBeforeIndex(1); // 7
 		const afterInsertPlaceholder3 = get(appStore);
 		expect(
-			afterInsertPlaceholder3.schedule.segments.filter((s) => isSegmentPlaceholder(s)).length
+			afterInsertPlaceholder3.schedule.steps.filter((s) => isStepPlaceholder(s)).length
 		).toEqual(2);
 
 		const afterChanges = get(appStore);
@@ -390,11 +390,11 @@ describe('appStore', () => {
 		// undo them all
 		appStore.undo(); // -6
 		const afterUndo1 = get(appStore);
-		expect(afterUndo1.schedule).toEqual(afterEditSegment3.schedule);
+		expect(afterUndo1.schedule).toEqual(afterEditStep3.schedule);
 
 		appStore.undo(); // -5
 		const afterUndo2 = get(appStore);
-		expect(afterUndo2.schedule).toEqual(afterEditSegment2.schedule);
+		expect(afterUndo2.schedule).toEqual(afterEditStep2.schedule);
 
 		appStore.undo(); // -4
 		const afterUndo3 = get(appStore);
@@ -402,11 +402,11 @@ describe('appStore', () => {
 
 		appStore.undo(); // -3
 		const afterUndo4 = get(appStore);
-		expect(afterUndo4.schedule).toEqual(afterEditSegment.schedule);
+		expect(afterUndo4.schedule).toEqual(afterEditStep.schedule);
 
 		appStore.undo(); // -2
 		const afterUndo5 = get(appStore);
-		expect(afterUndo5.schedule).toEqual(afterDeleteSegment.schedule);
+		expect(afterUndo5.schedule).toEqual(afterDeleteStep.schedule);
 
 		appStore.undo(); // -1
 		const afterUndo6 = get(appStore);
@@ -416,7 +416,7 @@ describe('appStore', () => {
 		const afterUndo7 = get(appStore);
 		expect(afterUndo7.schedule).toEqual(INITIAL_STORE_STATE.schedule);
 		expect(afterUndo7.undoStack.length).toEqual(0); // no more undos to undo
-		expect(afterUndo7.schedule.segments[0]).toEqual(INITIAL_STORE_STATE.schedule.segments[0]);
+		expect(afterUndo7.schedule.steps[0]).toEqual(INITIAL_STORE_STATE.schedule.steps[0]);
 		expect(afterUndo7.schedule).toEqual(INITIAL_STORE_STATE.schedule);
 		expect(afterUndo7.startDateInputValue).toEqual(INITIAL_STORE_STATE.startDateInputValue);
 	});
@@ -439,38 +439,38 @@ describe('appStore', () => {
 		const initialState = get(appStore);
 
 		// Perform some actions
-		appStore.editSegmentAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
+		appStore.editStepAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
 		const afterEdit1 = get(appStore);
 		expect(afterEdit1.undoStack.length).toEqual(1);
 
-		appStore.editSegmentAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
+		appStore.editStepAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
 		const afterEdit2 = get(appStore);
 		expect(afterEdit2.undoStack.length).toEqual(2);
 
-		appStore.editSegmentAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
+		appStore.editStepAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
 		const afterEdit3 = get(appStore);
 		expect(afterEdit3.undoStack.length).toEqual(3);
 
 		// Perform undo actions
 		appStore.undo(); // undo last edit
 		const afterUndo1 = get(appStore);
-		expect(afterUndo1.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
+		expect(afterUndo1.schedule.steps[1]).toEqual({ dose: 2, daysForDose: 1 });
 		expect(afterUndo1.redoStack.length).toEqual(1);
 
 		appStore.undo(); // undo second edit
 		const afterUndo2 = get(appStore);
-		expect(afterUndo2.schedule.segments[1]).toEqual({ dose: 1, daysForDose: 1 });
+		expect(afterUndo2.schedule.steps[1]).toEqual({ dose: 1, daysForDose: 1 });
 		expect(afterUndo2.redoStack.length).toEqual(2);
 
 		// Perform redo actions
 		appStore.redo(); // redo second edit
 		const afterRedo1 = get(appStore);
-		expect(afterRedo1.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
+		expect(afterRedo1.schedule.steps[1]).toEqual({ dose: 2, daysForDose: 1 });
 		expect(afterRedo1.redoStack.length).toEqual(1);
 
 		appStore.redo(); // redo last edit
 		const afterRedo2 = get(appStore);
-		expect(afterRedo2.schedule.segments[1]).toEqual({ dose: 3, daysForDose: 1 });
+		expect(afterRedo2.schedule.steps[1]).toEqual({ dose: 3, daysForDose: 1 });
 		expect(afterRedo2.redoStack.length).toEqual(0);
 	});
 
@@ -478,9 +478,9 @@ describe('appStore', () => {
 		const initialState = get(appStore);
 
 		// Perform some actions
-		appStore.editSegmentAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
-		appStore.editSegmentAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
-		appStore.editSegmentAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
+		appStore.editStepAtIndex(1, { dose: 1, daysForDose: 1 }); // 1
+		appStore.editStepAtIndex(1, { dose: 2, daysForDose: 1 }); // 2
+		appStore.editStepAtIndex(1, { dose: 3, daysForDose: 1 }); // 3
 
 		// Perform multiple undo actions
 		appStore.undo(); // undo last edit
@@ -488,27 +488,27 @@ describe('appStore', () => {
 		appStore.undo(); // undo first edit
 
 		const afterUndoAll = get(appStore);
-		expect(afterUndoAll.schedule.segments[1]).toEqual(initialState.schedule.segments[1]);
+		expect(afterUndoAll.schedule.steps[1]).toEqual(initialState.schedule.steps[1]);
 		expect(afterUndoAll.redoStack.length).toEqual(3);
 
 		// Perform multiple redo actions
 		appStore.redo(); // redo first edit
 		const afterRedo1 = get(appStore);
-		expect(afterRedo1.schedule.segments[1]).toEqual({ dose: 1, daysForDose: 1 });
+		expect(afterRedo1.schedule.steps[1]).toEqual({ dose: 1, daysForDose: 1 });
 
 		appStore.redo(); // redo second edit
 		const afterRedo2 = get(appStore);
-		expect(afterRedo2.schedule.segments[1]).toEqual({ dose: 2, daysForDose: 1 });
+		expect(afterRedo2.schedule.steps[1]).toEqual({ dose: 2, daysForDose: 1 });
 
 		appStore.redo(); // redo last edit
 		const afterRedo3 = get(appStore);
-		expect(afterRedo3.schedule.segments[1]).toEqual({ dose: 3, daysForDose: 1 });
+		expect(afterRedo3.schedule.steps[1]).toEqual({ dose: 3, daysForDose: 1 });
 		expect(afterRedo3.redoStack.length).toEqual(0);
 	});
 
 	test('redo returns current state when redoStack is empty', () => {
 		// Perform an action to modify the state
-		appStore.editSegmentAtIndex(0, { dose: 5, daysForDose: 10 });
+		appStore.editStepAtIndex(0, { dose: 5, daysForDose: 10 });
 
 		// Call undo to enable redo
 		appStore.undo();

@@ -1,23 +1,27 @@
-type Segment = {
+type Step = {
 	dose: number;
 	daysForDose: number;
 };
 
+type DoseDate = Date & {
+	__brand: "DoseDate"
+}
+
 type DayWithDose = {
 	date: ScheduleDate;
 	dose: number;
+}
+
+type StepWithStartEndDate = {
+	step: Step;
+	stepStartDate: ScheduleDate;
+	stepEndDate: ScheduleDate;
 };
 
-type SegmentWithStartEndDate = {
-	segment: Segment;
-	segmentStartDate: ScheduleDate;
-	segmentEndDate: ScheduleDate;
-};
-
-type DisplayMode = "calendar" | "doses" | "segments"
+type DisplayMode = "calendar" | "doses" | "steps"
 
 type Schedule = {
-	segments: Segment[];
+	steps: Step[];
 	startDate: ScheduleDate;
 	templateKey: string;
 	languageKey: string;
@@ -42,7 +46,7 @@ type Language = {
 	dir: 'ltr' | 'rtl';
 };
 
-type Template = Segment;
+type Template = Step;
 
 type Message = {
 	startDate?: string | null;

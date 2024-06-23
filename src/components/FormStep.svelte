@@ -1,34 +1,34 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { isSegmentInvalid, isSegmentPlaceholder } from '../utils';
-	export let segments: Segment[];
-	export let segment: Segment;
+	import { isStepInvalid, isStepPlaceholder } from '../utils';
+	export let steps: Step[];
+	export let step: Step;
 	export let index: number;
 
 	const dispatch = createEventDispatcher();
-	$: isOnlyRealSegment = segments.length === 2;
-	$: isPlaceholder = isSegmentPlaceholder(segment);
-	$: isInvalid = !isPlaceholder && isSegmentInvalid(segment);
-	$: isLastSegment = index === segments.length - 1
+	$: isOnlyRealStep = steps.length === 2;
+	$: isPlaceholder = isStepPlaceholder(step);
+	$: isInvalid = !isPlaceholder && isStepInvalid(step);
+	$: isLastStep = index === steps.length - 1
 
 	function handleClickDelete() {
-		dispatch('removeSegment', index);
+		dispatch('removeStep', index);
 	}
 </script>
 
-<div class="segment" class:isInvalid class:isPlaceholder class:isLastSegment>
+<div class="step" class:isInvalid class:isPlaceholder class:isLastStep>
 	<div class="dose">
 		<label for="dose-{index}">
 			<input
 				min={1}
 				id="dose-{index}"
-				step={segment.dose > 5 ? 1 : 0.25}
+				step={step.dose > 5 ? 1 : 0.25}
 				type="number"
 				inputmode="decimal"
 				pattern="[1-9]\d*"
 				aria-label="dose-{index}"
-				bind:value={segment.dose}
-				on:change={() => dispatch('change', segment)}
+				bind:value={step.dose}
+				on:change={() => dispatch('change', step)}
 			/>
 		</label>
 	</div>
@@ -41,13 +41,13 @@
 				inputmode="decimal"
 				pattern="[1-9]\d*"
 				aria-label="days-{index}"
-				bind:value={segment.daysForDose}
-				on:change={() => dispatch('change', segment)}
+				bind:value={step.daysForDose}
+				on:change={() => dispatch('change', step)}
 			/>
 		</label>
 	</div>
 	<button
-		{...(isLastSegment || isOnlyRealSegment) ? { disabled: true } : {}}
+		{...(isLastStep || isOnlyRealStep) ? { disabled: true } : {}}
 		title="Remove this step"
 		class="remove-btn"
 		on:click={handleClickDelete}>×</button
@@ -56,7 +56,7 @@
 
 <style>
 
-.segment {
+.step {
 	display: flex;
 	flex: 0 0 12rem;
 	gap: 1px;
@@ -119,7 +119,7 @@
 		background: var(--color-status-error-background-muted);
 	}
 
-	.isLastSegment .remove-btn {
+	.isLastStep .remove-btn {
 		visibility: hidden;
 	}
 

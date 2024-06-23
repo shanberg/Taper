@@ -10,25 +10,25 @@ const getLanguageFromKey = (key: string) => {
   return languages.find(lang => lang.lang === key) || languages[0];
 };
 
-const isSegmentPlaceholder = (segment: { dose: number, daysForDose: number }): boolean => {
-  return segment.dose === 0 && segment.daysForDose === 0;
+const isStepPlaceholder = (step: { dose: number, daysForDose: number }): boolean => {
+  return step.dose === 0 && step.daysForDose === 0;
 };
 
-const calculateSegmentStartAndEndDates = (schedule: any, index: number) => {
+const calculateStepStartAndEndDates = (schedule: any, index: number) => {
   const startDate = new Date(schedule.startDate);
   startDate.setUTCDate(startDate.getUTCDate() + index * 5);
   const endDate = new Date(startDate);
-  endDate.setUTCDate(endDate.getUTCDate() + schedule.segments[index].daysForDose - 1);
-  return { segment: schedule.segments[index], segmentStartDate: startDate, segmentEndDate: endDate };
+  endDate.setUTCDate(endDate.getUTCDate() + schedule.steps[index].daysForDose - 1);
+  return { step: schedule.steps[index], stepStartDate: startDate, stepEndDate: endDate };
 };
 
-const formatSegmentText = ({ segment, segmentStartDate, segmentEndDate, index, selectedLanguage }: any) => {
-  return `Segment ${index + 1}: ${segment.dose} dose(s) from ${segmentStartDate.toUTCString()} to ${segmentEndDate.toUTCString()} in ${selectedLanguage.labelEn}`;
+const formatStepText = ({ step, stepStartDate, stepEndDate, index, selectedLanguage }: any) => {
+  return `Step ${index + 1}: ${step.dose} dose(s) from ${stepStartDate.toUTCString()} to ${stepEndDate.toUTCString()} in ${selectedLanguage.labelEn}`;
 };
 
 // Test data
 const mockSchedule = {
-  segments: [
+  steps: [
     { dose: 10, daysForDose: 5 },
     { dose: 20, daysForDose: 3 },
     { dose: 30, daysForDose: 7 },
@@ -49,11 +49,11 @@ Then take 30mg daily for 7 days (Jan 9, 2023 - Jan 15, 2023)`;
     expect(result).toEqual(expected);
   });
 
-  it('should exclude placeholder segments', () => {
+  it('should exclude placeholder steps', () => {
     const scheduleWithPlaceholder = {
       ...mockSchedule,
-      segments: [
-        ...mockSchedule.segments,
+      steps: [
+        ...mockSchedule.steps,
         { dose: 0, daysForDose: 0 },
       ],
     };

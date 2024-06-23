@@ -6,7 +6,7 @@
 	import { FormHeader } from '../components/FormHeader';
 	import { Output } from '../components/Output';
 	import Heading from '../components/Heading.svelte';
-	import ScheduleRow from '../components/ScheduleRow.svelte';
+	import FormScheduleRow from '../components/FormScheduleRow.svelte';
 	import Message from '../components/Message.svelte';
 	import AboutAppButton from '../components/AboutAppButton.svelte';
 
@@ -39,7 +39,6 @@
 	});
 
 	$: schedule = $appStore.schedule;
-	$: selectedLanguage = getLanguageFromKey(schedule.languageKey);
 </script>
 
 <main>
@@ -53,13 +52,12 @@
 		<div class={`${layout.hstack} form-schedule-header`}>
 			<div class="dose">mg</div>
 			<div class="days">days</div>
-			<div class="schedule">Schedule</div>
+			<div class="schedule">Steps</div>
 		</div>
-		{#each schedule.segments as _, index}
-			<ScheduleRow {schedule} {index} {selectedLanguage} />
+		{#each schedule.steps as _, index}
+			<FormScheduleRow {schedule} {index} />
 		{/each}
 	</div>
-
 	<Output />
 </main>
 

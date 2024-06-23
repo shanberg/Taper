@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { formatSegmentText } from '../src/utils';
+import { formatStepText } from '../src/utils';
 import { LANGUAGES } from '../src/consts';
 import { TaperDate } from '../src/TaperDate';
 
@@ -10,16 +10,16 @@ const Mandarin = LANGUAGES.find((language) => language.labelEn === 'Mandarin');
 const Swahili = LANGUAGES.find((language) => language.labelEn === 'Swahili');
 const Arabic = LANGUAGES.find((language) => language.labelEn === 'Arabic');
 
-describe('formatSegmentText', () => {
-	const segment = { dose: 50, daysForDose: 5 };
-	const segmentStartDate = new TaperDate('2024-06-01').toScheduleDate();
-	const segmentEndDate = new TaperDate('2024-06-05').toScheduleDate();
+describe('formatStepText', () => {
+	const step = { dose: 50, daysForDose: 5 };
+	const stepStartDate = new TaperDate('2024-06-01').toScheduleDate();
+	const stepEndDate = new TaperDate('2024-06-05').toScheduleDate();
 
 	test('formats text for English language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
+		const result = formatStepText({
+			step,
+			stepStartDate,
+			stepEndDate,
 			index: 0,
 			selectedLanguage: English
 		});
@@ -27,10 +27,10 @@ describe('formatSegmentText', () => {
 	});
 
 	test('formats text for Spanish language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
+		const result = formatStepText({
+			step,
+			stepStartDate,
+			stepEndDate,
 			index: 1,
 			selectedLanguage: Spanish
 		});
@@ -38,10 +38,10 @@ describe('formatSegmentText', () => {
 	});
 
 	test('formats text for Haitian Creole language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
+		const result = formatStepText({
+			step,
+			stepStartDate,
+			stepEndDate,
 			index: 0,
 			selectedLanguage: HaitianCreole
 		});
@@ -49,10 +49,10 @@ describe('formatSegmentText', () => {
 	});
 
 	test('formats text for Mandarin language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
+		const result = formatStepText({
+			step,
+			stepStartDate,
+			stepEndDate,
 			index: 1,
 			selectedLanguage: Mandarin
 		});
@@ -60,10 +60,10 @@ describe('formatSegmentText', () => {
 	});
 
 	test('formats text for Swahili language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
+		const result = formatStepText({
+			step,
+			stepStartDate,
+			stepEndDate,
 			index: 0,
 			selectedLanguage: Swahili
 		});
@@ -71,10 +71,10 @@ describe('formatSegmentText', () => {
 	});
 
 	test('formats text for Arabic language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
+		const result = formatStepText({
+			step,
+			stepStartDate,
+			stepEndDate,
 			index: 1,
 			selectedLanguage: Arabic
 		});
@@ -82,10 +82,10 @@ describe('formatSegmentText', () => {
 	});
 
 	test('returns empty string for unsupported language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
+		const result = formatStepText({
+			step,
+			stepStartDate,
+			stepEndDate,
 			index: 1,
 			selectedLanguage: { labelEn: 'Unsupported Language', lang: 'xx', dir: 'ltr' }
 		});

@@ -1,11 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ScheduleSegment > renders correctly 1`] = `
+exports[`ScheduleStep > renders correctly 1`] = `
 <div>
   <span
     class="svelte-1eqebjg"
   >
-    Segment 1: 1 dose(s) from 6/1/2024 to 6/5/2024
+    Step 1: 1 dose(s) from 6/1/2024 to 6/5/2024
   </span>
   
 </div>

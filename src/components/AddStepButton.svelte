@@ -4,15 +4,15 @@
 	const dispatch = createEventDispatcher();
 
 	function handleClick() {
-		dispatch('addSegment');
+		dispatch('addStep');
 	}
 </script>
 
-<button title="Add a segment" on:click={handleClick}></button>
+<button title="Add a step" on:click={handleClick}></button>
 
 <style>
 	:root {
-		--add-segment-button-height: calc((1 / 3) * var(--control-height-default));
+		--add-step-button-height: calc((1 / 3) * var(--control-height-default));
 	}
 
 	button {
@@ -36,7 +36,7 @@
 			top: 50%;
 			left: 0;
 			right: 0;
-			height: var(--add-segment-button-height);
+			height: var(--add-step-button-height);
 			transform: translateY(-50%);
 			opacity: 0;
 		}
@@ -48,7 +48,7 @@
 			top: 50%;
 			left: 0;
 			right: 0;
-			height: calc(var(--add-segment-button-height) * 0.25);
+			height: calc(var(--add-step-button-height) * 0.25);
 			background-color: var(--color-text-muted);
 			transition: inherit;
 			transform: translateY(-50%) scaleY(0);

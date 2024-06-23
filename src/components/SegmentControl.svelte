@@ -61,7 +61,9 @@
       place-content: center;
     }
 
-    .checked {
+    .checked,
+    .checked:active,
+    .checked:hover {
       background: var(--color-text-primary);
       color: var(--color-text-primary-contrast);
     }

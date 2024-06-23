@@ -1,29 +1,29 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent } from '@testing-library/svelte';
 import '@testing-library/jest-dom';
-import FormSegment from './FormSegment.svelte';
+import FormStep from './FormStep.svelte';
 
-describe('FormSegment', () => {
-	let segments: Segment[];
-	let segment: Segment;
+describe('FormStep', () => {
+	let steps: Step[];
+	let step: Step;
 	let index: number;
 
 	beforeEach(() => {
-		segments = [
+		steps = [
 			{ dose: 1, daysForDose: 2 },
 			{ dose: 3, daysForDose: 4 }
 		];
-		segment = { dose: 1, daysForDose: 2 };
+		step = { dose: 1, daysForDose: 2 };
 		index = 0;
 	});
 
 	test('renders correctly', () => {
-		const { container } = render(FormSegment, { segments, segment, index });
+		const { container } = render(FormStep, { steps, step, index });
 		expect(container).toMatchSnapshot();
 	});
 
 	test('handles dose change', async () => {
-		const { getByDisplayValue, component } = render(FormSegment, { segments, segment, index });
+		const { getByDisplayValue, component } = render(FormStep, { steps, step, index });
 		const input = getByDisplayValue('1');
 
 		const changeHandler = vi.fn();
@@ -34,13 +34,13 @@ describe('FormSegment', () => {
 
 		expect(changeHandler).toHaveBeenCalledWith(
 			expect.objectContaining({
-				detail: { ...segment, dose: 2 }
+				detail: { ...step, dose: 2 }
 			})
 		);
 	});
 
 	test('handles daysForDose change', async () => {
-		const { getByDisplayValue, component } = render(FormSegment, { segments, segment, index });
+		const { getByDisplayValue, component } = render(FormStep, { steps, step, index });
 		const input = getByDisplayValue('2');
 
 		const changeHandler = vi.fn();
@@ -51,17 +51,17 @@ describe('FormSegment', () => {
 
 		expect(changeHandler).toHaveBeenCalledWith(
 			expect.objectContaining({
-				detail: { ...segment, daysForDose: 3 }
+				detail: { ...step, daysForDose: 3 }
 			})
 		);
 	});
 
-	test('handles remove segment', async () => {
-		const { getByTitle, component } = render(FormSegment, { segments, segment, index });
+	test('handles remove step', async () => {
+		const { getByTitle, component } = render(FormStep, { steps, step, index });
 		const button = getByTitle('Remove this step');
 
 		const removeHandler = vi.fn();
-		component.$on('removeSegment', removeHandler);
+		component.$on('removeStep', removeHandler);
 
 		await fireEvent.click(button);
 
@@ -72,34 +72,34 @@ describe('FormSegment', () => {
 		);
 	});
 
-	test('disables remove button when segment is the only real segment', () => {
-		segments = [
+	test('disables remove button when step is the only real step', () => {
+		steps = [
 			{ dose: 1, daysForDose: 1 },
 			{ dose: 1, daysForDose: 1 }
 		];
-		const { getByTitle } = render(FormSegment, { segments, segment, index });
+		const { getByTitle } = render(FormStep, { steps, step, index });
 		const button = getByTitle('Remove this step');
 
 		expect(button).toBeDisabled();
 	});
 
-	test('applies isPlaceholder class when segment is a placeholder', () => {
-		// isSegmentPlaceholder.mockReturnValue(true);
-		const { container } = render(FormSegment, {
-			segments,
-			segment: { dose: 0, daysForDose: 0 },
+	test('applies isPlaceholder class when step is a placeholder', () => {
+		// isStepPlaceholder.mockReturnValue(true);
+		const { container } = render(FormStep, {
+			steps,
+			step: { dose: 0, daysForDose: 0 },
 			index
 		});
-		expect(container.querySelector('.segment')).toHaveClass('isPlaceholder');
+		expect(container.querySelector('.step')).toHaveClass('isPlaceholder');
 	});
 
-	test('applies isInvalid class when segment is invalid', () => {
-		// isSegmentInvalid.mockReturnValue(true);
-		const { container } = render(FormSegment, {
-			segments,
-			segment: { dose: -1, daysForDose: 0 },
+	test('applies isInvalid class when step is invalid', () => {
+		// isStepInvalid.mockReturnValue(true);
+		const { container } = render(FormStep, {
+			steps,
+			step: { dose: -1, daysForDose: 0 },
 			index
 		});
-		expect(container.querySelector('.segment')).toHaveClass('isInvalid');
+		expect(container.querySelector('.step')).toHaveClass('isInvalid');
 	});
 });
