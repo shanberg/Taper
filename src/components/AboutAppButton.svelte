@@ -16,7 +16,7 @@
   })
 </script>
  
-<Button variant="text" {...$trigger} action={trigger}>About <FilledSymbolsInfo class="icon" /></Button>
+<Button variant="text" action={trigger}>About <FilledSymbolsInfo class="icon" /></Button>
 
 {#if $open}
   <div use:melt={$portalled} class="container">
@@ -31,7 +31,7 @@
       <main use:melt={$description}>
         <p>Taper is a simple tool for healthcare professionals to calcuate tapering schedules and translate them for use by patients.</p>
         <List>
-          <ListItem>It is free and <Link href="https://github.com/shanberg/Taper">open source</Link>.</ListItem>
+          <ListItem>It is free and <Link target="_blank" href="https://github.com/shanberg/Taper">open source</Link>.</ListItem>
           <ListItem>It doesn't store any data, and will never request personally identifying information.</ListItem>
           <ListItem>It is made for healthcare professionals, not for patients.</ListItem>
         </List>
