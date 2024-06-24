@@ -73,6 +73,15 @@
   .variantPrimary {
     background: var(--color-interaction-primary);
     color: #fff;
+
+    &:not([aria-disabled="true"]) {
+
+      &:hover,
+      &:active,
+      &:focus-visible {
+        background: var(--color-interaction-primary);
+      }
+    }
   }
 
   .isActive {

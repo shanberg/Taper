@@ -1,6 +1,7 @@
 type Step = {
 	dose: number;
-	daysForDose: number;
+	dose2?: number;
+	duration: number;
 };
 
 type DoseDate = Date & {
@@ -10,7 +11,8 @@ type DoseDate = Date & {
 type DayWithDose = {
 	date: ScheduleDate;
 	dose: number;
-}
+	period?: string;
+};
 
 type StepWithStartEndDate = {
 	step: Step;
@@ -20,15 +22,18 @@ type StepWithStartEndDate = {
 
 type DisplayMode = "calendar" | "doses" | "steps"
 
-type PeriodSize = "half-day" | "day" | "week"
+type OutputPeriodSize = "half-day" | "day" | "week"
+
+type StepType = "Twice Daily" | "Daily" | "Twice Weekly" | "Weekly"
 
 type Schedule = {
 	steps: Step[];
 	startDate: ScheduleDate;
+	stepType: StepType;
 	templateKey: string;
 	languageKey: string;
 	displayMode: DisplayMode;
-	periodSize: PeriodSize;
+	outputPeriodSize: OutputPeriodSize;
 };
 
 type SerializedSchedule = string & {

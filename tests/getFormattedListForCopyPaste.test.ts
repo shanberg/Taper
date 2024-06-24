@@ -10,15 +10,15 @@ const getLanguageFromKey = (key: string) => {
   return languages.find(lang => lang.lang === key) || languages[0];
 };
 
-const isStepPlaceholder = (step: { dose: number, daysForDose: number }): boolean => {
-  return step.dose === 0 && step.daysForDose === 0;
+const isStepPlaceholder = (step: { dose: number, duration: number }): boolean => {
+  return step.dose === 0 && step.duration === 0;
 };
 
 const calculateStepStartAndEndDates = (schedule: any, index: number) => {
   const startDate = new Date(schedule.startDate);
   startDate.setUTCDate(startDate.getUTCDate() + index * 5);
   const endDate = new Date(startDate);
-  endDate.setUTCDate(endDate.getUTCDate() + schedule.steps[index].daysForDose - 1);
+  endDate.setUTCDate(endDate.getUTCDate() + schedule.steps[index].duration - 1);
   return { step: schedule.steps[index], stepStartDate: startDate, stepEndDate: endDate };
 };
 
@@ -29,10 +29,11 @@ const formatStepText = ({ step, stepStartDate, stepEndDate, index, selectedLangu
 // Test data
 const mockSchedule = {
   steps: [
-    { dose: 10, daysForDose: 5 },
-    { dose: 20, daysForDose: 3 },
-    { dose: 30, daysForDose: 7 },
+    { dose: 10, duration: 5 },
+    { dose: 20, duration: 3 },
+    { dose: 30, duration: 7 },
   ],
+  stepType: "Daily",
   startDate: new Date('2023-01-01T12:00:00.000Z'),
   templateKey: 'template1',
   languageKey: 'en',
@@ -54,7 +55,7 @@ Then take 30mg daily for 7 days (Jan 9, 2023 - Jan 15, 2023)`;
       ...mockSchedule,
       steps: [
         ...mockSchedule.steps,
-        { dose: 0, daysForDose: 0 },
+        { dose: 0, duration: 0 },
       ],
     };
 

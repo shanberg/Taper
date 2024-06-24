@@ -4,7 +4,7 @@ import { isStepInvalid, sumStepsDays, sumStepsDose, isStepPlaceholder } from './
 import { formatStepText } from './textUtils';
 import { getLanguageFromKey } from './languageUtils';
 
-const PLACEHOLDER_SEGMENT: Step = { dose: 0, daysForDose: 0 };
+const PLACEHOLDER_STEP: Step = { dose: 0, duration: 0 };
 
 /**
  * Creates an initial schedule with default settings.
@@ -12,12 +12,13 @@ const PLACEHOLDER_SEGMENT: Step = { dose: 0, daysForDose: 0 };
  */
 export function createInitialSchedule(): Schedule {
   return {
-    steps: [...TEMPLATES.Default, PLACEHOLDER_SEGMENT],
+    steps: [...TEMPLATES.Default, PLACEHOLDER_STEP],
     startDate: new TaperDate().toScheduleDate(),
     templateKey: DEFAULT_TEMPLATE_KEY,
     languageKey: DEFAULT_LANGUAGE_KEY,
-    displayMode: "steps",
-    periodSize: "day"
+    displayMode: "doses",
+    stepType: "Daily",
+    outputPeriodSize: "day"
   };
 }
 
@@ -54,11 +55,11 @@ export function calculateStepStartAndEndDates(schedule: Schedule, index: number)
   const totalDaysForStartDate =
     schedule.steps
       .slice(0, index)
-      .reduce((acc: number, curr: { daysForDose: number }) => acc + curr.daysForDose - 1, 0) +
+      .reduce((acc: number, curr: { duration: number }) => acc + curr.duration - 1, 0) +
     index;
   taperStartDate.incrementByDays(totalDaysForStartDate);
   const taperEndDate = new TaperDate(taperStartDate.toScheduleDate());
-  taperEndDate.incrementByDays(step.daysForDose - 1);
+  taperEndDate.incrementByDays(step.duration - 1);
 
   return {
     step,
@@ -73,7 +74,7 @@ export function calculateStepStartAndEndDates(schedule: Schedule, index: number)
  * @returns {string} The formatted list of steps.
  */
 export function getFormattedListForCopyPaste(schedule: Schedule): string {
-  const { steps, languageKey } = schedule;
+  const { steps, stepType, languageKey } = schedule;
   const selectedLanguage = getLanguageFromKey(languageKey);
 
   // Filter out placeholder steps
@@ -85,6 +86,7 @@ export function getFormattedListForCopyPaste(schedule: Schedule): string {
 
     return formatStepText({
       step,
+      stepType,
       stepStartDate,
       stepEndDate,
       index,

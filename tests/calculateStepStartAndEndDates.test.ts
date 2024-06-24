@@ -4,14 +4,14 @@ import { calculateStepStartAndEndDates } from '../src/utils';
 // Mock types
 type Schedule = {
   startDate: string;
-  steps: { daysForDose: number }[];
+  steps: { duration: number }[];
 };
 
 describe('calculateStepStartAndEndDates', () => {
   it('should calculate correct start and end dates for the first step', () => {
     const schedule: Schedule = {
       startDate: '2024-01-01',
-      steps: [{ daysForDose: 5 }]
+      steps: [{ duration: 5 }]
     };
     const index = 0;
     const result = calculateStepStartAndEndDates(schedule, index);
@@ -23,9 +23,9 @@ describe('calculateStepStartAndEndDates', () => {
     const schedule: Schedule = {
       startDate: '2024-01-01',
       steps: [
-        { daysForDose: 5 },
-        { daysForDose: 3 },
-        { daysForDose: 7 }
+        { duration: 5 },
+        { duration: 3 },
+        { duration: 7 }
       ]
     };
     const index = 1;
@@ -38,9 +38,9 @@ describe('calculateStepStartAndEndDates', () => {
     const schedule: Schedule = {
       startDate: '2024-01-01',
       steps: [
-        { daysForDose: 5 },
-        { daysForDose: 3 },
-        { daysForDose: 7 }
+        { duration: 5 },
+        { duration: 3 },
+        { duration: 7 }
       ]
     };
     const index = 2;
@@ -52,7 +52,7 @@ describe('calculateStepStartAndEndDates', () => {
   it('should handle a schedule with a single step', () => {
     const schedule: Schedule = {
       startDate: '2024-01-01',
-      steps: [{ daysForDose: 10 }]
+      steps: [{ duration: 10 }]
     };
     const index = 0;
     const result = calculateStepStartAndEndDates(schedule, index);
@@ -64,10 +64,10 @@ describe('calculateStepStartAndEndDates', () => {
     const schedule: Schedule = {
       startDate: '2024-01-01',
       steps: [
-        { daysForDose: 2 },
-        { daysForDose: 5 },
-        { daysForDose: 1 },
-        { daysForDose: 3 }
+        { duration: 2 },
+        { duration: 5 },
+        { duration: 1 },
+        { duration: 3 }
       ]
     };
     const index = 3;
@@ -79,7 +79,7 @@ describe('calculateStepStartAndEndDates', () => {
   it('should throw an error if the index is out of bounds', () => {
     const schedule: Schedule = {
       startDate: '2024-01-01',
-      steps: [{ daysForDose: 5 }]
+      steps: [{ duration: 5 }]
     };
     const index = 1;
     expect(() => calculateStepStartAndEndDates(schedule, index)).toThrow();

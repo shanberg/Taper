@@ -7,14 +7,16 @@ describe('FormStep', () => {
 	let steps: Step[];
 	let step: Step;
 	let index: number;
+	let stepType: "Daily"
 
 	beforeEach(() => {
 		steps = [
-			{ dose: 1, daysForDose: 2 },
-			{ dose: 3, daysForDose: 4 }
+			{ dose: 1, duration: 2 },
+			{ dose: 3, duration: 4 }
 		];
-		step = { dose: 1, daysForDose: 2 };
+		step = { dose: 1, duration: 2 };
 		index = 0;
+		stepType = "Daily";
 	});
 
 	test('renders correctly', () => {
@@ -23,6 +25,7 @@ describe('FormStep', () => {
 	});
 
 	test('handles dose change', async () => {
+		console.log(stepType);
 		const { getByDisplayValue, component } = render(FormStep, { steps, step, index });
 		const input = getByDisplayValue('1');
 
@@ -39,7 +42,7 @@ describe('FormStep', () => {
 		);
 	});
 
-	test('handles daysForDose change', async () => {
+	test('handles duration change', async () => {
 		const { getByDisplayValue, component } = render(FormStep, { steps, step, index });
 		const input = getByDisplayValue('2');
 
@@ -51,7 +54,7 @@ describe('FormStep', () => {
 
 		expect(changeHandler).toHaveBeenCalledWith(
 			expect.objectContaining({
-				detail: { ...step, daysForDose: 3 }
+				detail: { ...step, duration: 3 }
 			})
 		);
 	});
@@ -74,8 +77,8 @@ describe('FormStep', () => {
 
 	test('disables remove button when step is the only real step', () => {
 		steps = [
-			{ dose: 1, daysForDose: 1 },
-			{ dose: 1, daysForDose: 1 }
+			{ dose: 1, duration: 1 },
+			{ dose: 1, duration: 1 }
 		];
 		const { getByTitle } = render(FormStep, { steps, step, index });
 		const button = getByTitle('Remove this step');
@@ -87,7 +90,7 @@ describe('FormStep', () => {
 		// isStepPlaceholder.mockReturnValue(true);
 		const { container } = render(FormStep, {
 			steps,
-			step: { dose: 0, daysForDose: 0 },
+			step: { dose: 0, duration: 0 },
 			index
 		});
 		expect(container.querySelector('.step')).toHaveClass('isPlaceholder');
@@ -97,7 +100,7 @@ describe('FormStep', () => {
 		// isStepInvalid.mockReturnValue(true);
 		const { container } = render(FormStep, {
 			steps,
-			step: { dose: -1, daysForDose: 0 },
+			step: { dose: -1, duration: 0 },
 			index
 		});
 		expect(container.querySelector('.step')).toHaveClass('isInvalid');

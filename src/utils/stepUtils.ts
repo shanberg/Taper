@@ -1,22 +1,26 @@
 import { TaperDate } from '../TaperDate';
 
 /**
- * Determines if a step is invalid based on its dose and daysForDose values.
+ * Determines if a step is invalid based on its dose and duration values.
  * @param {Step} step - The step to validate.
  * @returns {boolean} - True if the step is invalid, false otherwise.
  */
 export const isStepInvalid = (step: Step): boolean => {
-  return step.dose <= 0 || step.daysForDose <= 0;
+  return step.dose <= 0 || step.duration <= 0;
 };
 
 /**
- * Checks if a step is a placeholder (both dose and daysForDose are 0).
+ * Checks if a step is a placeholder (both dose and duration are 0).
  * @param {Step} step - The step to check.
  * @returns {boolean} - True if the step is a placeholder, false otherwise.
  */
 export const isStepPlaceholder = (step: Step): boolean => {
   if (!step) return false;
-  return step.dose === 0 && step.daysForDose === 0;
+  if (step?.dose2 === undefined) {
+    return step.dose === 0 && step.duration === 0;
+  } else {
+    return step.dose === 0 && step.dose2 === 0 && step.duration === 0;
+  }
 };
 
 /**
@@ -25,7 +29,7 @@ export const isStepPlaceholder = (step: Step): boolean => {
  * @returns {number} - The total dose.
  */
 export const sumStepsDose = (steps: Step[]): number => {
-  return steps.reduce((sum, step) => sum + step.dose * step.daysForDose, 0);
+  return steps.reduce((sum, step) => sum + step.dose * step.duration, 0);
 };
 
 /**
@@ -34,7 +38,7 @@ export const sumStepsDose = (steps: Step[]): number => {
  * @returns {number} - The total number of days.
  */
 export const sumStepsDays = (steps: Step[]): number => {
-  return steps.reduce((sum, step) => sum + step.daysForDose, 0);
+  return steps.reduce((sum, step) => sum + step.duration, 0);
 };
 
 /**
@@ -78,28 +82,35 @@ export function stepIsOrAfterPlaceholder(steps: Step[], index: number) {
 type GetPeriodsWithDosesForStepParams = {
   step: Step,
   stepStartDate: ScheduleDate,
-  periodSize: "half-day" | "day" | "week"
+  outputPeriodSize: "half-day" | "day" | "week"
 }
 
-export function getPeriodsWithDosesForStep({ step, stepStartDate, periodSize }: GetPeriodsWithDosesForStepParams): DayWithDose[] {
+export function getPeriodsWithDosesForStep({ step, stepStartDate, outputPeriodSize }: GetPeriodsWithDosesForStepParams): DayWithDose[] {
   const periodsWithDoses: DayWithDose[] = [];
   let currentDate = new Date(stepStartDate);
 
-  switch (periodSize) {
+  switch (outputPeriodSize) {
     case 'half-day':
-      for (let i = 0; i < step.daysForDose; i++) {
-        // Two half-day doses for each day
-        for (let j = 0; j < 2; j++) {
-          periodsWithDoses.push({
-            date: new TaperDate(currentDate).toScheduleDate(),
-            dose: step.dose / 2,
-          });
-          currentDate.setHours(currentDate.getHours() + 12);
-        }
+      for (let i = 0; i < step.duration; i++) {
+        // Morning dose
+        periodsWithDoses.push({
+          date: new TaperDate(currentDate).toScheduleDate(),
+          dose: step.dose / 2,
+          period: 'in the morning',
+        });
+        currentDate.setHours(currentDate.getHours() + 12);
+
+        // Evening dose
+        periodsWithDoses.push({
+          date: new TaperDate(currentDate).toScheduleDate(),
+          dose: step.dose / 2,
+          period: 'in the evening',
+        });
+        currentDate.setHours(currentDate.getHours() + 12);
       }
       break;
     case 'day':
-      for (let i = 0; i < step.daysForDose; i++) {
+      for (let i = 0; i < step.duration; i++) {
         periodsWithDoses.push({
           date: new TaperDate(currentDate).toScheduleDate(),
           dose: step.dose,
@@ -108,16 +119,16 @@ export function getPeriodsWithDosesForStep({ step, stepStartDate, periodSize }: 
       }
       break;
     case 'week':
-      for (let i = 0; i < step.daysForDose; i += 7) {
+      for (let i = 0; i < step.duration; i += 7) {
         periodsWithDoses.push({
           date: new TaperDate(currentDate).toScheduleDate(),
-          dose: step.dose * Math.min(7, step.daysForDose - i), // Handle cases where daysForDose is not a multiple of 7
+          dose: step.dose * Math.min(7, step.duration - i), // Handle cases where duration is not a multiple of 7
         });
         currentDate.setDate(currentDate.getDate() + 7);
       }
       break;
     default:
-      throw new Error(`Unsupported period type: ${periodSize}`);
+      throw new Error(`Unsupported period type: ${outputPeriodSize}`);
   }
 
   return periodsWithDoses;

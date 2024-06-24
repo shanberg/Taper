@@ -9,6 +9,7 @@
 	import FormScheduleRow from '../components/FormScheduleRow.svelte';
 	import Message from '../components/Message.svelte';
 	import AboutAppButton from '../components/AboutAppButton.svelte';
+	import { STEP_TYPES } from '../consts';
 
 	function handleKeyDown(e: KeyboardEvent) {
 		const { ctrlKey, metaKey, shiftKey, key } = e;
@@ -38,6 +39,11 @@
 		}
 	});
 
+	const handleChangeStepType = (e: Event) => {
+		const target = e.target as HTMLInputElement;
+		appStore.changeStepType(target.value as StepType);
+	};
+
 	$: schedule = $appStore.schedule;
 </script>
 
@@ -52,14 +58,20 @@
 		<Heading level={2}>Steps</Heading>
 		<div class={`${layout.hstack} form-schedule-header`}>
 			<div class="dose">mg</div>
-			<div class="days">days</div>
+			<div class="days">
+				<select value={schedule.stepType} on:change={handleChangeStepType}>
+					{#each STEP_TYPES as stepType}
+						<option value={stepType}>{stepType}</option>
+					{/each}
+				</select>
+			</div>
 			<div class="schedule">Steps</div>
 		</div>
 		{#each schedule.steps as _, index}
 			<FormScheduleRow {schedule} {index} />
 		{/each}
 	</div>
-	<Output />
+	<!-- <Output /> -->
 </main>
 
 <style>

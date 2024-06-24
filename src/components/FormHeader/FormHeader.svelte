@@ -26,7 +26,6 @@
 	$: selectedLanguageIsVerified = selectedLanguage.verified;
 	$: copyableText = getFormattedListForCopyPaste(schedule);
 
-
 	// event handlers
 	const handleChangeDate = (e: Event) => {
 		const target = e.target as HTMLInputElement;

@@ -12,9 +12,10 @@
 	
 	$: displayMode = schedule.displayMode;
 	$: scheduleStartDate = schedule.startDate;
+	$: stepType = schedule.stepType;
 	$: steps = schedule.steps;
 	$: step = schedule.steps[index];
-	$: isStepPlaceholder = step.dose === 0 && step.daysForDose === 0;
+	$: isStepPlaceholder = step.dose === 0 && step.duration === 0;
 	$: isInvalid = !isStepPlaceholder && isStepInvalid(step);
 	$: isLastPlaceholderStep = index === steps.length - 1 && isStepPlaceholder;
 
@@ -25,7 +26,7 @@
 
 <div class="row" class:isInvalid class:isStepPlaceholder class:isLastPlaceholderStep>
 	<span class="written-plan">
-		{formatStepText({ ...stepDetails, index, selectedLanguage })}
+		{formatStepText({ ...stepDetails, stepType, index, selectedLanguage })}
 	</span>
 </div>
 

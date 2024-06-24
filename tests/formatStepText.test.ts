@@ -10,86 +10,171 @@ const Mandarin = LANGUAGES.find((language) => language.labelEn === 'Mandarin');
 const Swahili = LANGUAGES.find((language) => language.labelEn === 'Swahili');
 const Arabic = LANGUAGES.find((language) => language.labelEn === 'Arabic');
 
+
+const stepStartDate = new TaperDate('2024-01-01').toScheduleDate();
+const stepEndDate = new TaperDate('2024-01-03').toScheduleDate();
+
 describe('formatStepText', () => {
-	const step = { dose: 50, daysForDose: 5 };
-	const stepStartDate = new TaperDate('2024-06-01').toScheduleDate();
-	const stepEndDate = new TaperDate('2024-06-05').toScheduleDate();
+	const languages = [
+		{ labelEn: 'English', lang: 'en-US', dir: 'ltr' },
+		{ labelEn: 'Spanish', lang: 'es', dir: 'ltr' },
+		{ labelEn: 'Haitian Creole', lang: 'ht', dir: 'ltr' },
+		{ labelEn: 'Mandarin', lang: 'zh', dir: 'ltr' },
+		{ labelEn: 'Swahili', lang: 'sw', dir: 'ltr' },
+		{ labelEn: 'Arabic', lang: 'ar', dir: 'rtl' }
+	];
 
-	test('formats text for English language', () => {
+	const stepTypes: StepType[] = ["Twice Daily", "Daily", "Twice Weekly", "Weekly"];
+	const doses = [10, 20, 50];
+	const durations = [1, 3, 7];
+
+	languages.forEach(language => {
+		stepTypes.forEach(stepType => {
+			doses.forEach(dose => {
+				durations.forEach(duration => {
+					test(`formats text correctly for ${language.labelEn} (${language.lang}), step type ${stepType}, dose ${dose}mg, duration ${duration}`, () => {
+						const result = formatStepText({
+							step: { dose, duration, stepType },
+							stepType,
+							stepStartDate,
+							stepEndDate,
+							index: 0,
+							selectedLanguage: language
+						});
+
+						expect(result).toMatchSnapshot();
+					});
+				});
+			});
+		});
+	});
+
+	test('throws TypeError for unsupported language', () => {
+		expect(() => {
+			formatStepText({
+				step: { dose: 20, duration: 3, stepType: "Daily" },
+				stepType: "Daily",
+				stepStartDate,
+				stepEndDate,
+				index: 1,
+				selectedLanguage: { labelEn: 'Unsupported Language', lang: 'xx', dir: 'ltr' }
+			});
+		}).toThrow(TypeError);
+	});
+
+	test('formats text correctly for the first step', () => {
 		const result = formatStepText({
-			step,
+			step: { dose: 20, duration: 3, stepType: "Daily" },
+			stepType: "Daily",
 			stepStartDate,
 			stepEndDate,
 			index: 0,
-			selectedLanguage: English
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
 		});
-		expect(result).toBe('Take 50mg daily for 5 days (Jun 1 - Jun 5)');
+
+		expect(result).toBe('Take 20mg daily for 3 days (Jan 1 - Jan 3)');
 	});
 
-	test('formats text for Spanish language', () => {
+	test('formats text correctly for a subsequent step', () => {
 		const result = formatStepText({
-			step,
+			step: { dose: 20, duration: 3, stepType: "Daily" },
+			stepType: "Daily",
 			stepStartDate,
 			stepEndDate,
 			index: 1,
-			selectedLanguage: Spanish
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
 		});
-		expect(result).toBe('Después tome 50mg cada día durante 5 días (1 jun - 5 jun)');
+
+		expect(result).toBe('Then take 20mg daily for 3 days (Jan 1 - Jan 3)');
 	});
 
-	test('formats text for Haitian Creole language', () => {
+	test('formats text correctly for a single day duration', () => {
 		const result = formatStepText({
-			step,
+			step: { dose: 20, duration: 1, stepType: "Daily" },
+			stepType: "Daily",
 			stepStartDate,
 			stepEndDate,
 			index: 0,
-			selectedLanguage: HaitianCreole
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
 		});
-		expect(result).toBe('Pran 50mg chak jou pou 5 jou (Jun 1 - Jun 5)');
+
+		expect(result).toBe('Take 20mg daily for 1 day (Jan 1 - Jan 3)');
 	});
 
-	test('formats text for Mandarin language', () => {
+	test('formats text correctly for a single half-day duration', () => {
 		const result = formatStepText({
-			step,
-			stepStartDate,
-			stepEndDate,
-			index: 1,
-			selectedLanguage: Mandarin
-		});
-		expect(result).toBe('然后服用 50毫克，每天服用5 天 (6月1日 - 6月5日)');
-	});
-
-	test('formats text for Swahili language', () => {
-		const result = formatStepText({
-			step,
+			step: { dose: 20, duration: 1, stepType: "Twice Daily" },
+			stepType: "Twice Daily",
 			stepStartDate,
 			stepEndDate,
 			index: 0,
-			selectedLanguage: Swahili
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
 		});
-		expect(result).toBe('Kutoka 50mg kwa saa 5 siku (1 Jun - 5 Jun)');
+
+		expect(result).toBe('Take 20mg twice daily for 1 half-day (Jan 1 - Jan 3)');
 	});
 
-	test('formats text for Arabic language', () => {
+	test('formats text correctly for a single half-week duration', () => {
 		const result = formatStepText({
-			step,
+			step: { dose: 20, duration: 1, stepType: "Twice Weekly" },
+			stepType: "Twice Weekly",
 			stepStartDate,
 			stepEndDate,
-			index: 1,
-			selectedLanguage: Arabic
+			index: 0,
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
 		});
-		expect(result).toBe('في ذلك الحين تحتاج 50mg كل يوم 5 يوم (٥ يونيو - ١ يونيو)');
+		expect(result).toBe('Take 20mg twice weekly for 1 half-week (Jan 1 - Jan 3)');
 	});
 
-	test('returns empty string for unsupported language', () => {
+	test('formats text correctly for a single week duration', () => {
 		const result = formatStepText({
-			step,
+			step: { dose: 20, duration: 1, stepType: "Weekly" },
+			stepType: "Weekly",
 			stepStartDate,
 			stepEndDate,
-			index: 1,
-			selectedLanguage: { labelEn: 'Unsupported Language', lang: 'xx', dir: 'ltr' }
+			index: 0,
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
 		});
 
-		expect(result).toBe('');
+		expect(result).toBe('Take 20mg weekly for 1 week (Jan 1 - Jan 3)');
+	});
+
+	test('formats text correctly for varying start and end dates', () => {
+		const result = formatStepText({
+			step: { dose: 20, duration: 3, stepType: "Daily" },
+			stepType: "Daily",
+			stepStartDate: new TaperDate('2024-02-01').toScheduleDate(),
+			stepEndDate: new TaperDate('2024-02-03').toScheduleDate(),
+			index: 0,
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
+		});
+
+		expect(result).toBe('Take 20mg daily for 3 days (Feb 1 - Feb 3)');
+	});
+
+	test('formats text correctly for varying doses', () => {
+		const result = formatStepText({
+			step: { dose: 50, duration: 3, stepType: "Daily" },
+			stepType: "Daily",
+			stepStartDate,
+			stepEndDate,
+			index: 0,
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
+		});
+
+		expect(result).toBe('Take 50mg daily for 3 days (Jan 1 - Jan 3)');
+	});
+
+	test('formats text correctly for varying durations', () => {
+		const result = formatStepText({
+			step: { dose: 20, duration: 7, stepType: "Daily" },
+			stepType: "Daily",
+			stepStartDate,
+			stepEndDate: new TaperDate('2024-01-07').toScheduleDate(),
+			index: 0,
+			selectedLanguage: { labelEn: 'English', lang: 'en-US', dir: 'ltr' }
+		});
+
+		expect(result).toBe('Take 20mg daily for 7 days (Jan 1 - Jan 7)');
 	});
 });

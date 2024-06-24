@@ -32,20 +32,37 @@
 			/>
 		</label>
 	</div>
-	<div class="days">
-		<label for="days-{index}">
+	{#if (step.dose2 !== undefined)}
+	<div class="dose2">
+		<label for="dose2-{index}">
 			<input
 				min={1}
-				id="days-{index}"
+				id="dose2-{index}"
+				step={step?.dose2 > 5 ? 1 : 0.25}
 				type="number"
 				inputmode="decimal"
 				pattern="[1-9]\d*"
-				aria-label="days-{index}"
-				bind:value={step.daysForDose}
+				aria-label="dose2-{index}"
+				bind:value={step.dose2}
 				on:change={() => dispatch('change', step)}
 			/>
 		</label>
 	</div>
+	{/if}
+		<div class="duration">
+			<label for="duration-{index}">
+				<input
+					min={1}
+					id="duration-{index}"
+					type="number"
+					inputmode="decimal"
+					pattern="[1-9]\d*"
+					aria-label="duration-{index}"
+					bind:value={step.duration}
+					on:change={() => dispatch('change', step)}
+				/>
+			</label>
+		</div>
 	<button
 		{...(isLastStep || isOnlyRealStep) ? { disabled: true } : {}}
 		title="Remove this step"
@@ -66,7 +83,7 @@
 		display: contents;
 	}
 
-	.dose, .days {
+	.dose, .duration {
 		flex: 1 1 100%;
 	}
 

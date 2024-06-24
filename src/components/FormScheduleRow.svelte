@@ -14,9 +14,10 @@
 	let stepEndDate: ScheduleDate;
 	
 	$: startDate = schedule.startDate;
+	$: stepType = schedule.stepType;
 	$: steps = schedule.steps;
 	$: step = schedule.steps[index];
-	$: isStepPlaceholder = step.dose === 0 && step.daysForDose === 0;
+	$: isStepPlaceholder = step.dose === 0 && step.duration === 0;
 	$: isInvalid = !isStepPlaceholder && isStepInvalid(step);
 	$: isLastPlaceholderStep = index === steps.length - 1 && isStepPlaceholder;
 
@@ -26,11 +27,11 @@
 		const totalDaysForStartDate =
 			steps
 				.slice(0, index)
-				.reduce((acc: number, curr: { daysForDose: number }) => acc + curr.daysForDose - 1, 0) +
+				.reduce((acc: number, curr: { duration: number }) => acc + curr.duration - 1, 0) +
 			index;
 		taperStartDate.incrementByDays(totalDaysForStartDate);
 		const taperEndDate = new TaperDate(taperStartDate.toScheduleDate());
-		taperEndDate.incrementByDays(step.daysForDose - 1);
+		taperEndDate.incrementByDays(step.duration - 1);
 
 		stepStartDate = taperStartDate.toScheduleDate();
 		stepEndDate = taperEndDate.toScheduleDate();
@@ -57,7 +58,7 @@
     </span>
   {:else}
     <span class="written-plan">
-      {formatStepText({ step, stepStartDate, stepEndDate, index, selectedLanguage })}
+      {formatStepText({ step, stepStartDate, stepType, stepEndDate, index, selectedLanguage })}
     </span>
   {/if}
 </div>

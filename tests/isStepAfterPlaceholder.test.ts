@@ -3,11 +3,11 @@ import { isStepDirectlyAfterPlaceholder } from '../src/utils';
 
 test('isStepDirectlyAfterPlaceholder', () => {
   const steps = [
-    { dose: 1, daysForDose: 1 },
-    { dose: 2, daysForDose: 2 },
-    { dose: 0, daysForDose: 0 },
-    { dose: 3, daysForDose: 3 },
-    { dose: 4, daysForDose: 4 }
+    { dose: 1, duration: 1 },
+    { dose: 2, duration: 2 },
+    { dose: 0, duration: 0 },
+    { dose: 3, duration: 3 },
+    { dose: 4, duration: 4 }
   ]
 
   expect(isStepDirectlyAfterPlaceholder(steps, 0)).toBe(false);

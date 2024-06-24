@@ -7,9 +7,9 @@
   import { formControlStyles, formLabelStyles, inputStyles } from '../'
   import { appStore } from '../../stores';
 
-	const handleChangePeriodSize = (e: Event) => {
+	const handleChangeOutputPeriodSize = (e: Event) => {
 		const target = e.target as HTMLSelectElement;
-		appStore.changePeriodSize(target.value as PeriodSize);
+		appStore.changeOutputPeriodSize(target.value as OutputPeriodSize);
 	};
 
   const displayModeStore = derived(appStore, ($store) => $store.schedule.displayMode);
@@ -18,7 +18,7 @@
   };
   
   $: selectedOption = $appStore.schedule.displayMode;
-  $: periodSize = $appStore.schedule.periodSize;
+  $: outputPeriodSize = $appStore.schedule.outputPeriodSize;
 </script>
 
 <div class="container">
@@ -34,8 +34,8 @@
     <span class={formLabelStyles.base}>Period Size</span>
     <select 
       class={inputStyles}
-      value={periodSize}
-        on:change={handleChangePeriodSize}
+      value={outputPeriodSize}
+        on:change={handleChangeOutputPeriodSize}
       >
       <option value="half-day">Half-day</option>
       <option value="day">Days</option>

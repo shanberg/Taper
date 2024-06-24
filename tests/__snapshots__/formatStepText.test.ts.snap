@@ -1,0 +1,433 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 10mg, duration 1 1`] = `"خذ 10mg يوميا لمدة 1 أيا (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 10mg, duration 3 1`] = `"خذ 10mg يوميا لمدة 3 أيام (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 10mg, duration 7 1`] = `"خذ 10mg يوميا لمدة 7 أيام (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 20mg, duration 1 1`] = `"خذ 20mg يوميا لمدة 1 أيا (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 20mg, duration 3 1`] = `"خذ 20mg يوميا لمدة 3 أيام (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 20mg, duration 7 1`] = `"خذ 20mg يوميا لمدة 7 أيام (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 50mg, duration 1 1`] = `"خذ 50mg يوميا لمدة 1 أيا (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 50mg, duration 3 1`] = `"خذ 50mg يوميا لمدة 3 أيام (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Daily, dose 50mg, duration 7 1`] = `"خذ 50mg يوميا لمدة 7 أيام (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 10mg, duration 1 1`] = `"خذ 10mg مرتين يوميا لمدة 1 نصف يو (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 10mg, duration 3 1`] = `"خذ 10mg مرتين يوميا لمدة 3 نصف يوم (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 10mg, duration 7 1`] = `"خذ 10mg مرتين يوميا لمدة 7 نصف يوم (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 20mg, duration 1 1`] = `"خذ 20mg مرتين يوميا لمدة 1 نصف يو (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 20mg, duration 3 1`] = `"خذ 20mg مرتين يوميا لمدة 3 نصف يوم (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 20mg, duration 7 1`] = `"خذ 20mg مرتين يوميا لمدة 7 نصف يوم (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 50mg, duration 1 1`] = `"خذ 50mg مرتين يوميا لمدة 1 نصف يو (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 50mg, duration 3 1`] = `"خذ 50mg مرتين يوميا لمدة 3 نصف يوم (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Daily, dose 50mg, duration 7 1`] = `"خذ 50mg مرتين يوميا لمدة 7 نصف يوم (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 10mg, duration 1 1`] = `"خذ 10mg مرتين في الأسبوع لمدة 1 نصف أسبو (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 10mg, duration 3 1`] = `"خذ 10mg مرتين في الأسبوع لمدة 3 نصف أسبوع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 10mg, duration 7 1`] = `"خذ 10mg مرتين في الأسبوع لمدة 7 نصف أسبوع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 20mg, duration 1 1`] = `"خذ 20mg مرتين في الأسبوع لمدة 1 نصف أسبو (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 20mg, duration 3 1`] = `"خذ 20mg مرتين في الأسبوع لمدة 3 نصف أسبوع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 20mg, duration 7 1`] = `"خذ 20mg مرتين في الأسبوع لمدة 7 نصف أسبوع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 50mg, duration 1 1`] = `"خذ 50mg مرتين في الأسبوع لمدة 1 نصف أسبو (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 50mg, duration 3 1`] = `"خذ 50mg مرتين في الأسبوع لمدة 3 نصف أسبوع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Twice Weekly, dose 50mg, duration 7 1`] = `"خذ 50mg مرتين في الأسبوع لمدة 7 نصف أسبوع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 10mg, duration 1 1`] = `"خذ 10mg أسبوعيا لمدة 1 أسابي (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 10mg, duration 3 1`] = `"خذ 10mg أسبوعيا لمدة 3 أسابيع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 10mg, duration 7 1`] = `"خذ 10mg أسبوعيا لمدة 7 أسابيع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 20mg, duration 1 1`] = `"خذ 20mg أسبوعيا لمدة 1 أسابي (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 20mg, duration 3 1`] = `"خذ 20mg أسبوعيا لمدة 3 أسابيع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 20mg, duration 7 1`] = `"خذ 20mg أسبوعيا لمدة 7 أسابيع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 50mg, duration 1 1`] = `"خذ 50mg أسبوعيا لمدة 1 أسابي (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 50mg, duration 3 1`] = `"خذ 50mg أسبوعيا لمدة 3 أسابيع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for Arabic (ar), step type Weekly, dose 50mg, duration 7 1`] = `"خذ 50mg أسبوعيا لمدة 7 أسابيع (٣ يناير - ١ يناير)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 10mg, duration 1 1`] = `"Take 10mg daily for 1 day (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 10mg, duration 3 1`] = `"Take 10mg daily for 3 days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 10mg, duration 7 1`] = `"Take 10mg daily for 7 days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 20mg, duration 1 1`] = `"Take 20mg daily for 1 day (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 20mg, duration 3 1`] = `"Take 20mg daily for 3 days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 20mg, duration 7 1`] = `"Take 20mg daily for 7 days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 50mg, duration 1 1`] = `"Take 50mg daily for 1 day (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 50mg, duration 3 1`] = `"Take 50mg daily for 3 days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Daily, dose 50mg, duration 7 1`] = `"Take 50mg daily for 7 days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 10mg, duration 1 1`] = `"Take 10mg twice daily for 1 half-day (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 10mg, duration 3 1`] = `"Take 10mg twice daily for 3 half-days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 10mg, duration 7 1`] = `"Take 10mg twice daily for 7 half-days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 20mg, duration 1 1`] = `"Take 20mg twice daily for 1 half-day (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 20mg, duration 3 1`] = `"Take 20mg twice daily for 3 half-days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 20mg, duration 7 1`] = `"Take 20mg twice daily for 7 half-days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 50mg, duration 1 1`] = `"Take 50mg twice daily for 1 half-day (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 50mg, duration 3 1`] = `"Take 50mg twice daily for 3 half-days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Daily, dose 50mg, duration 7 1`] = `"Take 50mg twice daily for 7 half-days (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 10mg, duration 1 1`] = `"Take 10mg twice weekly for 1 half-week (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 10mg, duration 3 1`] = `"Take 10mg twice weekly for 3 half-weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 10mg, duration 7 1`] = `"Take 10mg twice weekly for 7 half-weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 20mg, duration 1 1`] = `"Take 20mg twice weekly for 1 half-week (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 20mg, duration 3 1`] = `"Take 20mg twice weekly for 3 half-weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 20mg, duration 7 1`] = `"Take 20mg twice weekly for 7 half-weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 50mg, duration 1 1`] = `"Take 50mg twice weekly for 1 half-week (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 50mg, duration 3 1`] = `"Take 50mg twice weekly for 3 half-weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Twice Weekly, dose 50mg, duration 7 1`] = `"Take 50mg twice weekly for 7 half-weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 10mg, duration 1 1`] = `"Take 10mg weekly for 1 week (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 10mg, duration 3 1`] = `"Take 10mg weekly for 3 weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 10mg, duration 7 1`] = `"Take 10mg weekly for 7 weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 20mg, duration 1 1`] = `"Take 20mg weekly for 1 week (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 20mg, duration 3 1`] = `"Take 20mg weekly for 3 weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 20mg, duration 7 1`] = `"Take 20mg weekly for 7 weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 50mg, duration 1 1`] = `"Take 50mg weekly for 1 week (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 50mg, duration 3 1`] = `"Take 50mg weekly for 3 weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for English (en-US), step type Weekly, dose 50mg, duration 7 1`] = `"Take 50mg weekly for 7 weeks (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 10mg, duration 1 1`] = `"Pran 10mg chak jou pou 1 jo (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 10mg, duration 3 1`] = `"Pran 10mg chak jou pou 3 jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 10mg, duration 7 1`] = `"Pran 10mg chak jou pou 7 jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 20mg, duration 1 1`] = `"Pran 20mg chak jou pou 1 jo (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 20mg, duration 3 1`] = `"Pran 20mg chak jou pou 3 jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 20mg, duration 7 1`] = `"Pran 20mg chak jou pou 7 jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 50mg, duration 1 1`] = `"Pran 50mg chak jou pou 1 jo (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 50mg, duration 3 1`] = `"Pran 50mg chak jou pou 3 jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Daily, dose 50mg, duration 7 1`] = `"Pran 50mg chak jou pou 7 jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 10mg, duration 1 1`] = `"Pran 10mg de fwa pa jou pou 1 mwatye jo (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 10mg, duration 3 1`] = `"Pran 10mg de fwa pa jou pou 3 mwatye jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 10mg, duration 7 1`] = `"Pran 10mg de fwa pa jou pou 7 mwatye jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 20mg, duration 1 1`] = `"Pran 20mg de fwa pa jou pou 1 mwatye jo (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 20mg, duration 3 1`] = `"Pran 20mg de fwa pa jou pou 3 mwatye jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 20mg, duration 7 1`] = `"Pran 20mg de fwa pa jou pou 7 mwatye jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 50mg, duration 1 1`] = `"Pran 50mg de fwa pa jou pou 1 mwatye jo (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 50mg, duration 3 1`] = `"Pran 50mg de fwa pa jou pou 3 mwatye jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Daily, dose 50mg, duration 7 1`] = `"Pran 50mg de fwa pa jou pou 7 mwatye jou (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 10mg, duration 1 1`] = `"Pran 10mg de fwa pa semèn pou 1 mwatye semè (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 10mg, duration 3 1`] = `"Pran 10mg de fwa pa semèn pou 3 mwatye semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 10mg, duration 7 1`] = `"Pran 10mg de fwa pa semèn pou 7 mwatye semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 20mg, duration 1 1`] = `"Pran 20mg de fwa pa semèn pou 1 mwatye semè (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 20mg, duration 3 1`] = `"Pran 20mg de fwa pa semèn pou 3 mwatye semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 20mg, duration 7 1`] = `"Pran 20mg de fwa pa semèn pou 7 mwatye semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 50mg, duration 1 1`] = `"Pran 50mg de fwa pa semèn pou 1 mwatye semè (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 50mg, duration 3 1`] = `"Pran 50mg de fwa pa semèn pou 3 mwatye semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Twice Weekly, dose 50mg, duration 7 1`] = `"Pran 50mg de fwa pa semèn pou 7 mwatye semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 10mg, duration 1 1`] = `"Pran 10mg chak semèn pou 1 semè (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 10mg, duration 3 1`] = `"Pran 10mg chak semèn pou 3 semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 10mg, duration 7 1`] = `"Pran 10mg chak semèn pou 7 semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 20mg, duration 1 1`] = `"Pran 20mg chak semèn pou 1 semè (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 20mg, duration 3 1`] = `"Pran 20mg chak semèn pou 3 semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 20mg, duration 7 1`] = `"Pran 20mg chak semèn pou 7 semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 50mg, duration 1 1`] = `"Pran 50mg chak semèn pou 1 semè (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 50mg, duration 3 1`] = `"Pran 50mg chak semèn pou 3 semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Haitian Creole (ht), step type Weekly, dose 50mg, duration 7 1`] = `"Pran 50mg chak semèn pou 7 semèn (Jan 1 - Jan 3)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 10mg, duration 1 1`] = `"服用 10毫克，每天服用1  (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 10mg, duration 3 1`] = `"服用 10毫克，每天服用3 天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 10mg, duration 7 1`] = `"服用 10毫克，每天服用7 天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 20mg, duration 1 1`] = `"服用 20毫克，每天服用1  (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 20mg, duration 3 1`] = `"服用 20毫克，每天服用3 天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 20mg, duration 7 1`] = `"服用 20毫克，每天服用7 天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 50mg, duration 1 1`] = `"服用 50毫克，每天服用1  (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 50mg, duration 3 1`] = `"服用 50毫克，每天服用3 天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Daily, dose 50mg, duration 7 1`] = `"服用 50毫克，每天服用7 天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 10mg, duration 1 1`] = `"服用 10毫克，每天两次服用1 半 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 10mg, duration 3 1`] = `"服用 10毫克，每天两次服用3 半天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 10mg, duration 7 1`] = `"服用 10毫克，每天两次服用7 半天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 20mg, duration 1 1`] = `"服用 20毫克，每天两次服用1 半 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 20mg, duration 3 1`] = `"服用 20毫克，每天两次服用3 半天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 20mg, duration 7 1`] = `"服用 20毫克，每天两次服用7 半天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 50mg, duration 1 1`] = `"服用 50毫克，每天两次服用1 半 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 50mg, duration 3 1`] = `"服用 50毫克，每天两次服用3 半天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Daily, dose 50mg, duration 7 1`] = `"服用 50毫克，每天两次服用7 半天 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 10mg, duration 1 1`] = `"服用 10毫克，每周两次服用1 半 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 10mg, duration 3 1`] = `"服用 10毫克，每周两次服用3 半周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 10mg, duration 7 1`] = `"服用 10毫克，每周两次服用7 半周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 20mg, duration 1 1`] = `"服用 20毫克，每周两次服用1 半 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 20mg, duration 3 1`] = `"服用 20毫克，每周两次服用3 半周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 20mg, duration 7 1`] = `"服用 20毫克，每周两次服用7 半周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 50mg, duration 1 1`] = `"服用 50毫克，每周两次服用1 半 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 50mg, duration 3 1`] = `"服用 50毫克，每周两次服用3 半周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Twice Weekly, dose 50mg, duration 7 1`] = `"服用 50毫克，每周两次服用7 半周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 10mg, duration 1 1`] = `"服用 10毫克，每周服用1  (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 10mg, duration 3 1`] = `"服用 10毫克，每周服用3 周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 10mg, duration 7 1`] = `"服用 10毫克，每周服用7 周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 20mg, duration 1 1`] = `"服用 20毫克，每周服用1  (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 20mg, duration 3 1`] = `"服用 20毫克，每周服用3 周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 20mg, duration 7 1`] = `"服用 20毫克，每周服用7 周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 50mg, duration 1 1`] = `"服用 50毫克，每周服用1  (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 50mg, duration 3 1`] = `"服用 50毫克，每周服用3 周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Mandarin (zh), step type Weekly, dose 50mg, duration 7 1`] = `"服用 50毫克，每周服用7 周 (1月1日 - 1月3日)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 10mg, duration 1 1`] = `"Tomar 10mg cada día durante 1 día (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 10mg, duration 3 1`] = `"Tomar 10mg cada día durante 3 días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 10mg, duration 7 1`] = `"Tomar 10mg cada día durante 7 días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 20mg, duration 1 1`] = `"Tomar 20mg cada día durante 1 día (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 20mg, duration 3 1`] = `"Tomar 20mg cada día durante 3 días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 20mg, duration 7 1`] = `"Tomar 20mg cada día durante 7 días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 50mg, duration 1 1`] = `"Tomar 50mg cada día durante 1 día (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 50mg, duration 3 1`] = `"Tomar 50mg cada día durante 3 días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Daily, dose 50mg, duration 7 1`] = `"Tomar 50mg cada día durante 7 días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 10mg, duration 1 1`] = `"Tomar 10mg dos veces al día durante 1 medios día (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 10mg, duration 3 1`] = `"Tomar 10mg dos veces al día durante 3 medios días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 10mg, duration 7 1`] = `"Tomar 10mg dos veces al día durante 7 medios días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 20mg, duration 1 1`] = `"Tomar 20mg dos veces al día durante 1 medios día (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 20mg, duration 3 1`] = `"Tomar 20mg dos veces al día durante 3 medios días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 20mg, duration 7 1`] = `"Tomar 20mg dos veces al día durante 7 medios días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 50mg, duration 1 1`] = `"Tomar 50mg dos veces al día durante 1 medios día (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 50mg, duration 3 1`] = `"Tomar 50mg dos veces al día durante 3 medios días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Daily, dose 50mg, duration 7 1`] = `"Tomar 50mg dos veces al día durante 7 medios días (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 10mg, duration 1 1`] = `"Tomar 10mg dos veces por semana durante 1 medias semana (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 10mg, duration 3 1`] = `"Tomar 10mg dos veces por semana durante 3 medias semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 10mg, duration 7 1`] = `"Tomar 10mg dos veces por semana durante 7 medias semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 20mg, duration 1 1`] = `"Tomar 20mg dos veces por semana durante 1 medias semana (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 20mg, duration 3 1`] = `"Tomar 20mg dos veces por semana durante 3 medias semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 20mg, duration 7 1`] = `"Tomar 20mg dos veces por semana durante 7 medias semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 50mg, duration 1 1`] = `"Tomar 50mg dos veces por semana durante 1 medias semana (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 50mg, duration 3 1`] = `"Tomar 50mg dos veces por semana durante 3 medias semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Twice Weekly, dose 50mg, duration 7 1`] = `"Tomar 50mg dos veces por semana durante 7 medias semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 10mg, duration 1 1`] = `"Tomar 10mg semanal durante 1 semana (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 10mg, duration 3 1`] = `"Tomar 10mg semanal durante 3 semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 10mg, duration 7 1`] = `"Tomar 10mg semanal durante 7 semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 20mg, duration 1 1`] = `"Tomar 20mg semanal durante 1 semana (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 20mg, duration 3 1`] = `"Tomar 20mg semanal durante 3 semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 20mg, duration 7 1`] = `"Tomar 20mg semanal durante 7 semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 50mg, duration 1 1`] = `"Tomar 50mg semanal durante 1 semana (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 50mg, duration 3 1`] = `"Tomar 50mg semanal durante 3 semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Spanish (es), step type Weekly, dose 50mg, duration 7 1`] = `"Tomar 50mg semanal durante 7 semanas (1 ene - 3 ene)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 10mg, duration 1 1`] = `"Kutoka 10mg kila siku kwa 1 sik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 10mg, duration 3 1`] = `"Kutoka 10mg kila siku kwa 3 siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 10mg, duration 7 1`] = `"Kutoka 10mg kila siku kwa 7 siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 20mg, duration 1 1`] = `"Kutoka 20mg kila siku kwa 1 sik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 20mg, duration 3 1`] = `"Kutoka 20mg kila siku kwa 3 siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 20mg, duration 7 1`] = `"Kutoka 20mg kila siku kwa 7 siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 50mg, duration 1 1`] = `"Kutoka 50mg kila siku kwa 1 sik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 50mg, duration 3 1`] = `"Kutoka 50mg kila siku kwa 3 siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Daily, dose 50mg, duration 7 1`] = `"Kutoka 50mg kila siku kwa 7 siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 10mg, duration 1 1`] = `"Kutoka 10mg mara mbili kwa siku kwa 1 nusu sik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 10mg, duration 3 1`] = `"Kutoka 10mg mara mbili kwa siku kwa 3 nusu siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 10mg, duration 7 1`] = `"Kutoka 10mg mara mbili kwa siku kwa 7 nusu siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 20mg, duration 1 1`] = `"Kutoka 20mg mara mbili kwa siku kwa 1 nusu sik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 20mg, duration 3 1`] = `"Kutoka 20mg mara mbili kwa siku kwa 3 nusu siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 20mg, duration 7 1`] = `"Kutoka 20mg mara mbili kwa siku kwa 7 nusu siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 50mg, duration 1 1`] = `"Kutoka 50mg mara mbili kwa siku kwa 1 nusu sik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 50mg, duration 3 1`] = `"Kutoka 50mg mara mbili kwa siku kwa 3 nusu siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Daily, dose 50mg, duration 7 1`] = `"Kutoka 50mg mara mbili kwa siku kwa 7 nusu siku (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 10mg, duration 1 1`] = `"Kutoka 10mg mara mbili kwa wiki kwa 1 nusu wik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 10mg, duration 3 1`] = `"Kutoka 10mg mara mbili kwa wiki kwa 3 nusu wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 10mg, duration 7 1`] = `"Kutoka 10mg mara mbili kwa wiki kwa 7 nusu wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 20mg, duration 1 1`] = `"Kutoka 20mg mara mbili kwa wiki kwa 1 nusu wik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 20mg, duration 3 1`] = `"Kutoka 20mg mara mbili kwa wiki kwa 3 nusu wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 20mg, duration 7 1`] = `"Kutoka 20mg mara mbili kwa wiki kwa 7 nusu wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 50mg, duration 1 1`] = `"Kutoka 50mg mara mbili kwa wiki kwa 1 nusu wik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 50mg, duration 3 1`] = `"Kutoka 50mg mara mbili kwa wiki kwa 3 nusu wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Twice Weekly, dose 50mg, duration 7 1`] = `"Kutoka 50mg mara mbili kwa wiki kwa 7 nusu wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 10mg, duration 1 1`] = `"Kutoka 10mg kila wiki kwa 1 wik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 10mg, duration 3 1`] = `"Kutoka 10mg kila wiki kwa 3 wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 10mg, duration 7 1`] = `"Kutoka 10mg kila wiki kwa 7 wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 20mg, duration 1 1`] = `"Kutoka 20mg kila wiki kwa 1 wik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 20mg, duration 3 1`] = `"Kutoka 20mg kila wiki kwa 3 wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 20mg, duration 7 1`] = `"Kutoka 20mg kila wiki kwa 7 wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 50mg, duration 1 1`] = `"Kutoka 50mg kila wiki kwa 1 wik (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 50mg, duration 3 1`] = `"Kutoka 50mg kila wiki kwa 3 wiki (1 Jan - 3 Jan)"`;
+
+exports[`formatStepText > formats text correctly for Swahili (sw), step type Weekly, dose 50mg, duration 7 1`] = `"Kutoka 50mg kila wiki kwa 7 wiki (1 Jan - 3 Jan)"`;

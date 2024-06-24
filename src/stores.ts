@@ -5,7 +5,7 @@ import {
 	serializeSchedule,
 	deserializeSchedule
 } from './utils';
-import { TEMPLATES, PLACEHOLDER_SEGMENT } from './consts';
+import { TEMPLATES, PLACEHOLDER_STEP, PLACEHOLDER_TWICE_STEP } from './consts';
 import { TaperDate } from './TaperDate';
 
 const initialSchedule = createInitialSchedule();
@@ -18,9 +18,31 @@ export const INITIAL_STORE_STATE: AppState = {
 	startDateInputValue: new TaperDate(initialSchedule.startDate).toYYYYMMDD()
 };
 
+const convertScheduleToTwiceType = (schedule: Schedule) => {
+	return schedule.steps.map((s: Step) => ({ ...s, dose2: s.dose }));
+}
+
+const convertScheduleToSingleType = (schedule: Schedule) => {
+	return schedule.steps.map((s: Step) => ({ ...s, dose2: undefined }));
+}
+
+const getIsStepTypeTwice = (stepType: StepType): boolean => {
+	return stepType.startsWith("Twice")
+}
+
+const placeholderForStepType = (stepType: StepType) => {
+	if (getIsStepTypeTwice(stepType)) {
+		return { ...PLACEHOLDER_TWICE_STEP }
+	} else {
+		return { ...PLACEHOLDER_STEP }
+	}
+}
+
+
 export type AppStore = Writable<AppState> & {
 	editStepAtIndex: (index: number, updatedStep: Step) => void;
-	changePeriodSize: (newPeriodSize: PeriodSize) => void;
+	changeOutputPeriodSize: (newOutputPeriodSize: OutputPeriodSize) => void;
+	changeStepType: (stepType: StepType) => void;
 	changeStartDate: (newDate: ScheduleDate | InputStringDate) => void;
 	changeLanguageKey: (newLanguageKey: string) => void;
 	changeDisplayMode: (newDisplayMode: DisplayMode) => void;
@@ -60,12 +82,12 @@ export function createAppStore(): AppStore {
 				let newSteps = [...prevSteps];
 
 				updatedStep.dose = updatedStep.dose || 0;
-				updatedStep.daysForDose = updatedStep.daysForDose || 0;
+				updatedStep.duration = updatedStep.duration || 0;
 
 				newSteps[index] = updatedStep;
 
 				if (!newSteps.some((s) => isStepPlaceholder(s))) {
-					newSteps = [...newSteps, { ...PLACEHOLDER_SEGMENT }];
+					newSteps = [...newSteps, placeholderForStepType(state.schedule.stepType)];
 				}
 
 				return { ...newState, schedule: { ...newState.schedule, steps: newSteps } };
@@ -99,12 +121,31 @@ export function createAppStore(): AppStore {
 				};
 			});
 		},
-		changePeriodSize: (newPeriodSize: PeriodSize): void => {
+		changeOutputPeriodSize: (newOutputPeriodSize: OutputPeriodSize): void => {
 			update((state) => {
 				const newState = _saveScheduleForUndo(state);
 				return {
 					...newState,
-					schedule: { ...newState.schedule, periodSize: newPeriodSize }
+					schedule: { ...newState.schedule, outputPeriodSize: newOutputPeriodSize }
+				};
+			});
+		},
+		changeStepType: (stepType: StepType): void => {
+			update((state) => {
+				const newState = _saveScheduleForUndo(state);
+
+				const newStepTypeIsTwice = stepType.startsWith("Twice");
+				let newSteps;
+
+				if (newStepTypeIsTwice) {
+					newSteps = convertScheduleToTwiceType(state.schedule)
+				} else {
+					newSteps = convertScheduleToSingleType(state.schedule)
+				}
+
+				return {
+					...newState,
+					schedule: { ...newState.schedule, steps: newSteps, stepType }
 				};
 			});
 		},
@@ -119,7 +160,7 @@ export function createAppStore(): AppStore {
 
 				if (!scheduleContainsInnerPlaceholders) {
 					const newSteps = [...allSteps];
-					newSteps.splice(index, 0, { ...PLACEHOLDER_SEGMENT });
+					newSteps.splice(index, 0, placeholderForStepType(newState.schedule.stepType));
 					return { ...newState, schedule: { ...newState.schedule, steps: newSteps } };
 				}
 
@@ -128,13 +169,13 @@ export function createAppStore(): AppStore {
 
 				const newSteps = allSteps.filter((step) => !isStepPlaceholder(step));
 				if (!newSteps.some(isStepPlaceholder)) {
-					newSteps.push({ ...PLACEHOLDER_SEGMENT });
+					newSteps.push(placeholderForStepType(newState.schedule.stepType));
 				}
 
 				if (isIndexBeforeCurrentInnerPlaceholder) {
-					newSteps.splice(Math.max(0, index), 0, { ...PLACEHOLDER_SEGMENT });
+					newSteps.splice(Math.max(0, index), 0, placeholderForStepType(newState.schedule.stepType));
 				} else {
-					newSteps.splice(index - 1, 0, { ...PLACEHOLDER_SEGMENT });
+					newSteps.splice(index - 1, 0, placeholderForStepType(newState.schedule.stepType));
 				}
 				return { ...newState, schedule: { ...newState.schedule, steps: newSteps } };
 			}),
@@ -145,7 +186,7 @@ export function createAppStore(): AppStore {
 					...newState,
 					schedule: {
 						...newState.schedule,
-						steps: [...TEMPLATES[newTemplateKey], { ...PLACEHOLDER_SEGMENT }],
+						steps: [...TEMPLATES[newTemplateKey], placeholderForStepType(newState.schedule.stepType)],
 						templateKey: newTemplateKey
 					}
 				};
