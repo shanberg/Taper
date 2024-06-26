@@ -5,7 +5,7 @@
 	import { getLanguageFromKey } from '../utils';
 	import { FormHeader } from '../components/FormHeader';
 	import { Output } from '../components/Output';
-	import { Heading } from '../components';
+	import { Heading, inputStyles } from '../components';
 	import FormScheduleRow from '../components/FormScheduleRow.svelte';
 	import Message from '../components/Message.svelte';
 	import AboutAppButton from '../components/AboutAppButton.svelte';
@@ -55,15 +55,23 @@
 	</header>
 	<FormHeader />
 	<div class="body">
-		<Heading level={2}>Steps</Heading>
+		<div class={`${layout.hstack} steps`}>
+			<Heading level={2}>Steps</Heading>
+			<select class={inputStyles.input} value="mg">
+				<option value="mg">Milligrams (mg)</option>
+				<option disabled value="ml">Millileters (ml)</option>
+			</select>
+			<select class={inputStyles.input} value={schedule.stepType} on:change={handleChangeStepType}>
+				{#each STEP_TYPES as stepType}
+					<option value={stepType}>{stepType}</option>
+				{/each}
+			</select>
+		</div>
 		<div class={`${layout.hstack} form-schedule-header`}>
-			<div class="dose">mg</div>
+			<div class="dose">Dose 1</div>
+			<div class="dose2">Dose 2</div>
 			<div class="days">
-				<select value={schedule.stepType} on:change={handleChangeStepType}>
-					{#each STEP_TYPES as stepType}
-						<option value={stepType}>{stepType}</option>
-					{/each}
-				</select>
+				Days
 			</div>
 			<div class="schedule">Steps</div>
 		</div>
@@ -88,6 +96,12 @@
 		}
 		& .schedule {
 			margin-left: 2rem;
+		}
+	}
+
+	.steps {
+		& select {
+			width: unset;
 		}
 	}
 

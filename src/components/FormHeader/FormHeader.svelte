@@ -60,7 +60,7 @@
 		<label class={`${formControlStyles.base} course-begins`}>
 			<span class={formLabelStyles.base}>Course begins</span>
 			<input
-				class={inputStyles}
+				class={inputStyles.input}
 				type="date"
 				value={startDateInputValue}
 				on:keydown={handleDateInputKeyDown}
@@ -70,7 +70,7 @@
 
 		<label class={`${formControlStyles.base} template`}>
 			<span class={formLabelStyles.base}>Template</span>
-			<select class={inputStyles} value={selectedTemplateKey} on:change={handleChangeTemplateKey}>
+			<select class={inputStyles.input} value={selectedTemplateKey} on:change={handleChangeTemplateKey}>
 				{#each Object.keys(TEMPLATES) as template}
 					<option value={template}>{template}</option>
 				{/each}
@@ -87,7 +87,7 @@
 
 			<select
 				value={selectedLanguage.lang}
-				class={inputStyles}
+				class={inputStyles.input}
 				class:warn={!selectedLanguageIsVerified}
 				on:change={handleChangeLanguage}
 			>

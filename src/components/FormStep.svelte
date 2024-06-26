@@ -17,23 +17,20 @@
 </script>
 
 <div class="step" class:isInvalid class:isPlaceholder class:isLastStep>
-	<div class="dose">
-		<label for="dose-{index}">
-			<input
-				min={1}
-				id="dose-{index}"
-				step={step.dose > 5 ? 1 : 0.25}
-				type="number"
-				inputmode="decimal"
-				pattern="[1-9]\d*"
-				aria-label="dose-{index}"
-				bind:value={step.dose}
-				on:change={() => dispatch('change', step)}
-			/>
-		</label>
-	</div>
+	<label for="dose-{index}">
+		<input
+			min={1}
+			id="dose-{index}"
+			step={step.dose > 5 ? 1 : 0.25}
+			type="number"
+			inputmode="decimal"
+			pattern="[1-9]\d*"
+			aria-label="dose-{index}"
+			bind:value={step.dose}
+			on:change={() => dispatch('change', step)}
+		/>
+	</label>
 	{#if (step.dose2 !== undefined)}
-	<div class="dose2">
 		<label for="dose2-{index}">
 			<input
 				min={1}
@@ -47,22 +44,19 @@
 				on:change={() => dispatch('change', step)}
 			/>
 		</label>
-	</div>
 	{/if}
-		<div class="duration">
-			<label for="duration-{index}">
-				<input
-					min={1}
-					id="duration-{index}"
-					type="number"
-					inputmode="decimal"
-					pattern="[1-9]\d*"
-					aria-label="duration-{index}"
-					bind:value={step.duration}
-					on:change={() => dispatch('change', step)}
-				/>
-			</label>
-		</div>
+	<label for="duration-{index}">
+		<input
+			min={1}
+			id="duration-{index}"
+			type="number"
+			inputmode="decimal"
+			pattern="[1-9]\d*"
+			aria-label="duration-{index}"
+			bind:value={step.duration}
+			on:change={() => dispatch('change', step)}
+		/>
+	</label>
 	<button
 		{...(isLastStep || isOnlyRealStep) ? { disabled: true } : {}}
 		title="Remove this step"
@@ -75,12 +69,11 @@
 
 .step {
 	display: flex;
-	flex: 0 0 12rem;
 	gap: 1px;
 }
 
 	label {
-		display: contents;
+		width: 5rem;
 	}
 
 	.dose, .duration {

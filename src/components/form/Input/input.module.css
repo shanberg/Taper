@@ -21,9 +21,8 @@
   --color-background-control-active: hsl(from var(--color-background-control) h s l / 50%);
 }
 
-
 select.input {
-  padding-right: 1.4rem;
+  padding-right: 1.75rem;
   appearance: none;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20"><path d="M5,8 L10,13 L15,8" fill="none" stroke-width="2" stroke-linecap="round" stroke="black"/></svg>');
   background-repeat: no-repeat;

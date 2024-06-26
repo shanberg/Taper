@@ -1,4 +1,3 @@
-import module from './input.module.css';
-const inputStyles = module.input
+import inputStyles from './input.module.css';
 
 export { inputStyles }
