@@ -29,7 +29,7 @@ export const isStepPlaceholder = (step: Step): boolean => {
  * @returns {number} - The total dose.
  */
 export const sumStepsDose = (steps: Step[]): number => {
-  return steps.reduce((sum, step) => sum + step.dose * step.duration, 0);
+  return steps.reduce((sum, step) => sum + (step.dose + (step?.dose2 || 0)) * step.duration, 0);
 };
 
 /**
