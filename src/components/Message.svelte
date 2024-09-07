@@ -18,6 +18,10 @@
 			content: formatNew('Swahili and Arabic (both unverified!) now available.')
 		},
 		{
+			endDate: '2024-09-30',
+			content: formatNew('Pexivas reduced templates now available.')
+		},
+		{
 			content: "I hope you're having good day"
 		}
 	] as Message[];
