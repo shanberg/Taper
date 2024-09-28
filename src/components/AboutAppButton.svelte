@@ -29,7 +29,7 @@
       out:scale={{ duration: 250, delay: 0, opacity: 0.0, start: 0.9, easing: quintOut }}
     >
       <main use:melt={$description}>
-        <p>Taper is a simple tool for healthcare professionals to calculate tapering schedules and translate to share with patients.</p>
+        <p>Taper is a simple tool for healthcare professionals to calculate tapering schedules and translate them to share with patients.</p>
         <List>
           <ListItem>It is free and <Link target="_blank" href="https://github.com/shanberg/Taper">open source</Link>.</ListItem>
           <ListItem>It doesn't store any data, and will never request personally identifying information.</ListItem>
