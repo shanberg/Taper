@@ -3,84 +3,50 @@ import { formatSegmentText } from '../src/utils';
 import { LANGUAGES } from '../src/consts';
 import { TaperDate } from '../src/TaperDate';
 
-const English = LANGUAGES.find((language) => language.labelEn === 'English');
-const Spanish = LANGUAGES.find((language) => language.labelEn === 'Spanish');
-const HaitianCreole = LANGUAGES.find((language) => language.labelEn === 'Haitian Creole');
-const Mandarin = LANGUAGES.find((language) => language.labelEn === 'Mandarin');
-const Swahili = LANGUAGES.find((language) => language.labelEn === 'Swahili');
-const Arabic = LANGUAGES.find((language) => language.labelEn === 'Arabic');
+const segment = { dose: 50, daysForDose: 5 };
+const segmentStartDate = new TaperDate('2024-06-01').toScheduleDate();
+const segmentEndDate = new TaperDate('2024-06-05').toScheduleDate();
+
+function getLanguageByLabelEn(labelEn: string) {
+	const lang = LANGUAGES.find((l) => l.labelEn === labelEn);
+	if (!lang) throw new Error(`Language not found: ${labelEn}`);
+	return lang;
+}
+
+function runFormatTest(
+	labelEn: string,
+	index: number,
+	expected: string
+): void {
+	const selectedLanguage = getLanguageByLabelEn(labelEn);
+	const result = formatSegmentText({
+		segment,
+		segmentStartDate,
+		segmentEndDate,
+		index,
+		selectedLanguage
+	});
+	expect(result).toBe(expected);
+}
+
+function expectFormattedRow(labelEn: string, index: number, expected: string): void {
+	runFormatTest(labelEn, index, expected);
+}
+
+const FORMAT_SEGMENT_TEXT_CASES: [string, number, string][] = [
+	['English', 0, 'Take 50mg daily for 5 days (Jun 1 - Jun 5)'],
+	['Spanish', 1, 'Después tome 50mg cada día durante 5 días (1 jun - 5 jun)'],
+	['Haitian Creole', 0, 'Pran 50mg chak jou pou 5 jou (Jun 1 - Jun 5)'],
+	['Mandarin', 1, '然后服用 50毫克，每天服用5 天 (6月1日 - 6月5日)'],
+	['Swahili', 0, 'Kutoka 50mg kwa saa 5 siku (1 Jun - 5 Jun)'],
+	['Arabic', 1, 'في ذلك الحين تحتاج 50mg كل يوم 5 يوم (5 يونيو - 1 يونيو)']
+];
 
 describe('formatSegmentText', () => {
-	const segment = { dose: 50, daysForDose: 5 };
-	const segmentStartDate = new TaperDate('2024-06-01').toScheduleDate();
-	const segmentEndDate = new TaperDate('2024-06-05').toScheduleDate();
-
-	test('formats text for English language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
-			index: 0,
-			selectedLanguage: English
-		});
-		expect(result).toBe('Take 50mg daily for 5 days (Jun 1 - Jun 5)');
-	});
-
-	test('formats text for Spanish language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
-			index: 1,
-			selectedLanguage: Spanish
-		});
-		expect(result).toBe('Después tome 50mg cada día durante 5 días (1 jun - 5 jun)');
-	});
-
-	test('formats text for Haitian Creole language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
-			index: 0,
-			selectedLanguage: HaitianCreole
-		});
-		expect(result).toBe('Pran 50mg chak jou pou 5 jou (Jun 1 - Jun 5)');
-	});
-
-	test('formats text for Mandarin language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
-			index: 1,
-			selectedLanguage: Mandarin
-		});
-		expect(result).toBe('然后服用 50毫克，每天服用5 天 (6月1日 - 6月5日)');
-	});
-
-	test('formats text for Swahili language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
-			index: 0,
-			selectedLanguage: Swahili
-		});
-		expect(result).toBe('Kutoka 50mg kwa saa 5 siku (1 Jun - 5 Jun)');
-	});
-
-	test('formats text for Arabic language', () => {
-		const result = formatSegmentText({
-			segment,
-			segmentStartDate,
-			segmentEndDate,
-			index: 1,
-			selectedLanguage: Arabic
-		});
-		// RTL: end date then start date. Intl outputs Western digits (5, 1) in this environment.
-		expect(result).toBe('في ذلك الحين تحتاج 50mg كل يوم 5 يوم (5 يونيو - 1 يونيو)');
-	});
+	test.each(FORMAT_SEGMENT_TEXT_CASES)(
+		'formats text for %s (index %i)',
+		expectFormattedRow
+	);
 
 	test('returns empty string for unsupported language', () => {
 		const result = formatSegmentText({

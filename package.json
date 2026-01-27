@@ -10,7 +10,8 @@
 		"coverage": "vitest run --coverage",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"test": "npx vitest run"
+		"test": "npx vitest run",
+		"valknut": "npx @sibyllinesoft/valknut analyze ."
 	},
 	"devDependencies": {
 		"@melt-ui/pp": "^0.3.2",
