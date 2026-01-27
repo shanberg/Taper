@@ -4,17 +4,25 @@ export const isDateThisYear = (date: ScheduleDate): boolean => {
   return date.getFullYear() === new Date().getFullYear();
 };
 
+type FormatDateOptions = {
+  /** Omit year (month + day only). Use for compact ranges e.g. segment text. */
+  short?: boolean;
+};
+
 /** Higher-order function to create a cached formatter */
 function createCachedFormatter() {
-  const dateTimeFormatCache = new Map();
+  const dateTimeFormatCache = new Map<string, Intl.DateTimeFormat>();
 
-  return function (date: ScheduleDate, lang: string = 'en-US'): LocaleDate {
-    const yearFormat = isDateThisYear(date) ? undefined : 'numeric';
-    const cacheKey = `${lang}-${yearFormat}`;
+  return function (
+    date: ScheduleDate,
+    lang: string = 'en-US',
+    options?: FormatDateOptions
+  ): LocaleDate {
+    const yearFormat =
+      options?.short === true ? undefined : isDateThisYear(date) ? undefined : 'numeric';
+    const cacheKey = `${lang}-${options?.short ? 'short' : String(yearFormat ?? 'omit')}`;
 
-    // Check if the formatter is already in the cache
     if (!dateTimeFormatCache.has(cacheKey)) {
-      // Create a new formatter and store it in the cache
       const formatter = new Intl.DateTimeFormat(lang, {
         month: 'short',
         day: 'numeric',
@@ -23,8 +31,7 @@ function createCachedFormatter() {
       dateTimeFormatCache.set(cacheKey, formatter);
     }
 
-    // Use the cached formatter
-    const formatter = dateTimeFormatCache.get(cacheKey);
+    const formatter = dateTimeFormatCache.get(cacheKey)!;
     return formatter.format(date) as LocaleDate;
   };
 }

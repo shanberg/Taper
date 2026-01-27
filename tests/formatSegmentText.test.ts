@@ -78,7 +78,8 @@ describe('formatSegmentText', () => {
 			index: 1,
 			selectedLanguage: Arabic
 		});
-		expect(result).toBe('في ذلك الحين تحتاج 50mg كل يوم 5 يوم (٥ يونيو - ١ يونيو)');
+		// RTL: end date then start date. Intl outputs Western digits (5, 1) in this environment.
+		expect(result).toBe('في ذلك الحين تحتاج 50mg كل يوم 5 يوم (5 يونيو - 1 يونيو)');
 	});
 
 	test('returns empty string for unsupported language', () => {

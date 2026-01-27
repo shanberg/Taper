@@ -5,6 +5,59 @@ type FormatSegmentTextParams = SegmentWithStartEndDate & {
   selectedLanguage: Language;
 };
 
+type SegmentPhrases = {
+  first: string;
+  then: string;
+  middle: string;
+  day: string;
+  days: string;
+};
+
+const SEGMENT_PHRASES_BY_LANGUAGE: Record<string, SegmentPhrases> = {
+  English: {
+    first: 'Take',
+    then: 'Then take',
+    middle: 'daily for',
+    day: 'day',
+    days: 'days'
+  },
+  Spanish: {
+    first: 'Tomar',
+    then: 'Después tome',
+    middle: 'cada día durante',
+    day: 'día',
+    days: 'días'
+  },
+  'Haitian Creole': {
+    first: 'Pran',
+    then: 'Apre sa pran',
+    middle: 'chak jou pou',
+    day: 'jou',
+    days: 'jou'
+  },
+  Mandarin: {
+    first: '服用',
+    then: '然后服用',
+    middle: '毫克，每天服用',
+    day: '天',
+    days: '天'
+  },
+  Swahili: {
+    first: 'Kutoka',
+    then: 'Sasa kutoka',
+    middle: 'kwa saa',
+    day: 'siku',
+    days: 'siku'
+  },
+  Arabic: {
+    first: 'احتياج',
+    then: 'في ذلك الحين تحتاج',
+    middle: 'كل يوم',
+    day: 'يوم',
+    days: 'يوم'
+  }
+};
+
 /** Format segment content based on selected language */
 export const formatSegmentText = ({
   segment,
@@ -13,34 +66,22 @@ export const formatSegmentText = ({
   index,
   selectedLanguage
 }: FormatSegmentTextParams): string => {
-  const { lang, dir } = selectedLanguage;
+  const phrases = SEGMENT_PHRASES_BY_LANGUAGE[selectedLanguage.labelEn];
+  if (!phrases) return '';
 
+  const { lang, dir } = selectedLanguage;
   const dates = {
-    start: cachedFormatDate(segmentStartDate, lang),
-    end: cachedFormatDate(segmentEndDate, lang)
+    start: cachedFormatDate(segmentStartDate, lang, { short: true }),
+    end: cachedFormatDate(segmentEndDate, lang, { short: true })
   };
   const formattedDateRange =
     dir === 'ltr' ? `${dates.start} - ${dates.end}` : `${dates.end} - ${dates.start}`;
 
-  if (selectedLanguage.labelEn === 'English') {
-    // English
-    return `${index === 0 ? 'Take' : `Then take`} ${segment.dose}mg daily for ${segment.daysForDose} ${segment.daysForDose === 1 ? 'day' : 'days'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Spanish') {
-    // Spanish
-    return `${index === 0 ? 'Tomar' : `Después tome`} ${segment.dose}mg cada día durante ${segment.daysForDose} ${segment.daysForDose === 1 ? 'día' : 'días'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Haitian Creole') {
-    // Haitian Creole
-    return `${index === 0 ? 'Pran' : `Apre sa pran`} ${segment.dose}mg chak jou pou ${segment.daysForDose} ${segment.daysForDose === 1 ? 'jou' : 'jou'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Mandarin') {
-    // Mandarin
-    return `${index === 0 ? '服用' : `然后服用`} ${segment.dose}毫克，每天服用${segment.daysForDose} ${segment.daysForDose === 1 ? '天' : '天'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Swahili') {
-    // Swahili
-    return `${index === 0 ? 'Kutoka' : `Sasa kutoka`} ${segment.dose}mg kwa saa ${segment.daysForDose} ${segment.daysForDose === 1 ? 'siku' : 'siku'} (${formattedDateRange})`;
-  } else if (selectedLanguage.labelEn === 'Arabic') {
-    // Arabic
-    return `${index === 0 ? 'احتياج' : `في ذلك الحين تحتاج`} ${segment.dose}mg كل يوم ${segment.daysForDose} ${segment.daysForDose === 1 ? 'يوم' : 'يوم'} (${formattedDateRange})`;
-  }
+  const action = index === 0 ? phrases.first : phrases.then;
+  const unit = segment.daysForDose === 1 ? phrases.day : phrases.days;
 
-  return '';
+  if (selectedLanguage.labelEn === 'Mandarin') {
+    return `${action} ${segment.dose}${phrases.middle}${segment.daysForDose} ${unit} (${formattedDateRange})`;
+  }
+  return `${action} ${segment.dose}mg ${phrases.middle} ${segment.daysForDose} ${unit} (${formattedDateRange})`;
 };
