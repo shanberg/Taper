@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Tests for FormHeader: start date, template, and language controls.
+ */
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import FormHeader from './FormHeader.svelte';
@@ -6,6 +9,10 @@ import { get } from 'svelte/store';
 import { TaperDate } from '../TaperDate';
 import { DEFAULT_LANGUAGE_KEY, DEFAULT_TEMPLATE_KEY, LANGUAGES, TEMPLATES } from '../consts';
 
+/**
+ * Suite: FormHeader start date, template, and language controls.
+ * @description Tests for FormHeader: start date input, template select, language select, and unverified badge.
+ */
 describe('FormHeader component', () => {
 	it('renders the component with default values', () => {
 		render(FormHeader);

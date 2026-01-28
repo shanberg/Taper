@@ -43,9 +43,9 @@ const mockLanguage = { labelEn: 'English', lang: 'en', verified: true, dir: 'ltr
 describe('getFormattedListForCopyPaste', () => {
   it('should format the schedule correctly', () => {
     const result = getFormattedListForCopyPaste(mockSchedule);
-    const expected = `Take 10mg daily for 5 days (Jan 1, 2023 - Jan 5, 2023)
-Then take 20mg daily for 3 days (Jan 6, 2023 - Jan 8, 2023)
-Then take 30mg daily for 7 days (Jan 9, 2023 - Jan 15, 2023)`;
+    const expected = `Take 10mg daily for 5 days (Jan 1 - Jan 5)
+Then take 20mg daily for 3 days (Jan 6 - Jan 8)
+Then take 30mg daily for 7 days (Jan 9 - Jan 15)`;
     expect(result).toEqual(expected);
   });
 
@@ -59,9 +59,9 @@ Then take 30mg daily for 7 days (Jan 9, 2023 - Jan 15, 2023)`;
     };
 
     const result = getFormattedListForCopyPaste(scheduleWithPlaceholder);
-    const expected = `Take 10mg daily for 5 days (Jan 1, 2023 - Jan 5, 2023)
-Then take 20mg daily for 3 days (Jan 6, 2023 - Jan 8, 2023)
-Then take 30mg daily for 7 days (Jan 9, 2023 - Jan 15, 2023)`;
+    const expected = `Take 10mg daily for 5 days (Jan 1 - Jan 5)
+Then take 20mg daily for 3 days (Jan 6 - Jan 8)
+Then take 30mg daily for 7 days (Jan 9 - Jan 15)`;
     expect(result).toEqual(expected);
   });
 
@@ -72,9 +72,9 @@ Then take 30mg daily for 7 days (Jan 9, 2023 - Jan 15, 2023)`;
     };
 
     const result = getFormattedListForCopyPaste(mockScheduleSpanish);
-    const expected = `Tomar 10mg cada día durante 5 días (1 ene 2023 - 5 ene 2023)
-Después tome 20mg cada día durante 3 días (6 ene 2023 - 8 ene 2023)
-Después tome 30mg cada día durante 7 días (9 ene 2023 - 15 ene 2023)`;
+    const expected = `Tomar 10mg cada día durante 5 días (1 ene - 5 ene)
+Después tome 20mg cada día durante 3 días (6 ene - 8 ene)
+Después tome 30mg cada día durante 7 días (9 ene - 15 ene)`;
     expect(result).toEqual(expected);
   });
 });

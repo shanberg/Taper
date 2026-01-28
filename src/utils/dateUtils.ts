@@ -1,33 +1,72 @@
+/**
+ * @fileoverview Date formatting: year check, cached Intl formatter, and locale date strings.
+ */
 import { TaperDate } from '../TaperDate';
 
+/** Returns true if the given date is in the current calendar year. */
 export const isDateThisYear = (date: ScheduleDate): boolean => {
   return date.getFullYear() === new Date().getFullYear();
 };
 
-/** Higher-order function to create a cached formatter */
-function createCachedFormatter() {
-  const dateTimeFormatCache = new Map();
+type FormatDateOptions = {
+  /** Omit year (month + day only). Use for compact ranges e.g. segment text. */
+  short?: boolean;
+};
 
-  return function (date: ScheduleDate, lang: string = 'en-US'): LocaleDate {
-    const yearFormat = isDateThisYear(date) ? undefined : 'numeric';
-    const cacheKey = `${lang}-${yearFormat}`;
+/**
+ * Returns a cache key for the Intl formatter given lang and format options.
+ * @param lang - Locale code (e.g. 'en-US')
+ * @param short - If true, omit year (month+day only)
+ * @param includeYear - If true, include full year in output
+ * @returns Cache key string used for formatter lookup
+ */
+function getFormatterCacheKey(lang: string, short: boolean, includeYear: boolean): string {
+  const formatKind = short ? 'short' : includeYear ? 'numeric' : 'omit';
+  return `${lang}-${formatKind}`;
+}
 
-    // Check if the formatter is already in the cache
-    if (!dateTimeFormatCache.has(cacheKey)) {
-      // Create a new formatter and store it in the cache
-      const formatter = new Intl.DateTimeFormat(lang, {
+/**
+ * Higher-order function that returns a cached formatter for ScheduleDate -> LocaleDate.
+ * @returns A function (date, lang?, options?) that formats a date using a cached Intl.DateTimeFormat
+ */
+function createCachedFormatter(): (
+  date: ScheduleDate,
+  lang?: string,
+  options?: FormatDateOptions
+) => LocaleDate {
+  const dateTimeFormatCache = new Map<string, Intl.DateTimeFormat>();
+
+  /**
+   * Formats a schedule date using a cached Intl formatter.
+   * @param date - Schedule date to format
+   * @param lang - Locale code (default 'en-US')
+   * @param options - Optional { short: true } to omit year
+   * @returns Formatted locale date string
+   */
+  function formatDateCached(
+    date: ScheduleDate,
+    lang: string = 'en-US',
+    options?: FormatDateOptions
+  ): LocaleDate {
+    const short = options?.short === true;
+    const includeYear = !short && !isDateThisYear(date);
+    const cacheKey = getFormatterCacheKey(lang, short, includeYear);
+
+    let formatter = dateTimeFormatCache.get(cacheKey);
+    if (!formatter) {
+      formatter = new Intl.DateTimeFormat(lang, {
         month: 'short',
         day: 'numeric',
-        year: yearFormat
+        year: includeYear ? 'numeric' : undefined
       });
       dateTimeFormatCache.set(cacheKey, formatter);
     }
 
-    // Use the cached formatter
-    const formatter = dateTimeFormatCache.get(cacheKey);
     return formatter.format(date) as LocaleDate;
-  };
+  }
+
+  return formatDateCached;
 }
 
-// Create a cached version of formatDate
+/** Cached formatter for ScheduleDate -> LocaleDate (month/day/year per options). */
 export const cachedFormatDate = createCachedFormatter();
